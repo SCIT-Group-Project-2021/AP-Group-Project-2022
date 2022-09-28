@@ -1,0 +1,6 @@
+[INFO ] 2022-09-28 18:15:06.067 [main] app - Test Info message
+[DEBUG] 2022-09-28 18:15:06.069 [main] app - Test Debug Message
+[ERROR] 2022-09-28 18:15:06.069 [main] app - Test Error message
+[TRACE] 2022-09-28 18:15:06.070 [main] app - Test Trace message
+[FATAL] 2022-09-28 18:15:06.070 [main] app - Test Fatal message
+[WARN ] 2022-09-28 18:15:06.070 [main] app - Test Warning message
