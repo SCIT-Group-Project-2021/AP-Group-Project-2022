@@ -13,8 +13,6 @@ Store the following data on the customers:
 • Customer ID – string
 • Name – string
 
-Page 2 of 6
-
 • DOB – date
 • Address – string
 • Telephone – string
@@ -43,8 +41,6 @@ Store the following data on the products:
 • Product Code – string
 • Name – string
 
-Page 3 of 6
-
 • Short Description – string
 • Long Description – string
 • Items in Stock – integer
@@ -60,7 +56,9 @@ Store the following information on invoices:
 • Quantity of item – int
 • Cashier – string
 • Customer – string
+
 NB. Pay close attention to, many to many relationships and normalization
+
 Sales Reports
 The accounting personnel need to print reports on various aspects of the system. They
 should be able to pull the data on a particular product between a particular period. This
@@ -72,7 +70,6 @@ Design a JAVA application that will meet the requirements discussed in the meeti
 application should be built using the Client/Server architecture. Your Database
 should be located on the server machine where the client will make requests to the
 
-Page 4 of 6
 server over the network. Clients cannot communicate with the database. The
 server will process the corresponding request from the client. Your application should be
 developed with a graphical user interface that will aid the cashier in the check-out
