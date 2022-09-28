@@ -1,13 +1,13 @@
-package com.jwr.jwr;
+package com.jwr.janwr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JwrApplication {
+public class JanwrApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JwrApplication.class, args);
+		SpringApplication.run(JanwrApplication.class, args);
 	}
 
 }
