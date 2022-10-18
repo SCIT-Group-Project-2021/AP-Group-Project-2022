@@ -6,6 +6,8 @@
     ],
     "java.project.sourcePaths": [
         "JansWR\\properties",
-        "JansWR\\src"
+        "JansWR\\src",
+        "JNWR\\src",
+        "JNWR\\properties"
     ]
 }
