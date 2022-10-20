@@ -12,8 +12,8 @@ public class SystemApplication {
 
 	private static final Logger logger = LogManager.getLogger(SystemApplication.class);
 	public static void main(String[] args) {
-		SpringApplication.run(SystemApplication.class, args);
-        System.setProperty("java.awt.headless", "false");
+		//SpringApplication.run(SystemApplication.class, args);
+        //System.setProperty("java.awt.headless", "false");
 
 		/*logger.info("Test Info message");
         logger.debug("Test Debug Message");

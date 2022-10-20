@@ -11,12 +11,11 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         JFrame frame = createBFrame(1840,1000);
         frame.setMinimumSize(new Dimension(1040,600));
 
-        RoundedBorder round = new RoundedBorder(50);
-        RoundedBorder border = new RoundedBorder(0);
+        RoundedBorder round = new RoundedBorder(25);
 
         JPanel menuBar = createJPanel();
         menuBar.setBackground(Color.WHITE);
-        menuBar.setBorder(border);
+        menuBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
         menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
 
         JPanel mainPanel = createJPanel();
@@ -51,7 +50,8 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         frame.add(sidePanelLower, "newline,cell 0 2 1 1,grow");
         
 
-        frame.repaint();   
+        frame.repaint();
+        frame.setSize(1820,980);   
         
     }
     
