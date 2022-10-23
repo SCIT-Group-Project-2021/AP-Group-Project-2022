@@ -1,94 +1,26 @@
 # AP-Group-Project
 
-You have been contacted to develop the system for Jan’s Wholesale and Retail. After
-meeting with the management and the other employees the requirements reveal the
-following modules:
-Customer Database
-The management wants to have a good rapport with their customers and thus would like
-to maintain strong communication. They wish to maintain a database that will store
-contact details of their customers. The management allows the general public to shop in
-the store but customers with membership will be given a ten percent (10%) discount
-subtracted from the total before tax (15%) is added.
-Store the following data on the customers:
-• Customer ID – string
-• Name – string
+# Requirements
 
-• DOB – date
-• Address – string
-• Telephone – string
-• Email – string
-• Date of Membership – date
-• Date of Membership Expiry - date
-Staff Database
-Management also wants to maintain data on their staff for their own bookkeeping
-protocols. There are 3 types of employees, Manager, Supervisor and Line
-worker.
-The 3 departments in the business are:
-• Management
-• Inventory
-• Accounting and Sales – Cashiers also fall within this department.
-Store the following data on the departments:
-• Department Code – string
-• Name - string
-Stock and Inventory
-Keeping track of the inventory is very important to the running of the business. The
-management wishes to use the system to view the stock of particular products in the
-warehouse to determine when to replenish the supply from their suppliers. The system
-should also aid in the stock-taking process so that the inventory operators may update
-product information, delete product information, insert new products and their
-information.
-Store the following data on the products:
-• Product Code – string
-• Name – string
+Your application should be built using the **Client/Server** architecture. Your Database s**hould be located on the server machine** where the client will make requests to the server over the network. **Clients cannot communicate with the database.** The server will process the corresponding request from the client. Your application should be developed with a **GUI** that will aid the cashier in the check-out process. The server thus needs to be threaded to accommodate multiple client cashiers that will connect to it to interact with the database.
 
-• Short Description – string
-• Long Description – string
-• Items in Stock – integer
-• Unit price - float
-Check Out
-The cashiers will be using the check-out module to assist customers in making payment.
-The cashiers will use this module to create an invoice and accept payment from the
-customer. Upon finalizing payment, the items in the inventory should be updated.
-Store the following information on invoices:
-• Invoice Num – integer
-• Billing Date – date
-• Item – string
-• Quantity of item – int
-• Cashier – string
-• Customer – string
+You are not limited to the database fields given below for the database tables. Feel free to add other fields or develop your own database schema.
 
-NB. Pay close attention to, many to many relationships and normalization
+## Instructions
 
-Sales Reports
-The accounting personnel need to print reports on various aspects of the system. They
-should be able to pull the data on a particular product between a particular period. This
-should aid them in analyzing the customer demand for the product to determine if it
-should be restocked, or the rate at which that product should be restocked.
-
-Requirements
-Design a JAVA application that will meet the requirements discussed in the meeting. Your
-application should be built using the Client/Server architecture. Your Database
-should be located on the server machine where the client will make requests to the
-
-server over the network. Clients cannot communicate with the database. The
-server will process the corresponding request from the client. Your application should be
-developed with a graphical user interface that will aid the cashier in the check-out
-process.
-The management has decided to buy the adjacent store to the supermarket to expand. The
-expansion requires that the management add more cashiers to check out customers. The
-server thus needs to be threaded to accommodate multiple client cashiers that will
-connect to it to interact with the database.
-Instructions:
-1. System Name: Jan’s Wholesale & Retail Management System (Jans W&RMS)
-2. Please stick to programming conventions such as proper indentation. Include
-comments (one to briefly describe the function and any other special/important
+1. **System Name**: Jan’s Wholesale & Retail Management System (Jans W&RMS)
+2. Please stick to **programming conventions** such as proper indentation. Include
+comments (one to **briefly describe the function** and any other special/important
 lines).
-3. Classes begin with capital letters (ex: Person), methods begin with common
-letters followed by initial caps (ex: getName( ))
-4. Variables should have meaningful names. Refrain from using ‘x’ or any other
-single letter variables. Variables also begin with common letters followed by
-initial caps (ex: regStatus)
-5. Logging should be on the server side
+3. **Classes** begin with **capital letters** (ex: Person), **methods** begin with **camelCase** (ex: getName( ))
+4. **Variables** should have **meaningful names**. Refrain from using ‘x’ or any other single letter variables. Variables also use camelCase (ex: regStatus)
+5. **Logging** should be on the **server side**
+    - INFO - General information (E.g.- keep track of users logged in)
+    - WARN - Warning for operations
+    - ERROR - Errors (Great with exceptions)
+    - FATAL - Errors (Requires program termination)
+    - Rolling File Appender*
+    - Database Appender*
 6. Use appropriate exception handling
 7. Develop your group solution with the use of a GitHub Repository or its equivalent
 to host the project’s source code files, to which each member of the group is
@@ -96,3 +28,124 @@ expected to contribute. Proof of members’ contribution will be verified via th
 project’s history logs.
 8. Your lab tutor is to receive an invitation from each group, to collaborate on their
 project, within seven (7) days of this document being distributed.
+
+## Deliverables
+
+- [ ]  Group Report
+- [ ]  Application User Manuals
+- [ ]  Server-side Application
+- [ ]  Client-side Application
+
+## Assessment
+
+- [ ]  Application Document
+    - [ ]  User Manuals
+    - [ ]  UML Classes
+    - [x]  Database ER Diagrams
+    - [ ]  Comments, Programming Conventions and documentation
+- [ ]  Functioning Software Solution
+    - [ ]  Graphical User Interface
+    - [ ]  Client/Server Networking Model
+    - [ ]  Database Connectivity
+    - [ ]  Exception Handling & Logging, User & data input validation
+    - [ ]  Classes
+    - [ ]  Interfaces
+    - [ ]  Inheritance and Polymorphism
+    - [ ]  Customer Membership/Record Management (C.R.U.D.)
+        - [ ]  Member discount correctly applied
+    - [ ]  Staff data/record management(C.R.U.D.)
+    - [ ]  Inventory management
+        - [ ]  Management dashboard
+        - [ ]  CRUD
+        - [ ]  Real-time inventory update
+    - [ ]  Checkout
+        - [ ]  Invoice generation (printable)
+        - [ ]  Real-time inventory update
+    - [ ]  Sales report
+        - [ ]  Pull product data for specific period (Printable)
+    - [ ]  45 minutes Grading Presentation – all group members must be present and able to fully present the project. Absence from the grading interview means no grade.
+
+## Customer Table
+
+A database that will store contact details of their customers.
+
+Customers with membership will be given a **ten percent (10%) discount** subtracted from the total before tax (15%) is added.
+
+**Customer Data:**
+
+1. Customer ID – string
+2. **First Name – string**
+3. **Last Name - string**
+4. DOB – date
+5. Address – string
+6. Telephone – string
+7. Email – string
+8. Date of Membership – date
+9. Date of Membership Expiry - date
+
+### D**epartments**
+
+The 3 departments in the business are:
+
+- Management
+- Inventory
+- Accounting and Sales – Cashiers also fall within this department
+
+**Department Data**
+
+1. Department Code – string
+2. Name - string
+
+## **Staff Database**
+
+3 types of employees
+
+- Manager
+- Supervisor
+- Line worker
+
+**Staff data:**
+
+1. **ID Number**
+2. **First Name**
+3. **Last Name**
+4. **Phone Number**
+5. **Employee Type**
+6. **Address – string**
+7. Department code - foreign key
+
+## Stock and Inventory
+
+The management wishes to use the system to view the stock of particular products in the
+warehouse to determine when to replenish the supply from their suppliers. The system should also aid in the stock-taking process so that the inventory operators may update product information, delete product information, insert new products and their information.
+
+**Inventory Data:**
+
+1. Product Code – string
+2. Name – string
+3. Short Description – string
+4. Long Description – string
+5. Items in Stock – integer
+6. Unit price - float
+
+## Check Out
+
+The cashiers will use this module to create an invoice and accept payment from the customer.
+
+**Invoice Data**:
+
+1. Invoice Num – integer
+2. Billing Date – date
+3. Item – string
+4. Quantity of item – int
+5. Cashier – string
+6. Customer – string
+
+<aside>
+⚠️ NB. Pay close attention to, many to many relationships and normalization
+
+</aside>
+
+## Sales Report
+
+The accounting personnel should be able to pull the data on a particular product between a particular period. This should aid them in analyzing the customer demand for the product to determine if it should be restocked, or the rate at which that product should be restocked.
