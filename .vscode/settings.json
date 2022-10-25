@@ -9,5 +9,6 @@
         "JansWR\\src",
         "JNWR\\src",
         "JNWR\\properties"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
