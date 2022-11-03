@@ -13,15 +13,14 @@ import javax.persistence.Persistence;
 
 @SpringBootApplication
 public class ServerApplication {
-
 	private static final Logger logger = LogManager.getLogger(ServerApplication.class);
-    private static EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
+    private static EntityManagerFactory ENTITY_MANAGER_FACTORY;
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 
         //TODO: Create Server and connections
         //TODO: Connect server to Database
-        //TODO: Create Task For server to do when clent Requests
+        //TODO: Create Task For server to do when client Requests
 
 		/*logger.info("Test Info message");
         logger.debug("Test Debug Message");
@@ -36,6 +35,7 @@ public class ServerApplication {
 	}
 
     public static void addCustomer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMem, String expiryDate){
+        ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction et = null;
         try{
