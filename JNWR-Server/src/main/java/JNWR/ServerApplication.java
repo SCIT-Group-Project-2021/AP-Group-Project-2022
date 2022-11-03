@@ -23,18 +23,18 @@ public class ServerApplication {
         //TODO: Connect server to Database
         //TODO: Create Task For server to do when clent Requests
 
-		logger.info("Test Info message");
+		/*logger.info("Test Info message");
         logger.debug("Test Debug Message");
         logger.error("Test Error message");
         logger.trace("Test Trace message");
         logger.fatal("Test Fatal message");
-        logger.warn("Test Warning message");
+        logger.warn("Test Warning message");*/
 
-        addCustomer("Ashley","Deans","12/06/2002","18764523606","ashs4657@gmail.com", "3/11/2022", "3/11/2023");
-
+        addCustomer("Ashley","Deans","2002-12-06","18764523606","ashs4657@gmail.com", "2022-11-03", "2023-11-03");
 
         ENTITY_MANAGER_FACTORY.close();
 	}
+
     public static void addCustomer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMem, String expiryDate){
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction et = null;
@@ -57,6 +57,5 @@ public class ServerApplication {
             em.close();
         }
     }
-
 
 }
