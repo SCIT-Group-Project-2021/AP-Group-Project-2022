@@ -31,8 +31,8 @@ public class ClientApplication {
 
         Customer cust = new Customer("Gabriel","Tickle","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
 
-        client.sendCustomer(cust);
-        //client.sendAction("shutDown");
+        //client.sendCustomer(cust);
+        client.sendAction("shutDown");
         //new posPage();
         
 	}
