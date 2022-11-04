@@ -1,4 +1,4 @@
-package JNWR.Entity;
+package Entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
