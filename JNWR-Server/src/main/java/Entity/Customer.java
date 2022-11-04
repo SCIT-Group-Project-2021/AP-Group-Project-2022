@@ -1,11 +1,11 @@
-package JNWR.Entity;
+package Entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "customer")
-public class Customer implements Serializable {
+public class Customer implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="customerID")
