@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="inventory")
-public class Inventory {
+public class Inventory implements Serializable{
     @Id
     @Column(name="productCode", unique = true, nullable = false)
     String productCode;
