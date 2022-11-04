@@ -18,10 +18,10 @@
                       value="jdbc:mysql://localhost:3306/jwrms_db" />
 
             <property name="javax.persistence.jdbc.user"
-                      value="root"/>
+                      value="defaultUser"/>
 
             <property name="javax.persistence.jdbc.password"
-                      value="Password25%"/>
+                      value="defaultPassword%"/>
 
             <property name="hibernate.dialect" 
                         value="org.hibernate.dialect.MySQL8Dialect" />

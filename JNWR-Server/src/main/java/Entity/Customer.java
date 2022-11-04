@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "customer")
-public class Customer implements Serializable{
+public class Customer extends DBEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="customerID")

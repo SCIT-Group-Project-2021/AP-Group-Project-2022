@@ -53,6 +53,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+
     private void createConnection(String ip) {
         try {
             connectionSocket = new Socket(ip,8888);
@@ -73,10 +74,20 @@ public class Client {
         }
     }
 
-    public void sendCustomer(Customer action) {
+    public void sendCustomer(DBEntity entity) {
         sendAction("addCustomer");
         try {
-            objOs.writeObject(action);
+            objOs.writeObject(entity);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    public void sendStaff(DBEntity entity) {
+        sendAction("addStaff");
+        try {
+            objOs.writeObject(entity);
         } catch (IOException e) {
             e.printStackTrace();
 
