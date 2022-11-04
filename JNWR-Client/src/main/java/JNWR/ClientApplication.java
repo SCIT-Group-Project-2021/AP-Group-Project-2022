@@ -27,13 +27,13 @@ public class ClientApplication {
         logger.fatal("Test Fatal message");
         logger.warn("Test Warning message");*/
 
-        Client client = new Client();
+        //Client client = new Client();
 
-        Customer cust = new Customer("Gabriel","Tickle","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
+        //Customer cust = new Customer("Gabriel","Tickle","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
 
         //client.sendCustomer(cust);
-        client.sendAction("shutDown");
-        //new posPage();
+        //client.sendAction("shutDown");
+        new posPage();
         
 	}
 
