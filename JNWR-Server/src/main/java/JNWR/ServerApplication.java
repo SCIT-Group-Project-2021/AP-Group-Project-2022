@@ -15,7 +15,6 @@ import JNWR.Domain.*;
 
 @SpringBootApplication
 public class ServerApplication {
-
 	private static final Logger logger = LogManager.getLogger(ServerApplication.class);
     private static EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
 	public static void main(String[] args) throws ClassNotFoundException {
@@ -23,7 +22,7 @@ public class ServerApplication {
 
         
         //TODO: Connect server to Database
-        //TODO: Create Task For server to do when clent Requests
+        //TODO: Create Task For server to do when client Requests
 
 		/*logger.info("Test Info message");
         logger.debug("Test Debug Message");
