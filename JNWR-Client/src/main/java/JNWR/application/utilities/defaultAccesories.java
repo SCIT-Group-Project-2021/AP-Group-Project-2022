@@ -29,12 +29,12 @@ public class defaultAccesories {
 
     private static final Logger logger = LogManager.getLogger(defaultAccesories.class);
 
-    MigLayout mig = new MigLayout("fill,gap 5,insets 5");
+    //MigLayout mig = new MigLayout("fill,gap 5,insets 5");
 
     public JFrame createBFrame() {
 
         JFrame frame = new JFrame();
-        frame.setLayout(mig);
+        //frame.setLayout(mig);
         frame.setSize(1200, 500);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
@@ -47,7 +47,7 @@ public class defaultAccesories {
     public JFrame createBFrame(int w,int h) {
 
         JFrame frame = new JFrame();
-        frame.setLayout(mig);
+        //frame.setLayout(mig);
         frame.setSize(w, h);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);

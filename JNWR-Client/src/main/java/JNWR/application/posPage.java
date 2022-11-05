@@ -1,7 +1,6 @@
 package JNWR.application;
-
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Color;
 import javax.swing.*;
 import java.awt.GridBagConstraints;  
 import java.awt.GridBagLayout;
@@ -11,47 +10,106 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
 
     public posPage() {
 
-        JFrame frame = createBFrame(1840,1000);
-        frame.setMinimumSize(new Dimension(1040,600));
-
         RoundedBorder round = new RoundedBorder(25);
 
+        //region GridBagConstraints
+        GridBagConstraints mpCons = new GridBagConstraints();
+        mpCons.fill = GridBagConstraints.BOTH;
+        mpCons.insets = new Insets(5, 5, 5, 5);
+        mpCons.anchor = GridBagConstraints.NORTH;
+        //endregion
+
+        //region Base Frame Setup
+        JFrame frame = createBFrame(1840,1000);
+        frame.setMinimumSize(new Dimension(1040,600));
+        frame.setLayout(new GridBagLayout());
+        //endregion
+
+        //region Header Bar
         JPanel menuBar = createJPanel();
         menuBar.setBackground(Color.WHITE);
         menuBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
         menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
+        //endregion
 
+        //region Center Panel
         JPanel mainPanel = createJPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(round);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        mainPanel.setLayout(new GridBagLayout());
+        //endregion
 
+        //region invoicePanel
         JPanel sidePanelUpper = createJPanel();
         sidePanelUpper.setBackground(Color.WHITE);
         sidePanelUpper.setBorder(round);
-        sidePanelUpper.setLayout(new BoxLayout(sidePanelUpper, BoxLayout.X_AXIS));
-
+        //sidePanelUpper.setLayout();
+        //endregion
+        
+        //region sumPanel
         JPanel sidePanelLower = createJPanel();
         sidePanelLower.setBackground(Color.WHITE);
         sidePanelLower.setBorder(round);
-        sidePanelLower.setLayout(new BoxLayout(sidePanelLower, BoxLayout.X_AXIS));
+        //sidePanelLower.setLayout(new BoxLayout(sidePanelLower, BoxLayout.X_AXIS));
+        //endregion
 
+        //region CheckoutPanel
         JPanel endPanel = createJPanel();
         endPanel.setBackground(Color.WHITE);
         endPanel.setBorder(round);
-        endPanel.setLayout(new BoxLayout(endPanel, BoxLayout.Y_AXIS));
+        //endPanel.setLayout(new BoxLayout(endPanel, BoxLayout.Y_AXIS));
+        //endregion
 
+        //region Item Panel
         JPanel itemPanel = createJPanel();
         itemPanel.setBackground(Color.WHITE);
         itemPanel.setBorder(round);
-        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.X_AXIS));
+        //itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.X_AXIS));
+        //endregion
 
-        frame.add(menuBar, "h 50!, north");
-        frame.add(sidePanelUpper,"cell 0 0 1 2,grow");
-        frame.add(mainPanel, "cell 1 0 1 3,grow");
-        frame.add(endPanel, "cell 2 0 1 3,grow");
-        frame.add(sidePanelLower, "newline,cell 0 2 1 1,grow");
+        //region
+        mpCons.weightx = .5;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.gridwidth = 3;
+        mpCons.ipady = 60;
+        frame.add(menuBar,mpCons);
 
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 1;
+        mpCons.gridx = 0;
+        mpCons.gridheight = 1;
+        mpCons.gridwidth = 1;
+        mpCons.ipady = 100;
+        mpCons.ipadx = 40;
+        frame.add(sidePanelUpper,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.gridx++;
+        mpCons.gridheight = 2;
+        mpCons.ipady = 100;
+        mpCons.ipadx = 200;
+        frame.add(mainPanel, mpCons);
+
+        mpCons.weightx =  1;
+        mpCons.gridx++;
+        mpCons.gridheight = 2;
+        mpCons.ipady = 100;
+        mpCons.ipadx = 30;
+        frame.add(endPanel,mpCons);
+
+        mpCons.weighty = 0;
+        mpCons.gridy = 2;
+        mpCons.gridx = 0;
+        mpCons.gridheight = 1;
+        mpCons.ipady = 120;
+        mpCons.ipadx = 60;
+        frame.add(sidePanelLower, mpCons);
+        //endregion
+
+        //region checkout
         GridBagConstraints cons = new GridBagConstraints();
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.weightx = 1;
@@ -77,7 +135,7 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         JButton Button4 = defaultButton();
         Button4.setBorder(round);
 
-        cons.ipady = 100;
+        cons.ipady = 10;
         endPanel.add(Button4,cons);
         cons.gridy++;
 
@@ -94,12 +152,55 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         endPanel.add(holdButton,cons);
         cons.gridy++;
 
-        cons.ipady = 100;
+        cons.ipady = 10;
         endPanel.add(checkOutButton,cons);
         cons.gridy++;
 
+        //endregion
+
+        //region Center Panel
+        JPanel centralItemPanel = createJPanel();
+        centralItemPanel.setBackground(Color.WHITE);
+        centralItemPanel.setBorder(round);
+        centralItemPanel.setLayout(new GridBagLayout());
+        //endregion
+
+        //region Center Panel
+        JPanel centralButtonPanel = createJPanel();
+        centralButtonPanel.setBackground(Color.WHITE);
+        centralButtonPanel.setBorder(round);
+        centralButtonPanel.setLayout(new GridBagLayout());
+        //endregion
+
+        //region Center Panel
+        JPanel customerItemPanel = createJPanel();
+        customerItemPanel.setBackground(Color.WHITE);
+        customerItemPanel.setBorder(round);
+        customerItemPanel.setLayout(new GridBagLayout());
+        //endregion
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.gridheight = 1;
+        mpCons.gridwidth = 1;
+        mpCons.ipady = 30;
+        mpCons.ipadx = 100;
+        mainPanel.add(centralItemPanel,mpCons);
+
+        mpCons.ipady = 100;
+        mpCons.gridy++;
+        mainPanel.add(centralButtonPanel,mpCons);
+
+        mpCons.ipady = 40;
+        mpCons.gridy++;
+        mainPanel.add(customerItemPanel,mpCons);
+
         frame.repaint();
         frame.setSize(1820,980);   
+
+        
         
     }
     
