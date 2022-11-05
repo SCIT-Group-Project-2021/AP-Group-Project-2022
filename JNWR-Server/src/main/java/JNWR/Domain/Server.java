@@ -48,11 +48,11 @@ public class Server {
                 this.configureStreams();
                 try {
                     action = (String) objIs.readObject();
-
+                    /*
                     if (action.equals("shutDown")) {
-                        System.out.println("Shuttind Down Server");
+                        System.out.println("Shutting Down Server");
                         break;
-                    }
+                    }*/
 
                     switch (action) {
                         case "addCustomer":
@@ -64,7 +64,27 @@ public class Server {
                             addCustomer(customer);
                             
                             break;
-                    
+                        case "findCustomer":
+
+                            Customer customer = null;
+
+                            customer = (Customer)objIs.readObject();
+
+                            addCustomer(customer);
+
+                            break;
+                        case "deleteCustomer":
+
+                            Customer customer = null;
+
+                            customer = (Customer)objIs.readObject();
+
+                            addCustomer(customer);
+
+                            break;
+                        case "shutDown":
+                            System.out.println("Server shutdown");
+                            return;
                         default:
                             break;
                     }

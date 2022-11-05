@@ -32,7 +32,9 @@ public class Customer extends DBEntity implements Serializable{
     @Column(name="dateOfMembershipExpiry", nullable = false)
     String dateOfMembershipExpiry;
 
-    public Customer(){}
+    public Customer(){
+
+    }
 
     public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership, String dateOfMembershipExpiry) {
         this.fName = fName;

@@ -74,24 +74,17 @@ public class Client {
         }
     }
 
-    public void sendCustomer(DBEntity entity) {
-        sendAction("addCustomer");
+    public void sendEntity(DBEntity entity) {
+        sendAction(entity.getAction());
         try {
             objOs.writeObject(entity);
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
-
-    public void sendStaff(DBEntity entity) {
-        sendAction("addStaff");
-        try {
-            objOs.writeObject(entity);
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
+    public void addEntity(DBEntity entity) {
+        sendAction(entity.getAction());
+        sendEntity();
     }
 
     //endregion
