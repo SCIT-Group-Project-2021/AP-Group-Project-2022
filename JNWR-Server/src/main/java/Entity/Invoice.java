@@ -71,11 +71,12 @@ public class Invoice extends DBEntity implements Serializable{
 
     //endregion
 
-
+    //TODO: Something isnt working in here so i temporarily commented it out
     // Creating an invoice item
     //Map<String, Object> params = new HashMap<>();
-params.put("cus_ID");
-params.put("price");
+    /* 
+    params.put("cus_ID");
+    params.put("price");
 
     InvoiceItem invoiceItem =
             InvoiceItem.create(params);
@@ -94,5 +95,5 @@ params.put("price");
 
     //List of all invoice items
     InvoiceItemCollection invoiceItems =
-            InvoiceItem.list(params);
+            InvoiceItem.list(params);*/
 }
