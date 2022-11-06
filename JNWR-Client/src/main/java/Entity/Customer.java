@@ -43,6 +43,7 @@ public class Customer extends DBEntity implements Serializable{
         this.telephoneNum = telephoneNum;
         this.email = email;
         this.dateOfMembership = dateOfMembership;
+        //TODO: Data of expiry should be auto generated based on date of membership
         this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
 

@@ -54,10 +54,10 @@ public class Server {
                         break;
                     }*/
 
+                    Customer customer = null;
+
                     switch (action) {
                         case "addCustomer":
-
-                            Customer customer = null;
 
                             customer = (Customer)objIs.readObject();
 
@@ -66,16 +66,12 @@ public class Server {
                             break;
                         case "findCustomer":
 
-                            Customer customer = null;
-
                             customer = (Customer)objIs.readObject();
 
                             addCustomer(customer);
 
                             break;
                         case "deleteCustomer":
-
-                            Customer customer = null;
 
                             customer = (Customer)objIs.readObject();
 

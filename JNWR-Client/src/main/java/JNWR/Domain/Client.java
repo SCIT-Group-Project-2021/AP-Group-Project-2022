@@ -82,10 +82,6 @@ public class Client {
             e.printStackTrace();
         }
     }
-    public void addEntity(DBEntity entity) {
-        sendAction(entity.getAction());
-        sendEntity();
-    }
 
     //endregion
     

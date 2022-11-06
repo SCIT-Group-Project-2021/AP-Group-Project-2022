@@ -10,5 +10,20 @@
         "JNWR\\src",
         "JNWR\\properties"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "askForPassword": true,
+            "driver": "MySQL",
+            "database": "jwrms_db",
+            "username": "defaultUser",
+            "name": "JNWR_DB"
+        }
+    ]
 }

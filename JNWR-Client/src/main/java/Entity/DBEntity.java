@@ -1,43 +1,18 @@
 package Entity;
 
 public class DBEntity {
-    private String addAction;
-    private String deleteAction;
-    private String findAction;
+    private String Action;
 
     public DBEntity() {
-        this.addAction = "";
-        this.deleteAction = "";
-        this.findAction = "";
+        this.Action = "";
     }
 
-    public DBEntity(String addAction, String deleteAction, String findAction) {
-        this.addAction = addAction;
-        this.deleteAction = deleteAction;
-        this.findAction = findAction;
+    public String getAction() {
+        return this.Action;
     }
 
-    public String getAddAction() {
-        return addAction;
+    public void setAction(String Action) {
+        this.Action = Action;
     }
-
-    public void setAddAction(String addAction) {
-        this.addAction = addAction;
-    }
-
-    public String getDeleteAction() {
-        return deleteAction;
-    }
-
-    public void setDeleteAction(String deleteAction) {
-        this.deleteAction = deleteAction;
-    }
-
-    public String getFindAction() {
-        return findAction;
-    }
-
-    public void setFindAction(String findAction) {
-        this.findAction = findAction;
-    }
+    
 }
