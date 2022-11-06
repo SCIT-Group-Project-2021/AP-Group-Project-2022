@@ -48,35 +48,16 @@ public class Server {
                 this.configureStreams();
                 try {
                     action = (String) objIs.readObject();
-                    /*
-                    if (action.equals("shutDown")) {
-                        System.out.println("Shutting Down Server");
-                        break;
-                    }*/
 
-                    Customer customer = null;
+                    DBEntity dbEntity = null;
 
                     switch (action) {
-                        case "addCustomer":
+                        case "addEntity":
 
-                            customer = (Customer)objIs.readObject();
+                            dbEntity = (DBEntity)objIs.readObject();
 
-                            addCustomer(customer);
+                            addEntity(dbEntity);
                             
-                            break;
-                        case "findCustomer":
-
-                            customer = (Customer)objIs.readObject();
-
-                            addCustomer(customer);
-
-                            break;
-                        case "deleteCustomer":
-
-                            customer = (Customer)objIs.readObject();
-
-                            addCustomer(customer);
-
                             break;
                         case "shutDown":
                             System.out.println("Server shutdown");
@@ -135,20 +116,19 @@ public class Server {
         }
     }
 
-    public static void addCustomer(Customer cust) {
+    public static void addEntity(DBEntity entity) {
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction et = null;
         try{
             et = em.getTransaction();
             et.begin();
-            em.persist(cust);
+            em.persist(entity);
             et.commit();
-            //logger.info("New customer record added to the database");
+            
         }
         catch(Exception ex){
             if(et !=null){
                 et.rollback();
-                //logger.error("Entity was not added to the database. Rolled back!");
             }
             ex.printStackTrace();
         }
@@ -190,8 +170,6 @@ public class Server {
     public void setObjIs(ObjectInputStream objIs) {
         this.objIs = objIs;
     }
-
-    
 
     public ResultSet getResult() {
         return this.result;

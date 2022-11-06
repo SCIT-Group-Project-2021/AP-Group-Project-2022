@@ -29,9 +29,12 @@ public class ClientApplication {
 
         Client client = new Client();
 
-        Customer cust = new Customer("Jane","Doe","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
+        Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
         
-        cust.setAction("addCustomer");
+        Staff staff = new Staff(289219,"Gabriel","Tickle","18765993666","Admin","2555");
+
+        cust.setAction("addEntity");
+        staff.setAction("addEntity");
         client.sendEntity(cust);
 
         //new posPage();
