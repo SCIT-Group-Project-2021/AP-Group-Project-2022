@@ -70,4 +70,29 @@ public class Invoice extends DBEntity implements Serializable{
     }
 
     //endregion
+
+
+    // Creating an invoice item
+    //Map<String, Object> params = new HashMap<>();
+params.put("cus_ID");
+params.put("price");
+
+    InvoiceItem invoiceItem =
+            InvoiceItem.create(params);
+
+    //Retrieve and inoice item
+    InvoiceItem invoiceItem =
+            InvoiceItem.retrieve("");
+
+    //Update an invoice item
+    InvoiceItem updatedInvoiceItem =
+            invoiceItem.update(params);
+
+    //Delete and invoice item
+    InvoiceItem deletedInvoiceItem =
+            invoiceItem.delete();
+
+    //List of all invoice items
+    InvoiceItemCollection invoiceItems =
+            InvoiceItem.list(params);
 }
