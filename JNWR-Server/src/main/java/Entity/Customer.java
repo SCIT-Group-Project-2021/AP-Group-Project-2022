@@ -32,7 +32,9 @@ public class Customer extends DBEntity implements Serializable {
     @Column(name="dateOfMembershipExpiry", nullable = false)
     String dateOfMembershipExpiry;
 
-    public Customer(){}
+    public Customer(){
+        
+    }
 
     public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership, String dateOfMembershipExpiry) {
         this.fName = fName;
@@ -41,6 +43,7 @@ public class Customer extends DBEntity implements Serializable {
         this.telephoneNum = telephoneNum;
         this.email = email;
         this.dateOfMembership = dateOfMembership;
+        //TODO: Data of expiry should be auto generated based on date of membership
         this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
 
@@ -109,5 +112,20 @@ public class Customer extends DBEntity implements Serializable {
         this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n customerId= " + getCustomerId() +
+            ", fName= " + getfName() +
+            ", lName= " + getlName() +
+            ", dob= " + getDob() +
+            ", telephoneNum= " + getTelephoneNum() +
+            ", email= " + getEmail() +
+            ", dateOfMembership= " + getDateOfMembership() +
+            ", dateOfMembershipExpiry= " + getDateOfMembershipExpiry();
+    }
+
 
 }

@@ -6,7 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,8 +24,7 @@ public class Server {
     private ServerSocket serverSocket;
     private Socket connectionSocket;
     private ObjectOutputStream objOs;
-    private ObjectInputStream objIs;
-    private ResultSet result;  
+    private ObjectInputStream objIs; 
 
     //Open Server on Port Specified and then waits for request
     public Server() throws ClassNotFoundException {
@@ -32,21 +32,22 @@ public class Server {
         this.waitForRequests();
     }
 
-    public Server(ServerSocket serverSocket, Socket connectionSocket, ObjectOutputStream objOs, ObjectInputStream objIs, ResultSet result) {
+    public Server(ServerSocket serverSocket, Socket connectionSocket, ObjectOutputStream objOs, ObjectInputStream objIs) {
         this.serverSocket = serverSocket;
         this.connectionSocket = connectionSocket;
         this.objOs = objOs;
         this.objIs = objIs;
-        this.result = result;
     }
 
     private void waitForRequests() throws ClassNotFoundException {
         String action = "";
         try {
             while (true) {
+                System.out.println("Waiting For Request");
                 connectionSocket = serverSocket.accept();
                 this.configureStreams();
                 try {
+                    System.out.println("Waiting For Action");
                     action = (String) objIs.readObject();
 
                     DBEntity dbEntity = null;
@@ -54,17 +55,42 @@ public class Server {
                     switch (action) {
                         case "addEntity":
 
+                            System.out.println("Adding Entity");
+
                             dbEntity = (DBEntity)objIs.readObject();
 
                             addEntity(dbEntity);
+
+                            sendAction("Task Completed");
+                            
+                            break;
+                        case "findEntity":
+
+                            System.out.println("Finding Entity");
+
+                            findEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject());
+
+                            sendAction("Task Completed");
+
+                            break;
+                        case "getList":
+
+                            System.out.println("Getting List");
+
+                            sendList(listEntity((String) objIs.readObject()));
+
+                            sendAction("Task Completed");
                             
                             break;
                         case "shutDown":
                             System.out.println("Server shutdown");
                             return;
                         default:
+                            System.out.println("No Task Completed");
                             break;
                     }
+
+                    System.out.println("Task Completed");
 
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
@@ -73,6 +99,7 @@ public class Server {
                     ex.printStackTrace();
                 }
                 this.closeConnection();
+                
             }
         } catch (EOFException ex) {
             System.out.println("Client has Terminated connection with server");
@@ -86,6 +113,36 @@ public class Server {
 
         }
         
+    }
+
+    private void findEntity(String Table,String IDType, String ID) {
+        EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        DBEntity dbEntity = em.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '" + ID + "'",DBEntity.class).getSingleResult(); 
+
+        System.out.println(dbEntity);
+
+        //dbEntity = (DBEntity) em.find(Department.class,19283);
+
+        sendEntity(dbEntity);
+
+    }
+
+    public List<DBEntity> listEntity(String Table) {
+        EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        List<DBEntity> entityList = em2.createQuery("SELECT a FROM " + Table + " a",DBEntity.class).getResultList(); 
+        
+        System.out.println(Arrays.toString(entityList.toArray()));
+        return entityList;
+    }
+
+    public void sendList(List<DBEntity> entityList) {
+        try {
+            objOs.writeObject(entityList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void configureStreams() {
@@ -137,6 +194,23 @@ public class Server {
         }
     }
 
+    public void sendAction(String action) {
+        try {
+            objOs.writeObject(action);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    public void sendEntity(DBEntity entity) {
+        try {
+            objOs.writeObject(entity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //#region
 
     public ServerSocket getServerSocket() {
@@ -170,15 +244,6 @@ public class Server {
     public void setObjIs(ObjectInputStream objIs) {
         this.objIs = objIs;
     }
-
-    public ResultSet getResult() {
-        return this.result;
-    }
-
-    public void setResult(ResultSet result) {
-        this.result = result;
-    }
-
 
     //#endregion
 

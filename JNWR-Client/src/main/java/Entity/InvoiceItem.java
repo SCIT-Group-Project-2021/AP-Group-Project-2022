@@ -6,7 +6,7 @@ import javax.persistence.*;
 @IdClass(InvoiceItem.class) //https://www.objectdb.com/java/jpa/entity/id#composite_primary_key
 @Entity
 @Table(name="invoiceitem")
-public class InvoiceItem implements Serializable {
+public class InvoiceItem extends DBEntity implements Serializable{
 
     @Id
     @Column(name="productCode", nullable=false)
@@ -54,4 +54,14 @@ public class InvoiceItem implements Serializable {
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n productCode= " + getProductCode() +
+            ", invoiceNum= " + getInvoiceNum() +
+            ", itemQuantity= " + getItemQuantity();
+    }
+
 }

@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "staffadress")
-public class StaffAddress {
+public class StaffAddress extends DBEntity implements Serializable {
     @Id
     @Column(name = "staffID", nullable = false, unique = true)
     int staffID;
@@ -63,4 +63,15 @@ public class StaffAddress {
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n staffID= " + getStaffID() +
+            ", stName= " + getStName() +
+            ", city= " + getCity() +
+            ", parish= " + getParish();
+    }
+
 }

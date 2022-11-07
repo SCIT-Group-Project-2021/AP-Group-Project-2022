@@ -96,4 +96,15 @@ public class Invoice extends DBEntity implements Serializable{
     //List of all invoice items
     InvoiceItemCollection invoiceItems =
             InvoiceItem.list(params);*/
+
+    @Override
+    public String toString() {
+        return 
+            "\n invoiceNum= " + getInvoiceNum() +
+            ", billingDate= " + getBillingDate() +
+            ", customerID= " + getCustomerID() +
+            ", staffID= " + getStaffID();
+    }
+
+    
 }

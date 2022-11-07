@@ -54,4 +54,14 @@ public class InvoiceItem extends DBEntity implements Serializable{
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n productCode= " + getProductCode() +
+            ", invoiceNum= " + getInvoiceNum() +
+            ", itemQuantity= " + getItemQuantity();
+    }
+
 }

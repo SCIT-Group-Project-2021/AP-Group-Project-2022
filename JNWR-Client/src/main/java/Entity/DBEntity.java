@@ -1,18 +1,13 @@
 package Entity;
 
 public class DBEntity {
-    private String Action;
-
-    public DBEntity() {
-        this.Action = "";
-    }
+    private String action;
 
     public String getAction() {
-        return this.Action;
+        return action;
     }
 
-    public void setAction(String Action) {
-        this.Action = Action;
+    public void setAction(String action) {
+        this.action = action;
     }
-    
 }

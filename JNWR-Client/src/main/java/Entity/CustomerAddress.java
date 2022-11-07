@@ -63,4 +63,15 @@ public class CustomerAddress extends DBEntity implements Serializable{
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n customerID= " + getCustomerID() +
+            ", stName= " + getStName() +
+            ", city= " + getCity() +
+            ", parish= " + getParish();
+    }
+
 }

@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="inventory")
-public class Inventory implements Serializable{
+public class Inventory extends DBEntity implements Serializable{
     @Id
     @Column(name="productCode", unique = true, nullable = false)
     String productCode;
@@ -97,4 +97,17 @@ public class Inventory implements Serializable{
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return
+            "\n productCode= " + getProductCode() +
+            ", name= " + getName() +
+            ", shortDescrip= " + getShortDescrip() +
+            ", longDescrip= " + getLongDescrip() +
+            ", stock= " + getStock() +
+            ", unitPrice= " + getUnitPrice() ;
+    }
+    
 }

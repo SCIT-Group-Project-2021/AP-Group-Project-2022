@@ -87,4 +87,17 @@ public class Staff extends DBEntity implements Serializable{
     }
 
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n idNum= " + getIdNum() +
+            ", fName= " + getfName() +
+            ", lName= " + getlName() +
+            ", phoneNum= " + getPhoneNum() +
+            ", employeeType= " + getEmployeeType() +
+            ", departmentCode= " + getDepartmentCode();
+    }
+
 }

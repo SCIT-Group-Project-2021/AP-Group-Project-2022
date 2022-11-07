@@ -39,4 +39,13 @@ public class Department extends DBEntity implements Serializable{
     }
 
     //endregion
+    
+
+    @Override
+    public String toString() {
+        return 
+            "\n departmentCode= " + getDepartmentCode() +
+            ", name=" + getName();
+    }
+
 }

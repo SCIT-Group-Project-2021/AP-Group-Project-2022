@@ -27,16 +27,32 @@ public class ClientApplication {
         logger.fatal("Test Fatal message");
         logger.warn("Test Warning message");*/
 
-        Client client = new Client();
+       
 
         Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03", "2023-11-03");
         
-        Staff staff = new Staff(289219,"Gabriel","Tickle","18765993666","Admin","2555");
+        Department dep = new Department("Admin", "Admin");
+
+        Staff staff = new Staff(339219,"Gabriel","Tickle","18765993666","Admin","Admin");
 
         cust.setAction("addEntity");
+        dep.setAction("addEntity");
         staff.setAction("addEntity");
-        client.sendEntity(cust);
+       
+        
+        System.out.println("Task 1");
+        new Client().sendEntity(cust);
+        
+        System.out.println("Task 2");
+        new Client().getList("Department");
 
+        System.out.println("Task 3");
+        new Client().findEntity("Staff","idNum", "339219");
+        
+
+
+        
+        
         //new posPage();
         
 	}

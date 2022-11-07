@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "customer")
-public class Customer extends DBEntity implements Serializable{
+public class Customer extends DBEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="customerID")
@@ -112,5 +112,20 @@ public class Customer extends DBEntity implements Serializable{
         this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
     //endregion
+
+
+    @Override
+    public String toString() {
+        return 
+            "\n customerId= " + getCustomerId() +
+            ", fName= " + getfName() +
+            ", lName= " + getlName() +
+            ", dob= " + getDob() +
+            ", telephoneNum= " + getTelephoneNum() +
+            ", email= " + getEmail() +
+            ", dateOfMembership= " + getDateOfMembership() +
+            ", dateOfMembershipExpiry= " + getDateOfMembershipExpiry();
+    }
+
 
 }
