@@ -71,7 +71,7 @@ public class Invoice extends DBEntity implements Serializable{
 
     //endregion
 
-    Override
+    @Override
     public String toString() {
         return 
             "\n invoiceNum= " + getInvoiceNum() +
