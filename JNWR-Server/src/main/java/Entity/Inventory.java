@@ -25,32 +25,27 @@ public class Inventory extends DBEntity implements Serializable{
     @Column(name="unitPrice", nullable = false)
     float unitPrice;
 
-    @Column(name="expiryDate", nullable = false)
-    String expiryDate;
-
     @Column(name="categoryID", nullable = false)
     String categoryID;
 
     public Inventory(){}
 
-    public Inventory(String productCode, String name, String shortDescrip, int stock, float unitPrice, String expiryDate) {
+    public Inventory(String productCode, String name, String shortDescrip, int stock, float unitPrice) {
         this.productCode = productCode;
         this.name = name;
         this.shortDescrip = shortDescrip;
         this.stock = stock;
         this.unitPrice = unitPrice;
-        this.expiryDate = expiryDate;
     }
 
     //Includes longDescrip
-    public Inventory(String productCode, String name, String shortDescrip, String longDescrip, int stock, float unitPrice, String expiryDate) {
+    public Inventory(String productCode, String name, String shortDescrip, String longDescrip, int stock, float unitPrice) {
         this.productCode = productCode;
         this.name = name;
         this.shortDescrip = shortDescrip;
         this.longDescrip = longDescrip;
         this.stock = stock;
         this.unitPrice = unitPrice;
-        this.expiryDate = expiryDate;
     }
 
 
@@ -102,14 +97,6 @@ public class Inventory extends DBEntity implements Serializable{
 
     public void setUnitPrice(float unitPrice) {
         this.unitPrice = unitPrice;
-    }
-
-    public String getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
     }
 
     //endregion

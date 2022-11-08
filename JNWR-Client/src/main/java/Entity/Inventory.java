@@ -25,6 +25,9 @@ public class Inventory extends DBEntity implements Serializable{
     @Column(name="unitPrice", nullable = false)
     float unitPrice;
 
+    @Column(name="categoryID", nullable = false)
+    String categoryID;
+
     public Inventory(){}
 
     public Inventory(String productCode, String name, String shortDescrip, int stock, float unitPrice) {
@@ -102,12 +105,12 @@ public class Inventory extends DBEntity implements Serializable{
     @Override
     public String toString() {
         return
-            "\n productCode= " + getProductCode() +
-            ", name= " + getName() +
-            ", shortDescrip= " + getShortDescrip() +
-            ", longDescrip= " + getLongDescrip() +
-            ", stock= " + getStock() +
-            ", unitPrice= " + getUnitPrice() ;
+                "\n productCode= " + getProductCode() +
+                        ", name= " + getName() +
+                        ", shortDescrip= " + getShortDescrip() +
+                        ", longDescrip= " + getLongDescrip() +
+                        ", stock= " + getStock() +
+                        ", unitPrice= " + getUnitPrice() ;
     }
-    
+
 }
