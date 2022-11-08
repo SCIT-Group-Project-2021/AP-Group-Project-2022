@@ -18,16 +18,17 @@ import Entity.*;
 
 public class Server {
 
-    //Create's Entity Manager Factor using the entityManager(Hibernate) Set in the Persistence.xm
+    //Creates Entity Manager Factor using the entityManager(Hibernate) Set in the Persistence.xm
     private static EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
 
     private ServerSocket serverSocket;
     private Socket connectionSocket;
     private ObjectOutputStream objOs;
-    private ObjectInputStream objIs; 
+    private ObjectInputStream objIs;
+
 
     //Open Server on Port Specified and then waits for request
-    public Server() throws ClassNotFoundException {
+    public Server() {
         this.createConnection();
         this.waitForRequests();
     }
@@ -39,7 +40,25 @@ public class Server {
         this.objIs = objIs;
     }
 
-    private void waitForRequests() throws ClassNotFoundException {
+    public void createConnection() {
+        try {
+            serverSocket = new ServerSocket(8888);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            objIs.close();
+            objOs.close();
+            connectionSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void waitForRequests() {
         String action = "";
         try {
             while (true) {
@@ -155,23 +174,7 @@ public class Server {
         }
     }
 
-    public void createConnection() {
-        try {
-            serverSocket = new ServerSocket(8888);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
-    public void closeConnection() {
-        try {
-            objIs.close();
-            objOs.close();
-            connectionSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void addEntity(DBEntity entity) {
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
