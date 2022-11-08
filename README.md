@@ -45,8 +45,8 @@ project, within seven (7) days of this document being distributed.
     - [ ]  Comments, Programming Conventions and documentation
 - [ ]  Functioning Software Solution
     - [ ]  Graphical User Interface
-    - [ ]  Client/Server Networking Model
-    - [ ]  Database Connectivity
+    - [x]  Client/Server Networking Model
+    - [x]  Database Connectivity
     - [ ]  Exception Handling & Logging, User & data input validation
     - [ ]  Classes
     - [ ]  Interfaces
