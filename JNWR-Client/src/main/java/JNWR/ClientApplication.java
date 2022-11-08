@@ -47,7 +47,7 @@ public class ClientApplication {
         new Client().getList("Department");
 
         System.out.println("Task 3");
-        new Client().findEntity("Staff","idNum", "339219");
+        //new Client().findEntity("Staff","idNum", "339219");
         
 
 
