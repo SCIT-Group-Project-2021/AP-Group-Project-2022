@@ -16,30 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `invoiceitems`
+-- Table structure for table `invencategory`
 --
 
-DROP TABLE IF EXISTS `invoiceitems`;
+DROP TABLE IF EXISTS `invencategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `invoiceitems` (
-  `productCode` char(11) NOT NULL,
-  `invoiceNum` int NOT NULL,
-  `itemQuantity` int NOT NULL,
-  PRIMARY KEY (`productCode`,`invoiceNum`),
-  KEY `invoiceNum_idx` (`invoiceNum`),
-  CONSTRAINT `invoiceNum` FOREIGN KEY (`invoiceNum`) REFERENCES `invoice` (`invoiceNum`),
-  CONSTRAINT `productCode` FOREIGN KEY (`productCode`) REFERENCES `inventory` (`productCode`)
+CREATE TABLE `invencategory` (
+  `categoryID` varchar(5) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`categoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `invoiceitems`
+-- Dumping data for table `invencategory`
 --
 
-LOCK TABLES `invoiceitems` WRITE;
-/*!40000 ALTER TABLE `invoiceitems` DISABLE KEYS */;
-/*!40000 ALTER TABLE `invoiceitems` ENABLE KEYS */;
+LOCK TABLES `invencategory` WRITE;
+/*!40000 ALTER TABLE `invencategory` DISABLE KEYS */;
+INSERT INTO `invencategory` VALUES ('BKY','Baked Goods'),('BVG','Beverage'),('CNG','Canned Goods'),('DAI','Dairy'),('DRY','Baking Goods'),('FZG','Frozen Goods'),('HSS','Household & Cleaning Supplies'),('MT','Meat'),('PRD','Produce'),('PSC','Personal Care'),('PTC','Pet Care'),('SFD','Seafood'),('SNK','Snacks');
+/*!40000 ALTER TABLE `invencategory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-03 11:33:41
+-- Dump completed on 2022-11-09 17:53:13

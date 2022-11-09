@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `department` (
-  `departmentCode` varchar(6) NOT NULL,
+  `departmentCode` varchar(3) NOT NULL,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`departmentCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -35,6 +35,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
+INSERT INTO `department` VALUES ('ACS','Accounting and Sales'),('INV','Inventory'),('MGT','Management');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -47,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-03 11:33:41
+-- Dump completed on 2022-11-09 17:53:15

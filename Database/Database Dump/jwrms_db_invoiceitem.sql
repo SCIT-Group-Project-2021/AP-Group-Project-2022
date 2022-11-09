@@ -16,32 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `staff`
+-- Table structure for table `invoiceitem`
 --
 
-DROP TABLE IF EXISTS `staff`;
+DROP TABLE IF EXISTS `invoiceitem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `staff` (
-  `idNum` int NOT NULL,
-  `fName` varchar(45) NOT NULL,
-  `lName` varchar(45) NOT NULL,
-  `phoneNum` varchar(11) NOT NULL,
-  `employeeType` varchar(11) NOT NULL,
-  `departmentCode` varchar(3) NOT NULL,
-  PRIMARY KEY (`idNum`),
-  KEY `staffdepartment_idx` (`departmentCode`),
-  CONSTRAINT `staffdepartment` FOREIGN KEY (`departmentCode`) REFERENCES `department` (`departmentCode`)
+CREATE TABLE `invoiceitem` (
+  `productCode` char(11) NOT NULL,
+  `invoiceNum` int NOT NULL,
+  `itemQuantity` int NOT NULL,
+  PRIMARY KEY (`productCode`,`invoiceNum`),
+  KEY `invoiceNum_idx` (`invoiceNum`),
+  CONSTRAINT `invoiceNum` FOREIGN KEY (`invoiceNum`) REFERENCES `invoice` (`invoiceNum`),
+  CONSTRAINT `productCode` FOREIGN KEY (`productCode`) REFERENCES `inventory` (`productCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff`
+-- Dumping data for table `invoiceitem`
 --
 
-LOCK TABLES `staff` WRITE;
-/*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff` ENABLE KEYS */;
+LOCK TABLES `invoiceitem` WRITE;
+/*!40000 ALTER TABLE `invoiceitem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoiceitem` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-09 17:53:13
+-- Dump completed on 2022-11-09 17:53:14

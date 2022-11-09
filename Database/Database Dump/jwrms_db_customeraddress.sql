@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `customeraddress`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customeraddress` (
   `customerID` int NOT NULL,
-  `stName` varchar(100) NOT NULL,
+  `stName` varchar(100) DEFAULT NULL,
   `city` varchar(45) NOT NULL,
   `parish` varchar(45) NOT NULL,
   PRIMARY KEY (`customerID`),
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-03 11:33:40
+-- Dump completed on 2022-11-09 17:53:14

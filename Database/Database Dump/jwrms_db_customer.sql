@@ -32,7 +32,7 @@ CREATE TABLE `customer` (
   `dateOfMembership` date NOT NULL,
   `dateOfMembershipExpiry` date NOT NULL,
   PRIMARY KEY (`customerID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100008 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES (100000,'Ashley','Deans','2002-06-12','18764523606','ashs4657@gmail.com','2022-11-03','2023-11-03'),(100001,'Ashley','Deans','2002-12-06','18764523606','ashs4657@gmail.com','2022-11-03','2023-11-03'),(100002,'Ashley','Deans','2002-12-06','18764523606','ashs4657@gmail.com','2022-11-03','2023-11-03'),(100003,'Ashley','Deans','2002-12-06','18764523606','ashs4657@gmail.com','2022-11-03','2023-11-03'),(100004,'Ashley','Deans','2002-12-06','18764523606','ashs4657@gmail.com','2022-11-03','2023-11-03'),(100005,'chase','Doe','2001-07-16','18765553606','gabe@gmail.com','2022-11-03','2023-11-03'),(100006,'chase','Doe','2001-07-16','18765553606','gabe@gmail.com','2022-11-03','2023-11-03'),(100007,'chase','Doe','2001-07-16','18765553606','gabe@gmail.com','2022-11-03','2023-11-03');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-03 11:33:41
+-- Dump completed on 2022-11-09 17:53:13

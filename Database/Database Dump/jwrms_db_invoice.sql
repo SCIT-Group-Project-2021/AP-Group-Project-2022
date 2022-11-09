@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `invoice`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `invoice` (
   `invoiceNum` int NOT NULL AUTO_INCREMENT,
-  `billingDate` varchar(45) NOT NULL,
+  `billingDate` date NOT NULL,
   `customerID` int DEFAULT NULL,
   `staffID` int NOT NULL,
   PRIMARY KEY (`invoiceNum`),
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-03 11:33:41
+-- Dump completed on 2022-11-09 17:53:14
