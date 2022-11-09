@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -94,14 +95,17 @@ public class Client {
         }
     }
 
-    public void getList(String Table) {
+    public ArrayList<DBEntity> getList(String Table) {
+
+        ArrayList<DBEntity> list = new ArrayList<DBEntity>();
         //Calls the get list function
         sendAction("getList");
         //Tells the functionwhat table to return
         sendAction(Table);
 
         try {
-            System.out.println(Arrays.toString(((List) objIs.readObject()).toArray()));
+            list =(ArrayList<DBEntity>) objIs.readObject();
+            System.out.println(Arrays.toString(list.toArray()));
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -119,6 +123,8 @@ public class Client {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        return list;
   
     }
 

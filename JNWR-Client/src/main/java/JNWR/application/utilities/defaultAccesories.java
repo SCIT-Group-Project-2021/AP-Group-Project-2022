@@ -15,8 +15,6 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.miginfocom.swing.MigLayout;
-
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -31,36 +29,59 @@ public class defaultAccesories {
 
     //MigLayout mig = new MigLayout("fill,gap 5,insets 5");
 
-    public JFrame createBFrame() {
+    public class createBFrame{
 
-        JFrame frame = new JFrame();
-        //frame.setLayout(mig);
-        frame.setSize(1200, 500);
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        logger.trace("created Default Frame");
-    
-        return frame;
-    
+        public JFrame createBFrame() {
+
+            JFrame frame = new JFrame();
+            //frame.setLayout(mig);
+            frame.setSize(1200, 500);
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
+            logger.trace("created Default Frame");
+        
+            return frame;
+        
+        }
+
+        public static JFrame createBFrame(int w,int h) {
+
+            JFrame frame = new JFrame();
+            //frame.setLayout(mig);
+            frame.setSize(w, h);
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
+            logger.trace("created with customized size Default Frame");
+        
+            return frame;
+        
+        }
+        
+
     }
-
-    public JFrame createBFrame(int w,int h) {
-
-        JFrame frame = new JFrame();
-        //frame.setLayout(mig);
-        frame.setSize(w, h);
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        logger.trace("created with customized size Default Frame");
     
-        return frame;
+    public class createJPanel {
     
-    }
-    
-    public JPanel createJPanel() {
+        public JPanel createJPanel(int rnd) {
     
         PanelRound newJPanel = new PanelRound();
-        newJPanel.setRound(25);
+        newJPanel.setRound(rnd);
+        newJPanel.setSize(250, 250);
+        newJPanel.setVisible(true);
+        
+        return newJPanel;
+    
+    }
+
+        public JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
+    
+        PanelRound newJPanel = new PanelRound() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(fixedWidth, fixedHeight);
+            }
+        };
+        newJPanel.setRound(rnd);
         newJPanel.setSize(250, 250);
         newJPanel.setVisible(true);
         logger.trace("created Default Panel");
@@ -69,85 +90,88 @@ public class defaultAccesories {
     
     }
 
-    public JPanel createJPanel(int w,int h) {
-    
-        JPanel newJPanel = new JPanel();
-        newJPanel.setSize(w, h);
-        newJPanel.setVisible(true);
-        logger.trace("created with customized size Default Frame");
-    
-        return newJPanel;
-    
-    }
-    
-    public JLabel defaultLabel(String text) {
-    
-        JLabel newJLabel = new JLabel(text);
-        newJLabel.setSize(200, 25);
-        newJLabel.setVisible(true);
-        logger.trace("created Default Label");
-    
-        return newJLabel;
-    
+        
     }
 
-    public JLabel defaultLabel(int w,int h, String text) {
-    
-        JLabel newJLabel = new JLabel("Default Label");
-        newJLabel.setSize(w, h);
-        newJLabel.setVisible(true);
-        logger.trace("created Default Label");
+    public class defaultLabel{
 
-        return newJLabel;
+        public JLabel defaultLabel(String text) {
     
-    }
+            JLabel newJLabel = new JLabel(text);
+            newJLabel.setSize(200, 25);
+            newJLabel.setVisible(true);
+            logger.trace("created Default Label");
+        
+            return newJLabel;
+        
+        }
     
-    public JButton defaultButton() {
+        public JLabel defaultLabel(int w,int h, String text) {
+        
+            JLabel newJLabel = new JLabel("Default Label");
+            newJLabel.setSize(w, h);
+            newJLabel.setVisible(true);
+            logger.trace("created Default Label");
     
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(175, 25);
-        newJButton.setVisible(true);
-        logger.trace("created Default Button");
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-
-    public JButton defaultButton(int w,int h) {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(w, h);
-        newJButton.setVisible(true);
-        logger.trace("created Default Button");
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-    
-    public JTextField defaultTextField() {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(175, 25);
-        newJTextField.setVisible(true);
-        logger.trace("created Default TextBox");
-    
-        return newJTextField;
-    
+            return newJLabel;
+        
+        }
+        
+        
     }
 
-    public JTextField defaultTextField(int w,int h) {
+    public class defaultButton{
+        public JButton defaultButton() {
     
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(w, h);
-        newJTextField.setVisible(true);
-        logger.trace("created Default TextBox");
+            JButton newJButton = new JButton("Default Button");
+            newJButton.setSize(175, 25);
+            newJButton.setVisible(true);
+            logger.trace("created Default Button");
+            newJButton.setUI(new StyledButtonUI());
+        
+            return newJButton;
+        
+        }
     
-        return newJTextField;
-    
+        public JButton defaultButton(int w,int h) {
+        
+            JButton newJButton = new JButton("Default Button");
+            newJButton.setSize(w, h);
+            newJButton.setVisible(true);
+            logger.trace("created Default Button");
+            newJButton.setUI(new StyledButtonUI());
+        
+            return newJButton;
+        
+        }
+        
     }
 
+    public class defaultTextField{
+        public JTextField defaultTextField() {
+    
+            JTextField newJTextField = new JTextField();
+            newJTextField.setSize(175, 25);
+            newJTextField.setVisible(true);
+            logger.trace("created Default TextBox");
+        
+            return newJTextField;
+        
+        }
+    
+        public JTextField defaultTextField(int w,int h) {
+        
+            JTextField newJTextField = new JTextField();
+            newJTextField.setSize(w, h);
+            newJTextField.setVisible(true);
+            logger.trace("created Default TextBox");
+        
+            return newJTextField;
+        
+        }
+    
+    }
+    
     public static class RoundedBorder implements Border {
         
         private int radius;

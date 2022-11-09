@@ -2,11 +2,14 @@ package JNWR.application;
 import java.awt.Dimension;
 import java.awt.Color;
 import javax.swing.*;
+
+import JNWR.application.utilities.defaultPanelAccessories;
+
 import java.awt.GridBagConstraints;  
 import java.awt.GridBagLayout;
 import java.awt.Insets; 
 
-public class posPage extends JNWR.application.utilities.defaultAccesories{
+public class posPage implements defaultPanelAccessories{
 
     public posPage() {
 
@@ -26,42 +29,42 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         //endregion
 
         //region Header Bar
-        JPanel menuBar = createJPanel();
+        JPanel menuBar = createJPanel(25);
         menuBar.setBackground(Color.WHITE);
         menuBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
         menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
         //endregion
 
         //region Center Panel
-        JPanel mainPanel = createJPanel();
+        JPanel mainPanel = createJPanel(25);
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(round);
         mainPanel.setLayout(new GridBagLayout());
         //endregion
 
         //region invoicePanel
-        JPanel sidePanelUpper = createJPanel();
+        JPanel sidePanelUpper = createJPanel(25);
         sidePanelUpper.setBackground(Color.WHITE);
         sidePanelUpper.setBorder(round);
         //sidePanelUpper.setLayout();
         //endregion
         
         //region sumPanel
-        JPanel sidePanelLower = createJPanel();
+        JPanel sidePanelLower = createJPanel(25);
         sidePanelLower.setBackground(Color.WHITE);
         sidePanelLower.setBorder(round);
         //sidePanelLower.setLayout(new BoxLayout(sidePanelLower, BoxLayout.X_AXIS));
         //endregion
 
         //region CheckoutPanel
-        JPanel endPanel = createJPanel();
+        JPanel endPanel = createJPanel(25);
         endPanel.setBackground(Color.WHITE);
         endPanel.setBorder(round);
         //endPanel.setLayout(new BoxLayout(endPanel, BoxLayout.Y_AXIS));
         //endregion
 
         //region Item Panel
-        JPanel itemPanel = createJPanel();
+        JPanel itemPanel = createJPanel(25);
         itemPanel.setBackground(Color.WHITE);
         itemPanel.setBorder(round);
         //itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.X_AXIS));
@@ -159,21 +162,21 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
         //endregion
 
         //region Center Panel
-        JPanel centralItemPanel = createJPanel();
+        JPanel centralItemPanel = createJPanel(25);
         centralItemPanel.setBackground(Color.WHITE);
         centralItemPanel.setBorder(round);
         centralItemPanel.setLayout(new GridBagLayout());
         //endregion
 
         //region Center Panel
-        JPanel centralButtonPanel = createJPanel();
+        JPanel centralButtonPanel = createJPanel(25);
         centralButtonPanel.setBackground(Color.WHITE);
         centralButtonPanel.setBorder(round);
         centralButtonPanel.setLayout(new GridBagLayout());
         //endregion
 
         //region Center Panel
-        JPanel customerItemPanel = createJPanel();
+        JPanel customerItemPanel = createJPanel(25);
         customerItemPanel.setBackground(Color.WHITE);
         customerItemPanel.setBorder(round);
         customerItemPanel.setLayout(new GridBagLayout());
@@ -202,6 +205,119 @@ public class posPage extends JNWR.application.utilities.defaultAccesories{
 
         
         
+    }
+    
+    public static JFrame createBFrame() {
+
+        JFrame frame = new JFrame();
+        //frame.setLayout(mig);
+        frame.setSize(1200, 500);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    
+        return frame;
+    
+    }
+
+    public static JFrame createBFrame(int w,int h) {
+
+        JFrame frame = new JFrame();
+        //frame.setLayout(mig);
+        frame.setSize(w, h);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    
+        return frame;
+    
+    }
+    
+    public static JPanel createJPanel(int rnd) {
+    
+        PanelRound newJPanel = new PanelRound();
+        newJPanel.setRound(rnd);
+        newJPanel.setSize(250, 250);
+        newJPanel.setVisible(true); 
+
+        return newJPanel;
+    
+    }
+
+    public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
+    
+        PanelRound newJPanel = new PanelRound() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(fixedWidth, fixedHeight);
+            }
+        };
+        newJPanel.setRound(rnd);
+        newJPanel.setSize(250, 250);
+        newJPanel.setVisible(true);
+    
+        return newJPanel;
+    
+    }
+
+    public static JLabel defaultLabel(String text) {
+    
+        JLabel newJLabel = new JLabel(text);
+        newJLabel.setSize(200, 25);
+        newJLabel.setVisible(true);
+    
+        return newJLabel;
+    
+    }
+
+    public static JLabel defaultLabel(int w,int h, String text) {
+    
+        JLabel newJLabel = new JLabel("Default Label");
+        newJLabel.setSize(w, h);
+        newJLabel.setVisible(true);
+
+        return newJLabel;
+    
+    }
+    
+    public static JButton defaultButton() {
+    
+        JButton newJButton = new JButton("Default Button");
+        newJButton.setSize(175, 25);
+        newJButton.setVisible(true);
+        newJButton.setUI(new StyledButtonUI());
+    
+        return newJButton;
+    
+    }
+
+    public static JButton defaultButton(int w,int h) {
+    
+        JButton newJButton = new JButton("Default Button");
+        newJButton.setSize(w, h);
+        newJButton.setVisible(true);
+        newJButton.setUI(new StyledButtonUI());
+    
+        return newJButton;
+    
+    }
+    
+    public static JTextField defaultTextField() {
+    
+        JTextField newJTextField = new JTextField();
+        newJTextField.setSize(175, 25);
+        newJTextField.setVisible(true);
+    
+        return newJTextField;
+    
+    }
+
+    public static JTextField defaultTextField(int w,int h) {
+    
+        JTextField newJTextField = new JTextField();
+        newJTextField.setSize(w, h);
+        newJTextField.setVisible(true);
+    
+        return newJTextField;
+    
     }
     
 }
