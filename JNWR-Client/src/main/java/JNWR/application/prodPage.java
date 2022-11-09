@@ -100,13 +100,13 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
     public void updateTable() {
 
-        ArrayList<DBEntity> list = new Client().getList("inventory");
+        ArrayList<DBEntity> list = new Client().getList("Inventory");
 
         for (int i = 0; i < list.size(); i++) {
 
             Inventory inven = (Inventory) list.get(i);
 
-            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getShortDescrip(),inven.getLongDescrip(),inven.getStock(),inven.getUnitPrice()});
+            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
         
         }
         

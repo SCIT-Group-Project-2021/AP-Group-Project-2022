@@ -42,16 +42,18 @@ public class ClientApplication {
         
         System.out.println("Task 1");
         new Client().sendEntity(cust);
-        */
+
         System.out.println("Task 2");
         new Client().getList("Department");
-        /* 
+
         System.out.println("Task 3");
         new Client().findEntity("Staff","idNum", "339219");
         */
         
-        
+
+
         new landingPage();
+
         
 	}
 

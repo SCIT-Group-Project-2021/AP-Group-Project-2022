@@ -30,22 +30,24 @@ public class Inventory extends DBEntity implements Serializable{
 
     public Inventory(){}
 
-    public Inventory(String productCode, String name, String shortDescrip, int stock, float unitPrice) {
+    public Inventory(String productCode, String name, String shortDescrip, int stock, float unitPrice, String categoryID) {
         this.productCode = productCode;
         this.name = name;
         this.shortDescrip = shortDescrip;
         this.stock = stock;
         this.unitPrice = unitPrice;
+        this.categoryID = categoryID;
     }
 
     //Includes longDescrip
-    public Inventory(String productCode, String name, String shortDescrip, String longDescrip, int stock, float unitPrice) {
+    public Inventory(String productCode, String name, String shortDescrip, String longDescrip, int stock, float unitPrice, String categoryID) {
         this.productCode = productCode;
         this.name = name;
         this.shortDescrip = shortDescrip;
         this.longDescrip = longDescrip;
         this.stock = stock;
         this.unitPrice = unitPrice;
+        this.categoryID = categoryID;
     }
 
 

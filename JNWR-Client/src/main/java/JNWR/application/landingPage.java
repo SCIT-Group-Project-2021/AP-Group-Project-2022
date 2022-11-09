@@ -1,10 +1,6 @@
 package JNWR.application;
 
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.GridBagConstraints;  
-import java.awt.GridBagLayout;
-import java.awt.Insets; 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -71,31 +67,31 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         final int sideBarX = 25;
         final int sideBarY = 25;
         
-        JButton icon = defaultButton(sideBarX,sideBarY);
+        JButton icon = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/logo.png");
         icon.setBorder(round);
         icon.setText("");
 
-        JButton dashBoardButton = defaultButton(sideBarX,sideBarY);
+        JButton dashBoardButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-dashboard-100.png");
         dashBoardButton.setBorder(round);
         dashBoardButton.setText("");
 
-        JButton posButton = defaultButton(sideBarX,sideBarY);
+        JButton posButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-create-order-100.png");
         posButton.setBorder(round);
         posButton.setText("");
 
-        JButton customerButton = defaultButton(sideBarX,sideBarY);
+        JButton customerButton = iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-teamwork-100.png");
         customerButton.setBorder(round);
-        customerButton.setText("Cusotmer");
 
-        JButton inventoryButton = defaultButton(sideBarX,sideBarY);
+
+        JButton inventoryButton = iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-glyph-100.png");
         inventoryButton.setBorder(round);
         inventoryButton.setText("");
 
-        JButton reportButton = defaultButton(sideBarX,sideBarY);
+        JButton reportButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png");
         reportButton.setBorder(round);
         reportButton.setText("");
 
-        JButton settingButton = defaultButton(sideBarX,sideBarY);
+        JButton settingButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png");
         settingButton.setBorder(round);
         settingButton.setText("");
 
@@ -150,7 +146,39 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //endregion
 
-        //region Customer
+
+        //region Buttons
+        dashBoardButton.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mpCons.fill = GridBagConstraints.BOTH;
+                        mpCons.weightx = 1;
+                        mpCons.weighty = 1;
+                        mainPanel.add(new dashboardPage(),mpCons);
+                        refresh();
+
+                    }
+                }
+        );
+
+
+        posButton.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mpCons.fill = GridBagConstraints.BOTH;
+                        mpCons.weightx = 1;
+                        mpCons.weighty = 1;
+                        mainPanel.add(new custPage(),mpCons);
+                        refresh();
+
+                    }
+                }
+        );
+
         customerButton.addActionListener(
             new ActionListener()
             {
@@ -182,11 +210,29 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 }
             }
         );
+
+        reportButton.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mpCons.fill = GridBagConstraints.BOTH;
+                        mpCons.weightx = 1;
+                        mpCons.weighty = 1;
+                        mainPanel.add(new prodPage(),mpCons);
+                        refresh();
+
+                    }
+                }
+        );
         //endregion
 
-
+        mpCons.fill = GridBagConstraints.BOTH;
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        //mainPanel.add(new dashboardPage(),mpCons);
         refresh();
-        
+
     }
 
     private void refresh() {
@@ -242,7 +288,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     
     }
     
-    public static JButton defaultButton() {
+    public static JButton iconButton() {
     
         JButton newJButton = new JButton("Default Button");
         newJButton.setSize(175, 25);
@@ -253,13 +299,22 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     
     }
 
-    public static JButton defaultButton(int w,int h) {
-    
-        JButton newJButton = new JButton("Default Button");
+    public static JButton iconButton(int w,int h, String src) {
+        Icon icon = new ImageIcon(src);
+        Image img = ((ImageIcon) icon).getImage() ;
+        Image newimg = img.getScaledInstance( 55, 55,  java.awt.Image.SCALE_SMOOTH ) ;
+        icon = new ImageIcon( newimg );
+        JButton newJButton = new JButton(icon);
+        //JButton newJButton = new JButton("Default Button");
         newJButton.setSize(w, h);
         newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
+        //newJButton.setUI(new StyledButtonUI());
+        newJButton.setBorderPainted(false);
+        newJButton.setContentAreaFilled(false);
+        newJButton.setFocusPainted(false);
+        newJButton.setOpaque(false);
+        newJButton.setBorder(null);
+        newJButton.setBorderPainted(false);
         return newJButton;
     
     }

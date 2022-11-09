@@ -1,10 +1,6 @@
 package JNWR.application.utilities;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Insets;
+import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,16 +8,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
 public interface defaultPanelAccessories {
-
+    Font heading1 = new Font("Outfit", Font.BOLD, 40);
+    Font heading2 = new Font("Outfit", Font.BOLD, 30);
+    Font medText = new Font("Outfit", Font.PLAIN, 22);
+    Font smText = new Font("Outfit", Font.PLAIN, 18);
 
     public static class RoundedBorder implements Border {
         
