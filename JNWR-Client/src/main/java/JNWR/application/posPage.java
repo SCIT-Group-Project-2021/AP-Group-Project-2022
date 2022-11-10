@@ -1,7 +1,11 @@
 package JNWR.application;
-import java.awt.Dimension;
+
+import java.awt.*;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import JNWR.application.utilities.defaultPanelAccessories;
 
@@ -9,7 +13,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets; 
 
-public class posPage implements defaultPanelAccessories{
+public class posPage extends JPanel implements defaultPanelAccessories{
+
+    DefaultTableModel headerModel = new DefaultTableModel();
+        
+    String headers[] = { "Time Management", "Clocked Users"};
 
     public posPage() {
 
@@ -18,306 +26,234 @@ public class posPage implements defaultPanelAccessories{
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
         mpCons.fill = GridBagConstraints.BOTH;
-        mpCons.insets = new Insets(5, 5, 5, 5);
+        mpCons.insets = new Insets(0, 0, 0, 0);
         mpCons.anchor = GridBagConstraints.NORTH;
         //endregion
 
-        //region Base Frame Setup
-        JFrame frame = createBFrame(1840,1000);
-        frame.setMinimumSize(new Dimension(1040,600));
-        frame.setLayout(new GridBagLayout());
+        //region Main Panel
+        setLayout(new GridBagLayout());
         //endregion
 
-        //region Header Bar
-        JPanel menuBar = createJPanel(25);
-        menuBar.setBackground(Color.WHITE);
-        menuBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
-        menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
+        //region Top Bar
+        JPanel topBar = defaultPanelAccessories.createJPanel(0,80,120);
+        topBar.setLayout(new GridBagLayout());
+
+        //region date/time bar
+        JPanel dateTimePanel = defaultPanelAccessories.createJPanel(50,450,80);
+        dateTimePanel.setBackground(Color.WHITE);
+        dateTimePanel.setLayout(new GridBagLayout());
+
+
+        Image calendarImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-desk-calendar-100.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
+        ImageIcon calendarIcon = new ImageIcon(calendarImage);
+        JLabel calendar = new JLabel(calendarIcon);
+        JLabel date = new JLabel(defaultPanelAccessories.getTodayDate());
+        date.setFont(heading3);
+
+        Image clockImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-clock-100-2.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
+        ImageIcon clockIcon = new ImageIcon(clockImage);
+        JLabel clock = new JLabel(clockIcon);
+        JLabel time = new JLabel(defaultPanelAccessories.getCurrentTime());
+        time.setFont(heading3);
         //endregion
 
-        //region Center Panel
-        JPanel mainPanel = createJPanel(25);
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(round);
-        mainPanel.setLayout(new GridBagLayout());
+        //region Log Out Label & Button
+        JLabel empName = new JLabel();
+        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setFont(heading3);
+        JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
 
-        //region invoicePanel
-        JPanel sidePanelUpper = createJPanel(25);
-        sidePanelUpper.setBackground(Color.WHITE);
-        sidePanelUpper.setBorder(round);
-        //sidePanelUpper.setLayout();
         //endregion
+
+        //region main section
+        JPanel mainSection = defaultPanelAccessories.createJPanel(0,350,80);
+        mainSection.setLayout(new GridBagLayout());
+
+        //region userBox
+        JPanel userBox = defaultPanelAccessories.createJPanel(0,350,350);
+        userBox.setOpaque(false);
+        userBox.setLayout(new GridBagLayout());
+
+        headerModel.setColumnIdentifiers(headers);
+
+        JTable userTable = new JTable(headerModel);
         
-        //region sumPanel
-        JPanel sidePanelLower = createJPanel(25);
-        sidePanelLower.setBackground(Color.WHITE);
-        sidePanelLower.setBorder(round);
-        //sidePanelLower.setLayout(new BoxLayout(sidePanelLower, BoxLayout.X_AXIS));
+        JScrollPane userTableScroll = new JScrollPane(userTable){
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(100, 100);
+            }
+        };
+        //userTableScroll.setBackground(Color.GREEN);
         //endregion
 
-        //region CheckoutPanel
-        JPanel endPanel = createJPanel(25);
-        endPanel.setBackground(Color.WHITE);
-        endPanel.setBorder(round);
-        //endPanel.setLayout(new BoxLayout(endPanel, BoxLayout.Y_AXIS));
+        //region buttonBox
+        JPanel buttonBox = defaultPanelAccessories.createJPanel(0,350,350);
+        buttonBox.setOpaque(false);
+        buttonBox.setLayout(new GridBagLayout());
+
+        JButton clockOutButton = defaultPanelAccessories.defaultButton();
+        clockOutButton.setBorder(round);
+
+        JButton posButton = defaultPanelAccessories.defaultButton();
+        posButton.setBorder(round);
+
+        JButton inventoryButton = defaultPanelAccessories.defaultButton();
+        inventoryButton.setBorder(round);
+
+        JButton invoiceButton = defaultPanelAccessories.defaultButton();
+        invoiceButton.setBorder(round);
+
         //endregion
 
-        //region Item Panel
-        JPanel itemPanel = createJPanel(25);
-        itemPanel.setBackground(Color.WHITE);
-        itemPanel.setBorder(round);
-        //itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.X_AXIS));
         //endregion
 
-        //region
-        mpCons.weightx = .5;
+        //region Frame.Add
+
+        mpCons.ipadx = 0;
+        mpCons.ipady = 0;
+
+        mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.gridwidth = 3;
-        mpCons.ipady = 60;
-        frame.add(menuBar,mpCons);
+        add(topBar,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy = 1;
         mpCons.gridx = 0;
-        mpCons.gridheight = 1;
-        mpCons.gridwidth = 1;
-        mpCons.ipady = 100;
-        mpCons.ipadx = 40;
-        frame.add(sidePanelUpper,mpCons);
+        add(mainSection,mpCons);
+        
+        //region TopBar.Add
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(10, 30, 10, 10);
+        topBar.add(dateTimePanel,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.gridx++;
-        mpCons.gridheight = 2;
-        mpCons.ipady = 100;
-        mpCons.ipadx = 200;
-        frame.add(mainPanel, mpCons);
-
-        mpCons.weightx =  1;
-        mpCons.gridx++;
-        mpCons.gridheight = 2;
-        mpCons.ipady = 100;
-        mpCons.ipadx = 30;
-        frame.add(endPanel,mpCons);
-
         mpCons.weighty = 0;
-        mpCons.gridy = 2;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(empName,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(logOut,mpCons);        
+
+        //region DateTime.Add
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.gridheight = 1;
-        mpCons.ipady = 120;
-        mpCons.ipadx = 60;
-        frame.add(sidePanelLower, mpCons);
-        //endregion
+        mpCons.insets = new Insets(25, 25, 25, 5);
+        dateTimePanel.add(calendar, mpCons);
 
-        //region checkout
-        GridBagConstraints cons = new GridBagConstraints();
-        cons.fill = GridBagConstraints.HORIZONTAL;
-        cons.weightx = 1;
-        cons.weighty = 0;
-        cons.gridx = 0;
-        cons.gridy = 0;
-        cons.insets = new Insets(5, 5, 5, 5);
-        cons.anchor = GridBagConstraints.NORTH;
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        mpCons.insets = new Insets(25, 5, 25, 5);
+        dateTimePanel.add(date, mpCons);
 
-        endPanel.setLayout(new GridBagLayout());
+        /*mpCons.weightx = 0;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        //TODO: Fix separator
+        JSeparator line = new JSeparator(SwingConstants.VERTICAL);
+        line.setPreferredSize(new Dimension(25,25));
+        dateTimePanel.add(line);*/
 
-        JButton voidButton = defaultButton();
-        voidButton.setBorder(round);
-        voidButton.setText("Void");
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        dateTimePanel.add(clock, mpCons);
 
-        JButton holdButton = defaultButton();
-        holdButton.setBorder(round);
-        holdButton.setText("Hold");
-
-        JButton checkOutButton = defaultButton();
-        checkOutButton.setBorder(round);
-        checkOutButton.setText("Checkout");
-        JButton Button4 = defaultButton();
-        Button4.setBorder(round);
-
-        cons.ipady = 10;
-        endPanel.add(Button4,cons);
-        cons.gridy++;
-
-        cons.weighty = 1;
-        endPanel.add(Box.createGlue(),cons);
-        cons.gridy++;
-
-        cons.weighty = 0;
-        cons.ipady = 5;
-        endPanel.add(voidButton,cons);
-        cons.gridy++;
-        
-        cons.ipady = 5;
-        endPanel.add(holdButton,cons);
-        cons.gridy++;
-
-        cons.ipady = 10;
-        endPanel.add(checkOutButton,cons);
-        cons.gridy++;
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        mpCons.insets = new Insets(25, 5, 25, 25);
+        dateTimePanel.add(time, mpCons);
 
         //endregion
 
-        //region Center Panel
-        JPanel centralItemPanel = createJPanel(25);
-        centralItemPanel.setBackground(Color.WHITE);
-        centralItemPanel.setBorder(round);
-        centralItemPanel.setLayout(new GridBagLayout());
         //endregion
 
-        //region Center Panel
-        JPanel centralButtonPanel = createJPanel(25);
-        centralButtonPanel.setBackground(Color.WHITE);
-        centralButtonPanel.setBorder(round);
-        centralButtonPanel.setLayout(new GridBagLayout());
-        //endregion
-
-        //region Center Panel
-        JPanel customerItemPanel = createJPanel(25);
-        customerItemPanel.setBackground(Color.WHITE);
-        customerItemPanel.setBorder(round);
-        customerItemPanel.setLayout(new GridBagLayout());
-        //endregion
+        //region mainSection.Add
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.gridheight = 1;
-        mpCons.gridwidth = 1;
-        mpCons.ipady = 30;
-        mpCons.ipadx = 100;
-        mainPanel.add(centralItemPanel,mpCons);
+        mpCons.insets = new Insets(25, 25, 25, 25);
+        mainSection.add(userBox, mpCons);
 
-        mpCons.ipady = 100;
-        mpCons.gridy++;
-        mainPanel.add(centralButtonPanel,mpCons);
+        //region userBox.Add
 
-        mpCons.ipady = 40;
-        mpCons.gridy++;
-        mainPanel.add(customerItemPanel,mpCons);
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        userBox.add(userTableScroll, mpCons);
 
-        frame.repaint();
-        frame.setSize(1820,980);   
+        //endregion
+
+        mpCons.weightx = .5;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        mpCons.insets = new Insets(25, 25, 150, 25);
+        mainSection.add(buttonBox, mpCons);
+        mpCons.insets = new Insets(25, 25, 25, 25);
+
+        //region buttonBox.Add
+        
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        buttonBox.add(clockOutButton, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        buttonBox.add(posButton, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 1;
+        mpCons.gridx = 0;
+        buttonBox.add(invoiceButton, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 1;
+        mpCons.gridx = 1;
+        buttonBox.add(inventoryButton, mpCons);
+
+        //endregion
+
+        //endregion
+
+        //endregion
 
         
-        
-    }
-    
-    public static JFrame createBFrame() {
-
-        JFrame frame = new JFrame();
-        //frame.setLayout(mig);
-        frame.setSize(1200, 500);
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-    
-        return frame;
-    
-    }
-
-    public static JFrame createBFrame(int w,int h) {
-
-        JFrame frame = new JFrame();
-        //frame.setLayout(mig);
-        frame.setSize(w, h);
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-    
-        return frame;
-    
-    }
-    
-    public static JPanel createJPanel(int rnd) {
-    
-        PanelRound newJPanel = new PanelRound();
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true); 
-
-        return newJPanel;
-    
-    }
-
-    public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
-    
-        PanelRound newJPanel = new PanelRound() {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(fixedWidth, fixedHeight);
-            }
-        };
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true);
-    
-        return newJPanel;
-    
-    }
-
-    public static JLabel defaultLabel(String text) {
-    
-        JLabel newJLabel = new JLabel(text);
-        newJLabel.setSize(200, 25);
-        newJLabel.setVisible(true);
-    
-        return newJLabel;
-    
-    }
-
-    public static JLabel defaultLabel(int w,int h, String text) {
-    
-        JLabel newJLabel = new JLabel("Default Label");
-        newJLabel.setSize(w, h);
-        newJLabel.setVisible(true);
-
-        return newJLabel;
-    
-    }
-    
-    public static JButton defaultButton() {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(175, 25);
-        newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-
-    public static JButton defaultButton(int w,int h) {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(w, h);
-        newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-    
-    public static JTextField defaultTextField() {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(175, 25);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
-    }
-
-    public static JTextField defaultTextField(int w,int h) {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(w, h);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
     }
     
 }

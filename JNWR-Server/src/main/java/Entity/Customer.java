@@ -36,7 +36,7 @@ public class Customer extends DBEntity implements Serializable {
         
     }
 
-    public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership, String dateOfMembershipExpiry) {
+    public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership) {
         this.fName = fName;
         this.lName = lName;
         this.dob = dob;

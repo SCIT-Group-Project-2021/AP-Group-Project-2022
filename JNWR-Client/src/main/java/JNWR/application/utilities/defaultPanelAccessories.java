@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import java.awt.geom.Area;
@@ -16,6 +15,7 @@ import javax.swing.JPanel;
 public interface defaultPanelAccessories {
     Font heading1 = new Font("Outfit", Font.BOLD, 40);
     Font heading2 = new Font("Outfit", Font.BOLD, 30);
+    Font heading3 = new Font("Outfit", Font.BOLD, 24);
     Font medText = new Font("Outfit", Font.PLAIN, 22);
     Font smText = new Font("Outfit", Font.PLAIN, 18);
 
@@ -194,17 +194,73 @@ public interface defaultPanelAccessories {
             g.fillRoundRect(0, 0, size.width, size.height, 25, 25);
         }
 
-        private void paintBackground (Graphics g, JComponent c, int yOffset) {
-            Dimension size = c.getSize();
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setColor(c.getBackground().darker());
-            g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 25, 25);
-            g.setColor(c.getBackground());
-            g.fillRoundRect(0, yOffset, size.width, size.height + yOffset -1, 25, 25);
-        }
     }
 
+    public static String getCurrentTime() {
+        //TODO: Get current time function
+        String time = "16:35";
+        return time;
+    }
 
+    public static String getTodayDate() {
+        //TODO: Get month and day
+        String dateString = "9 November";
+        /*
+        Date = getDate();
+        String dateString = "";
+        dateString = getDay().toString() + " " + getMonth().toString();
+         */
+        return dateString;
+    }
+
+    public static String getCurrentUser() {
+        String empName = "Cassie C.";
+        //TODO: Get current user's name
+        return empName;
+    }
+
+    public static JButton iconButton(int w,int h, String src) {
+        
+        Image img = new ImageIcon(src).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(img);
+        JButton newJButton = new JButton(icon);
+        //JButton newJButton = new JButton("Default Button");
+        newJButton.setSize(w, h);
+        newJButton.setVisible(true);
+        //newJButton.setUI(new StyledButtonUI());
+        newJButton.setContentAreaFilled(false);
+        newJButton.setFocusPainted(false);
+        newJButton.setOpaque(false);
+        newJButton.setBorder(null);
+        newJButton.setBorderPainted(false);
+        return newJButton;
     
+    }
+
+    public static JButton defaultButton() {
+    
+        JButton newJButton = new JButton("Default Button");
+        newJButton.setSize(175, 25);
+        newJButton.setVisible(true);
+        newJButton.setUI(new StyledButtonUI());
+    
+        return newJButton;
+    
+    }
+
+    public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
+    
+        PanelRound newJPanel = new PanelRound() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(fixedWidth, fixedHeight);
+            }
+        };
+        newJPanel.setRound(rnd);
+        newJPanel.setSize(250, 250);
+        newJPanel.setVisible(true);
+    
+        return newJPanel;
+    
+    }
 }

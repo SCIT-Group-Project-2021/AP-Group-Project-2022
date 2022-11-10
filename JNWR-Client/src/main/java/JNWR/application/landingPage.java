@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce.Cluster.Refresh;
-
 import JNWR.application.utilities.*;
 
 public class landingPage extends JFrame implements defaultPanelAccessories{
@@ -20,7 +18,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setSize(1280, 720);
         setVisible(true);
         setLocationRelativeTo(null);
-        setMinimumSize(new Dimension(1040,600));
+        setMinimumSize(new Dimension(1380,820));
         setLayout(new GridBagLayout());
         //endregion
 
@@ -32,7 +30,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         //endregion
 
         //region Side Bar
-        JPanel sideBar = createJPanel(0,80,720);
+        JPanel sideBar = defaultPanelAccessories.createJPanel(0,80,720);
         sideBar.setBackground(Color.decode("#212020"));
         sideBar.setLayout(new GridBagLayout());
         //endregion
@@ -64,34 +62,34 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //region Buttons
 
-        final int sideBarX = 25;
-        final int sideBarY = 25;
+        final int sideBarX = 45;
+        final int sideBarY = 45;
         
-        JButton icon = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/logo.png");
+        JButton icon = defaultPanelAccessories.iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/logo.png");
         icon.setBorder(round);
         icon.setText("");
 
-        JButton dashBoardButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-dashboard-100.png");
+        JButton dashBoardButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-dashboard-100.png");
         dashBoardButton.setBorder(round);
         dashBoardButton.setText("");
 
-        JButton posButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-create-order-100.png");
+        JButton posButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-create-order-100.png");
         posButton.setBorder(round);
         posButton.setText("");
 
-        JButton customerButton = iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-teamwork-100.png");
+        JButton customerButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-teamwork-100.png");
         customerButton.setBorder(round);
 
 
-        JButton inventoryButton = iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-glyph-100.png");
+        JButton inventoryButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY, "src/main/resources/JWR-Icons/White/icons8-glyph-100.png");
         inventoryButton.setBorder(round);
         inventoryButton.setText("");
 
-        JButton reportButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png");
+        JButton reportButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png");
         reportButton.setBorder(round);
         reportButton.setText("");
 
-        JButton settingButton = iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png");
+        JButton settingButton = defaultPanelAccessories.iconButton(sideBarX,sideBarY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png");
         settingButton.setBorder(round);
         settingButton.setText("");
 
@@ -99,7 +97,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //region SideBar.Add
 
-        mpCons.insets = new Insets(25, 10, 10, 10);
+        mpCons.insets = new Insets(25, 10, 5, 10);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
@@ -115,7 +113,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         mpCons.gridy++;
         mpCons.weighty = 1;
-        mpCons.insets = new Insets(10, 10, 10, 10);
+        mpCons.insets = new Insets(0, 10, 0, 10);
         sideBar.add(Box.createGlue(),mpCons);
 
         mpCons.gridy++;
@@ -140,12 +138,16 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         mpCons.gridy++;
         mpCons.weighty = 0;
-        mpCons.insets = new Insets(10, 10, 25, 10);
+        mpCons.insets = new Insets(0, 10, 25, 10);
         sideBar.add(settingButton,mpCons);
 
 
         //endregion
 
+        JPanel dashBoard = new dashboardPage();
+        JPanel customer = new custPage();
+        JPanel inventory = new prodPage();
+        JPanel pos = new posPage();
 
         //region Buttons
         dashBoardButton.addActionListener(
@@ -156,7 +158,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                         mpCons.fill = GridBagConstraints.BOTH;
                         mpCons.weightx = 1;
                         mpCons.weighty = 1;
-                        mainPanel.add(new dashboardPage(),mpCons);
+                        mainPanel.removeAll();
+                        mainPanel.add(dashBoard,mpCons);
                         refresh();
 
                     }
@@ -172,7 +175,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                         mpCons.fill = GridBagConstraints.BOTH;
                         mpCons.weightx = 1;
                         mpCons.weighty = 1;
-                        mainPanel.add(new custPage(),mpCons);
+                        mainPanel.removeAll();
+                        mainPanel.add(pos,mpCons);
                         refresh();
 
                     }
@@ -187,15 +191,15 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                     mpCons.fill = GridBagConstraints.BOTH;
                     mpCons.weightx = 1;
                     mpCons.weighty = 1;
-                    mainPanel.add(new custPage(),mpCons);
+                    mainPanel.removeAll();
+                    customer.updateUI();
+                    mainPanel.add(customer,mpCons);
                     refresh();
                 
                 }
             }
         );
-        //endregion
-
-        //region Product
+       
         inventoryButton.addActionListener(
             new ActionListener()
             {
@@ -204,7 +208,9 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                     mpCons.fill = GridBagConstraints.BOTH;
                     mpCons.weightx = 1;
                     mpCons.weighty = 1;
-                    mainPanel.add(new prodPage(),mpCons);
+                    mainPanel.removeAll();
+                    inventory.updateUI();
+                    mainPanel.add(inventory,mpCons);
                     refresh();
                 
                 }
@@ -219,7 +225,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                         mpCons.fill = GridBagConstraints.BOTH;
                         mpCons.weightx = 1;
                         mpCons.weighty = 1;
-                        mainPanel.add(new prodPage(),mpCons);
+                        mainPanel.removeAll();
+                        //TODO: ADD REPORT BUTTON
                         refresh();
 
                     }
@@ -230,7 +237,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         mpCons.fill = GridBagConstraints.BOTH;
         mpCons.weightx = 1;
         mpCons.weighty = 1;
-        //mainPanel.add(new dashboardPage(),mpCons);
+        
+        mainPanel.add(dashBoard,mpCons);
         refresh();
 
     }
@@ -241,102 +249,5 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
-    public static JPanel createJPanel(int rnd) {
-    
-        PanelRound newJPanel = new PanelRound();
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true); 
-
-        return newJPanel;
-    
-    }
-
-    public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
-    
-        PanelRound newJPanel = new PanelRound() {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(fixedWidth, fixedHeight);
-            }
-        };
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true);
-    
-        return newJPanel;
-    
-    }
-
-    public static JLabel defaultLabel(String text) {
-    
-        JLabel newJLabel = new JLabel(text);
-        newJLabel.setSize(200, 25);
-        newJLabel.setVisible(true);
-    
-        return newJLabel;
-    
-    }
-
-    public static JLabel defaultLabel(int w,int h, String text) {
-    
-        JLabel newJLabel = new JLabel("Default Label");
-        newJLabel.setSize(w, h);
-        newJLabel.setVisible(true);
-
-        return newJLabel;
-    
-    }
-    
-    public static JButton iconButton() {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(175, 25);
-        newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-
-    public static JButton iconButton(int w,int h, String src) {
-        Icon icon = new ImageIcon(src);
-        Image img = ((ImageIcon) icon).getImage() ;
-        Image newimg = img.getScaledInstance( 55, 55,  java.awt.Image.SCALE_SMOOTH ) ;
-        icon = new ImageIcon( newimg );
-        JButton newJButton = new JButton(icon);
-        //JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(w, h);
-        newJButton.setVisible(true);
-        //newJButton.setUI(new StyledButtonUI());
-        newJButton.setBorderPainted(false);
-        newJButton.setContentAreaFilled(false);
-        newJButton.setFocusPainted(false);
-        newJButton.setOpaque(false);
-        newJButton.setBorder(null);
-        newJButton.setBorderPainted(false);
-        return newJButton;
-    
-    }
-    
-    public static JTextField defaultTextField() {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(175, 25);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
-    }
-
-    public static JTextField defaultTextField(int w,int h) {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(w, h);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
-    }
     
 }
