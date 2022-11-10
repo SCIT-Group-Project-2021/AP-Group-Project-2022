@@ -60,33 +60,27 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         JPanel mainSection = new JPanel();
         mainSection.setLayout(new GridBagLayout());
-        mainSection.setBackground(Color.GREEN);
 
         //region left section
         JPanel leftSection = defaultPanelAccessories.createJPanel(0,500,80);
         leftSection.setLayout(new GridBagLayout());
-        leftSection.setBackground(Color.GREEN);
 
         headerModel.setColumnIdentifiers(headers);
         JTable itemTable = new JTable(headerModel);
-        JScrollPane userTableScroll = new JScrollPane(itemTable){
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(100, 100);
-            }
-        };
+        JScrollPane userTableScroll = new JScrollPane(itemTable);
+        userTableScroll.setBorder(round);
 
         JPanel upperPane  = defaultPanelAccessories.createJPanel(0,300,250);
         upperPane.setLayout(new GridBagLayout());
-        upperPane.setBackground(Color.YELLOW);
 
-        JPanel buttonBox = defaultPanelAccessories.createJPanel(0,600,250);
+        JPanel buttonBox = defaultPanelAccessories.createJPanel(0,400,250);
         buttonBox.setLayout(new GridBagLayout());
-        buttonBox.setBackground(Color.RED);
+    
 
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(33,33, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);
         JButton searchByCode = defaultPanelAccessories.defaultButton();
+        searchByCode.setBackground(Color.white);
         searchByCode.setPreferredSize(new Dimension(150,70));
         searchByCode.setIcon(searchIcon);
         searchByCode.setText("Search in Catalog");
@@ -97,6 +91,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         Image barcodeImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-barcode-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon barcodeIcon = new ImageIcon(barcodeImage);
         JButton barcodeScan = defaultPanelAccessories.defaultButton();
+        barcodeScan.setBackground(Color.white);
         barcodeScan.setPreferredSize(new Dimension(150,70));
         barcodeScan.setIcon(barcodeIcon);
         barcodeScan.setText("Scan Barcode");
@@ -107,6 +102,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         Image addCustomerImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-contact-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon addCustomerIcon = new ImageIcon(addCustomerImage);
         JButton addCustomer = defaultPanelAccessories.defaultButton();
+        addCustomer.setBackground(Color.white);
         addCustomer.setPreferredSize(new Dimension(150,70));
         addCustomer.setIcon(addCustomerIcon);
         addCustomer.setText("Add Customer");
@@ -132,9 +128,9 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         //region rightSection
-        JPanel rightSection = defaultPanelAccessories.createJPanel(0,350,500);
+        JPanel rightSection = defaultPanelAccessories.createJPanel(25,350,500);
         rightSection.setLayout(new GridBagLayout());
-        rightSection.setBackground(Color.BLUE);
+        rightSection.setBackground(Color.decode("#292c2d"));
 
         //TODO:Get based on product selected (Get object with info and use this.get[attribute])
         Image categoryImage = new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cauliflower-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH);
@@ -168,8 +164,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         JLabel removeIconLabel = new JLabel(removeIcon);
         //endregion
 
-
-
         //region Frame.Add
 
         mpCons.ipadx = 0;
@@ -189,14 +183,17 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
+        
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 0, 0, 0);
         mainSection.add(leftSection,mpCons);
 
-        mpCons.weightx = 1;
+        mpCons.weightx = .40;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx++;
+        mpCons.insets = new Insets(0, 0, 0, 30);
         mainSection.add(rightSection,mpCons);
         
         //region TopBar.Add
@@ -235,7 +232,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(0, 25, 25, 25);
+        mpCons.insets = new Insets(0, 40, 25, 60);
         leftSection.add(upperPane, mpCons);
 
 
@@ -243,19 +240,20 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 1;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        leftSection.add(itemTable, mpCons);
+        mpCons.insets = new Insets(0, 40, 0, 60);
+        leftSection.add(userTableScroll, mpCons);
 
         mpCons.weightx = 0;
-        mpCons.weighty = 0;
+        mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0, 0, 0,0);
         upperPane.add(buttonBox, mpCons);
 
-        mpCons.weightx = 0;
+        mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
-        mpCons.gridx = 1;
+        mpCons.gridx++;
         //mpCons.insets = new Insets(0, 5 , 0,10);
         upperPane.add(itemInfo, mpCons);
 

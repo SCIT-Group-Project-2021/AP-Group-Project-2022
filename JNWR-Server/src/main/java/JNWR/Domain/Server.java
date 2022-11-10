@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
@@ -11,8 +12,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+
+import org.hibernate.MappingException;
+import org.hibernate.QueryException;
+import org.hibernate.boot.MappingNotFoundException;
+import org.hibernate.hql.internal.ast.QuerySyntaxException;
 
 import Entity.*;
 
@@ -76,29 +84,107 @@ public class Server {
 
                             System.out.println("Adding Entity");
 
-                            dbEntity = (DBEntity)objIs.readObject();
+                            try {
+                                
+                                dbEntity = (DBEntity)objIs.readObject();
 
-                            addEntity(dbEntity);
+                                addEntity(dbEntity);
+                                sendAction("Task Completed");
 
-                            sendAction("Task Completed");
+                            } catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            
                             
                             break;
                         case "findEntity":
 
                             System.out.println("Finding Entity");
 
-                            findEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject());
+                            try {
 
-                            sendAction("Task Completed");
+                                sendEntity(findEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
 
+                            } catch (EntityNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                        
+                            break;
+                        case "findEntitySimple":
+                            System.out.println("Finding Entity");
+                            try {
+
+                                sendEntity(findEntity((Integer) objIs.readObject(), (DBEntity) objIs.readObject()));
+                                sendAction("Task Completed");
+
+                            } catch (EntityNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                        
+                            break;
+                        
+                            
+                        
+                        case "alterEntity":
+
+                            System.out.println("Altering Entity");
+
+                            try {
+
+                                alterEntity((Integer) objIs.readObject(), (DBEntity) objIs.readObject());                      
+                                sendAction("Task Completed");
+                                
+                            } catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                        
+                            break;
+                        case "removeEntity":
+
+                            System.out.println("Removing Entity");
+
+                            try {
+
+                                removeEntity((Integer)objIs.readObject(),(DBEntity)objIs.readObject());
+                                sendAction("Task Completed");
+                                
+                            } catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            
+
+                            
+                            
                             break;
                         case "getList":
 
                             System.out.println("Getting List");
 
-                            sendList(listEntity((String) objIs.readObject()));
+                            try {
+                                sendList(listEntity((String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            } catch (MappingNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
 
-                            sendAction("Task Completed");
+                            
                             
                             break;
                         case "shutDown":
@@ -134,26 +220,116 @@ public class Server {
         
     }
 
-    private void findEntity(String Table,String IDType, String ID) {
+    private void removeEntity(Integer ID, DBEntity Entitiy) {
+
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 
-        DBEntity dbEntity = em.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '" + ID + "'",DBEntity.class).getSingleResult(); 
+        EntityTransaction transaction = em.getTransaction();
 
-        System.out.println(dbEntity);
+        try {
 
-        //dbEntity = (DBEntity) em.find(Department.class,19283);
+            transaction.begin();
 
-        sendEntity(dbEntity);
+            DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
+
+            em.remove(dbEntity);
+        
+            transaction.commit();
+
+            sendAction("Task Completed");
+            
+        } catch (EntityNotFoundException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+    }
+
+    private DBEntity findEntity(String Table,String IDType, String ID) throws EntityNotFoundException{
+        EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        DBEntity dbEntity = null;
+
+        try {
+            dbEntity = em.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '" + ID + "'",DBEntity.class).getSingleResult(); 
+            
+        } catch (EntityNotFoundException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        catch (NoResultException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        return dbEntity;
 
     }
 
-    public List<DBEntity> listEntity(String Table) {
+    private DBEntity findEntity(Integer ID, DBEntity Entitiy) throws EntityNotFoundException{
+
+        EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        DBEntity dbEntity = null;
+
+        try {
+
+            dbEntity = em.find(Entitiy.getClass(), ID);
+
+            sendAction("Task Completed");
+            
+        } catch (EntityNotFoundException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        return dbEntity;
+
+    }
+
+    private void alterEntity(Integer ID, DBEntity Entitiy) {
+
+        EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+
+            transaction.begin();
+
+            DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
+
+            em.merge(Entitiy);
+        
+            transaction.commit();
+
+            sendAction("Task Completed");
+            
+        } catch (EntityNotFoundException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        
+        
+
+    }
+
+    public List<DBEntity> listEntity(String Table) throws MappingNotFoundException{
         EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
 
-        List<DBEntity> entityList = em2.createQuery("SELECT a FROM " + Table + " a",DBEntity.class).getResultList(); 
+        List<DBEntity> entityList = null;
+
+        try {
+            entityList = em2.createQuery("SELECT a FROM " + Table + " a",DBEntity.class).getResultList();
+            System.out.println(Arrays.toString(entityList.toArray()));
+        } catch (IllegalArgumentException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
         
-        System.out.println(Arrays.toString(entityList.toArray()));
+
         return entityList;
+        
     }
 
     public void sendList(List<DBEntity> entityList) {
@@ -173,8 +349,6 @@ public class Server {
             e.printStackTrace();
         }
     }
-
-
 
     public static void addEntity(DBEntity entity) {
         EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();

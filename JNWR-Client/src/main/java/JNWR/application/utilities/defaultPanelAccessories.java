@@ -167,7 +167,64 @@ public interface defaultPanelAccessories {
             return area;
         }
     }
-    
+ 
+    public class JIconToggleButton extends JToggleButton {
+
+        Icon primaryIcon = getIcon();
+        Icon secondaryIcon = getIcon();
+
+        public Icon getPrimaryIcon() {
+
+            return primaryIcon;
+            
+        }
+
+        public void setPrimaryIcon(Icon icon) {
+
+            this.primaryIcon = icon;
+      
+        }
+
+        public Icon getSecondaryIcon() {
+
+            return secondaryIcon;
+            
+        }
+
+        public void setSecondaryIcon(Icon icon) {
+
+            this.secondaryIcon = icon;
+            
+        }
+
+        public JIconToggleButton (Icon icon, Icon icon2) {
+            this.setPrimaryIcon(icon);
+            this.setSecondaryIcon(icon2);
+        }
+
+        public void paintComponent(Graphics g) {
+            Icon icon;
+            
+            if(isSelected()) {
+                icon = getSecondaryIcon();
+                //setOpaque(true);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setColor(Color.white);
+                g.fillRoundRect(0, 0, getSize().width, getSize().height, 25, 25);
+            }else {
+                icon = getPrimaryIcon();
+                //setOpaque(false);  
+            }
+            
+
+            setIcon(icon);
+
+            super.paintComponent(g);
+            
+        }
+            
+    }
     public class StyledButtonUI extends BasicButtonUI {
 
         @Override
@@ -181,7 +238,6 @@ public interface defaultPanelAccessories {
         @Override
         public void paint (Graphics g, JComponent c) {
             AbstractButton b = (AbstractButton) c;
-            //paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
             paintBackground(g, b, b.getModel().isPressed() ? c.getBackground().darker() : c.getBackground());
            
             super.paint(g, c);
@@ -228,13 +284,67 @@ public interface defaultPanelAccessories {
         Image img = new ImageIcon(src).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(img);
         JButton newJButton = new JButton(icon);
-        //JButton newJButton = new JButton("Default Button");
         newJButton.setSize(w, h);
         newJButton.setVisible(true);
         //newJButton.setUI(new StyledButtonUI());
         newJButton.setContentAreaFilled(false);
         newJButton.setFocusPainted(false);
         newJButton.setOpaque(false);
+        newJButton.setBorder(null);
+        newJButton.setBorderPainted(false);
+        return newJButton;
+    
+    }
+
+    public static JButton iconButton(int w,int h,int imgW, int imgH, String src) {
+        
+        Image img = new ImageIcon(src).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(img);
+        JButton newJButton = new JButton(icon);
+        newJButton.setSize(w, h);
+        newJButton.setVisible(true);
+        //newJButton.setUI(new StyledButtonUI());
+        newJButton.setContentAreaFilled(false);
+        newJButton.setFocusPainted(false);
+        newJButton.setOpaque(false);
+        newJButton.setBorder(null);
+        newJButton.setBorderPainted(false);
+        return newJButton;
+    
+    }
+
+    public static JToggleButton iconToggleButton(int w,int h, String src, String src2) {
+        
+        Image img = new ImageIcon(src).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(img);
+        Image img2 = new ImageIcon(src2).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
+        ImageIcon icon2 = new ImageIcon(img2);
+        JToggleButton newJButton = new JIconToggleButton(icon,icon2);
+        newJButton.setSize(w, h);
+        newJButton.setVisible(true);
+        //newJButton.setUI(new StyledButtonUI());
+        newJButton.setOpaque(false);
+        newJButton.setContentAreaFilled(false);
+        newJButton.setFocusPainted(false);
+        newJButton.setBorder(null);
+        newJButton.setBorderPainted(false);
+        return newJButton;
+    
+    }
+
+    public static JToggleButton iconToggleButton(int w,int h,int imgW, int imgH, String src, String src2) {
+        
+        Image img = new ImageIcon(src).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(img);
+        Image img2 = new ImageIcon(src2).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
+        ImageIcon icon2 = new ImageIcon(img2);
+        JToggleButton newJButton = new JIconToggleButton(icon,icon2);
+        newJButton.setSize(w, h);
+        newJButton.setVisible(true);
+        //newJButton.setUI(new StyledButtonUI());
+        newJButton.setOpaque(false);
+        newJButton.setContentAreaFilled(false);
+        newJButton.setFocusPainted(false);
         newJButton.setBorder(null);
         newJButton.setBorderPainted(false);
         return newJButton;
@@ -263,6 +373,8 @@ public interface defaultPanelAccessories {
         newJPanel.setRound(rnd);
         newJPanel.setSize(250, 250);
         newJPanel.setVisible(true);
+        
+        
     
         return newJPanel;
     

@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.net.ConnectException;
 
 import Entity.*;
 
@@ -18,8 +19,17 @@ public class Client {
     private String action = "";
 
     public Client () {
-        this.createConnection();
-        this.configureStreams();
+        try {
+            this.createConnection();
+            this.configureStreams();
+        }catch (ConnectException e) {
+        // TODO: handle exception
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
         
     }
 
@@ -29,7 +39,7 @@ public class Client {
         
     }
 
-    private void configureStreams() {
+    private void configureStreams() throws NullPointerException{
         try {
             objOs = new ObjectOutputStream(connectionSocket.getOutputStream());
 
@@ -49,9 +59,12 @@ public class Client {
         }
     }
 
-    private void createConnection() {
+    private void createConnection() throws ConnectException {
         try {
             connectionSocket = new Socket("127.0.0.1",8888);
+        }catch (ConnectException e) {
+            // TODO: handle exception
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,10 +89,36 @@ public class Client {
         }
     }
 
+    public void sendInteger(Integer value) {
+        try {
+            objOs.writeObject(value);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
     public void sendEntity(DBEntity entity) {
-        sendAction(entity.getAction());
         try {
             objOs.writeObject(entity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void sendClass(Class classObject) {
+        try {
+            objOs.writeObject(classObject);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,6 +151,9 @@ public class Client {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         try {
@@ -126,6 +168,24 @@ public class Client {
 
         return list;
   
+    }
+
+    public void addEntity(DBEntity entity) {
+
+        sendAction("addEntity");
+
+        sendEntity(entity);
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
 
     public void findEntity(String Table,String IDType, String ID) {
@@ -145,7 +205,11 @@ public class Client {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        
 
         try {
             System.out.println((String) objIs.readObject());
@@ -158,6 +222,76 @@ public class Client {
         }
 
     }
+
+    public void findEntity(DBEntity entity,  Integer ID) {
+        //Calls the get list function
+        sendAction("findEntitySimple");
+        sendInteger(ID);
+        sendEntity(entity);
+
+        try {
+            DBEntity entityOut = (DBEntity)objIs.readObject();
+            System.out.println(entityOut);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public void alterEntity(DBEntity entity,  Integer ID) {
+        //Calls the get list function
+        sendAction("alterEntity");
+        sendInteger(ID);
+        sendEntity(entity);
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public void removeEntity(DBEntity entity,  Integer ID) {
+        //Calls the get list function
+        sendAction("removeEntity");
+        sendInteger(ID);
+        sendEntity(entity);
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
 
     //endregion
     
