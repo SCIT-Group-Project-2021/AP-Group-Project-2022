@@ -6,6 +6,7 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import Entity.Customer;
 import Entity.DBEntity;
@@ -36,18 +37,15 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         //region Main Panel
-        setBackground(Color.RED);
         setLayout(new GridBagLayout());
         //endregion
 
         //region Top Bar
-        JPanel topBar = createJPanel(0,80,120);
-        //topBar.setBackground(Color.YELLOW);
+        JPanel topBar = defaultPanelAccessories.createJPanel(0,80,120);
         topBar.setLayout(new GridBagLayout());
 
         //region date/time bar
-        JPanel dateTimePanel = createJPanel(50,450,80);
-        dateTimePanel.setBackground(Color.WHITE);
+        JPanel dateTimePanel = defaultPanelAccessories.createJPanel(50,450,80);
         dateTimePanel.setLayout(new GridBagLayout());
 
 
@@ -73,11 +71,12 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
-
-        //region top Bar
-        JPanel searchBar = createJPanel(0,80,120);
-        searchBar.setBackground(Color.BLACK);
+        //region Customer Bar
+        PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
+        searchBar.setBackground(Color.GRAY);
+        searchBar.setRoundTopLeft(25);
+        searchBar.setRoundTopRight(25);
         //endregion
 
         //region Customer Table Bar
@@ -86,13 +85,20 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
         JTable customerTable = new JTable(headerModel);
         
+        customerTable.setShowGrid(false);
+        customerTable.setRowHeight(50);
+
+        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+
         JScrollPane tableScroll = new JScrollPane(customerTable){
             @Override
             public Dimension getPreferredSize() {
                 return new Dimension(100, 100);
             }
+            
         };
-        tableScroll.setBackground(Color.GREEN);
+        //tableScroll.setBorder(round);
         //endregion
 
         //region Frame.Add
@@ -111,6 +117,7 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 1;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 60, 0, 60);
         add(searchBar,mpCons);
 
         mpCons.weightx = 1;
@@ -161,15 +168,6 @@ public class custPage extends JPanel implements defaultPanelAccessories{
          mpCons.insets = new Insets(25, 5, 25, 5);
          dateTimePanel.add(date, mpCons);
  
-         /*mpCons.weightx = 0;
-         mpCons.weighty = 1;
-         mpCons.gridy = 0;
-         mpCons.gridx++;
-         //TODO: Fix separator
-         JSeparator line = new JSeparator(SwingConstants.VERTICAL);
-         line.setPreferredSize(new Dimension(25,25));
-         dateTimePanel.add(line);*/
- 
          mpCons.weightx = 0;
          mpCons.weighty = 0;
          mpCons.gridy = 0;
@@ -209,75 +207,6 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         
         }
         
-    }
-
-    public static JPanel createJPanel(int rnd) {
-    
-        PanelRound newJPanel = new PanelRound();
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true); 
-
-        return newJPanel;
-    
-    }
-
-    public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {
-    
-        PanelRound newJPanel = new PanelRound() {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(fixedWidth, fixedHeight);
-            }
-        };
-        newJPanel.setRound(rnd);
-        newJPanel.setSize(250, 250);
-        newJPanel.setVisible(true);
-    
-        return newJPanel;
-    
-    }
-
-    public static JButton defaultButton() {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(175, 25);
-        newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-
-    public static JButton defaultButton(int w,int h) {
-    
-        JButton newJButton = new JButton("Default Button");
-        newJButton.setSize(w, h);
-        newJButton.setVisible(true);
-        newJButton.setUI(new StyledButtonUI());
-    
-        return newJButton;
-    
-    }
-    
-    public static JTextField defaultTextField() {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(175, 25);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
-    }
-
-    public static JTextField defaultTextField(int w,int h) {
-    
-        JTextField newJTextField = new JTextField();
-        newJTextField.setSize(w, h);
-        newJTextField.setVisible(true);
-    
-        return newJTextField;
-    
     }
 
 }

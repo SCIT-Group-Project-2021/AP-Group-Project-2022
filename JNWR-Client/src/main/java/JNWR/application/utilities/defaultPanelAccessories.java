@@ -353,7 +353,7 @@ public interface defaultPanelAccessories {
 
     public static JButton defaultButton() {
 
-        JButton newJButton = new JButton("Default Button");
+        JButton newJButton = new JButton();
         newJButton.setSize(175, 25);
         newJButton.setVisible(true);
         newJButton.setUI(new StyledButtonUI());

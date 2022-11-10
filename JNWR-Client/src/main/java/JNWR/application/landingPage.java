@@ -12,6 +12,20 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
     final int bottomOffset = 60;
 
+    public JPanel mainPanel;
+    public JPanel dashBoard;
+    public JPanel customer;
+    public JPanel inventory;
+    public JPanel pos;
+
+    public JToggleButton dashBoardButton;
+    public JToggleButton posButton;
+    public JToggleButton customerButton;
+    public JToggleButton inventoryButton;
+    public JToggleButton invoiceButton;
+    public JToggleButton reportButton;
+    public JToggleButton settingButton;
+
     public landingPage() {
 
         RoundedBorder round = new RoundedBorder(25);
@@ -41,7 +55,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //region Main Panel
         //JPanel mainPanel = createJPanel(0);
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setBackground(Color.decode("#f2f3f5"));
         mainPanel.setLayout(new GridBagLayout());
         //endregion
@@ -75,34 +89,35 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         icon.setBorder(round);
         icon.setText("");
         
-
-        JToggleButton dashBoardButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-dashboard-100.png","src/main/resources/JWR-Icons/Black/icons8-dashboard-100.png");
+        
+        dashBoardButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-dashboard-100.png","src/main/resources/JWR-Icons/Black/icons8-dashboard-100.png");
         dashBoardButton.setBorder(round);
         dashBoardButton.setText("");
         dashBoardButton.setSelected(true);
         sideBarButtons.add(dashBoardButton);
 
-        JToggleButton posButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-create-order-100.png","src/main/resources/JWR-Icons/Black/icons8-create-order-100.png");
+        posButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-create-order-100.png","src/main/resources/JWR-Icons/Black/icons8-create-order-100.png");
         posButton.setBorder(round);
         posButton.setText("");
         sideBarButtons.add(posButton);
 
-        JToggleButton customerButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY, "src/main/resources/JWR-Icons/White/icons8-teamwork-100.png","src/main/resources/JWR-Icons/Black/icons8-teamwork-100.png");
+        customerButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY, "src/main/resources/JWR-Icons/White/icons8-teamwork-100.png","src/main/resources/JWR-Icons/Black/icons8-teamwork-100.png");
         customerButton.setBorder(round);
+        customerButton.setText("");
         sideBarButtons.add(customerButton);
 
 
-        JToggleButton inventoryButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY, "src/main/resources/JWR-Icons/White/icons8-glyph-100.png","src/main/resources/JWR-Icons/Black/icons8-glyph-100.png");
+        inventoryButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY, "src/main/resources/JWR-Icons/White/icons8-glyph-100.png","src/main/resources/JWR-Icons/Black/icons8-glyph-100.png");
         inventoryButton.setBorder(round);
         inventoryButton.setText("");
         sideBarButtons.add(inventoryButton);
 
-        JToggleButton reportButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png","src/main/resources/JWR-Icons/Black/icons8-futures-100.png");
+        reportButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png","src/main/resources/JWR-Icons/Black/icons8-futures-100.png");
         reportButton.setBorder(round);
         reportButton.setText("");
         sideBarButtons.add(reportButton);
 
-        JToggleButton settingButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png","src/main/resources/JWR-Icons/Black/icons8-adjust-100.png");
+        settingButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png","src/main/resources/JWR-Icons/Black/icons8-adjust-100.png");
         settingButton.setBorder(round);
         settingButton.setText("");
         sideBarButtons.add(settingButton);
@@ -158,10 +173,10 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //endregion
 
-        JPanel dashBoard = new dashboardPage();
-        JPanel customer = new custPage();
-        JPanel inventory = new prodPage();
-        JPanel pos = new posPage();
+        dashBoard = new dashboardPage();
+        customer = new custPage();
+        inventory = new prodPage();
+        pos = new posPage();
 
         //region Buttons
         dashBoardButton.addActionListener(
@@ -169,13 +184,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mpCons.fill = GridBagConstraints.BOTH;
-                        mpCons.weightx = 1;
-                        mpCons.weighty = 1;
-                        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-                        mainPanel.removeAll();
-                        mainPanel.add(dashBoard,mpCons);
-                        refresh();
+                        replaceWindow(mainPanel, dashBoard);
 
                     }
                 }
@@ -187,13 +196,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mpCons.fill = GridBagConstraints.BOTH;
-                        mpCons.weightx = 1;
-                        mpCons.weighty = 1;
-                        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-                        mainPanel.removeAll();
-                        mainPanel.add(pos,mpCons);
-                        refresh();
+                        replaceWindow(mainPanel, pos);
 
                     }
                 }
@@ -204,14 +207,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    mpCons.fill = GridBagConstraints.BOTH;
-                    mpCons.weightx = 1;
-                    mpCons.weighty = 1;
-                    mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-                    mainPanel.removeAll();
-                    customer.updateUI();
-                    mainPanel.add(customer,mpCons);
-                    refresh();
+                    replaceWindow(mainPanel, customer);
                 
                 }
             }
@@ -222,14 +218,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    mpCons.fill = GridBagConstraints.BOTH;
-                    mpCons.weightx = 1;
-                    mpCons.weighty = 1;
-                    mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-                    mainPanel.removeAll();
-                    inventory.updateUI();
-                    mainPanel.add(inventory,mpCons);
-                    refresh();
+                    replaceWindow(mainPanel, inventory);
                 
                 }
             }
@@ -240,13 +229,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mpCons.fill = GridBagConstraints.BOTH;
-                        mpCons.weightx = 1;
-                        mpCons.weighty = 1;
-                        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-                        mainPanel.removeAll();
-                        //TODO: ADD REPORT BUTTON
-                        refresh();
+                        replaceWindow(mainPanel, null);
 
                     }
                 }
@@ -269,5 +252,19 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
-    
+    public void replaceWindow(JPanel mainPanel, JPanel replacPanel) {
+        GridBagConstraints mpCons = new GridBagConstraints();
+        mpCons.fill = GridBagConstraints.BOTH;
+        mpCons.insets = new Insets(0, 0, 0, 0);
+        mpCons.anchor = GridBagConstraints.NORTH;
+
+        mpCons.fill = GridBagConstraints.BOTH;
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
+        mainPanel.removeAll();
+        mainPanel.add(replacPanel,mpCons);
+        refresh();
+        
+    }
 }

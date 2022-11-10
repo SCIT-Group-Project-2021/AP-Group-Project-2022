@@ -6,6 +6,7 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import Entity.DBEntity;
 import Entity.Inventory;
@@ -22,7 +23,8 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
     DefaultTableModel headerModel = new DefaultTableModel();
         
-    String headers[] = { "Product Code", "Name", "Short Description", "Stock", "Unit Price"};
+    String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
+    String Category[] = { "Product Code"," roduct Category", "Name", "Short Description", "Stock", "Unit Price"};
 
     prodPage() {
 
@@ -72,19 +74,33 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
-        //region top Bar
-        JPanel searchBar = defaultPanelAccessories.createJPanel(0,80,120);
-        searchBar.setBackground(Color.BLACK);
+        //region Customer Bar
+        PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
+        searchBar.setBackground(Color.GRAY);
+        searchBar.setRoundTopLeft(25);
+        searchBar.setRoundTopRight(25);
         //endregion
+
 
         //region Customer Table Bar
         
         headerModel.setColumnIdentifiers(headers);
 
-        JTable customerTable = new JTable(headerModel);
+        JTable prodTable = new JTable(headerModel);
         
-        JScrollPane tableScroll = new JScrollPane(customerTable){
+        prodTable.setShowGrid(false);
+        prodTable.setRowHeight(50);
+
+        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+
+        final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
+        prodTable.setRowSorter(sorter);
+
+        JComboBox filterText = new JComboBox();
+        
+        JScrollPane tableScroll = new JScrollPane(prodTable){
             @Override
             public Dimension getPreferredSize() {
                 return new Dimension(100, 100);
@@ -109,6 +125,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 1;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 60, 0, 60);
         add(searchBar,mpCons);
 
         mpCons.weightx = 1;
