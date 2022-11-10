@@ -3,6 +3,10 @@ package Entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 @Entity
 @Table(name = "customer")
 public class Customer extends DBEntity implements Serializable {
@@ -43,10 +47,13 @@ public class Customer extends DBEntity implements Serializable {
         this.telephoneNum = telephoneNum;
         this.email = email;
         this.dateOfMembership = dateOfMembership;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
+        LocalDate date = LocalDate.parse(dateOfMembership, dtf);
+        LocalDate dateEnd = date.withYear(date.getYear()+ 1);
+        String DOME = dtf.format(dateEnd);
         //TODO: Data of expiry should be auto generated based on date of membership
-        this.dateOfMembershipExpiry = dateOfMembershipExpiry;
+        this.dateOfMembershipExpiry = DOME;
     }
-
     //region Getters and setters
     public int getCustomerId() {
         return customerId;

@@ -22,30 +22,36 @@ public class ClientApplication {
         //TODO: Create UI for connecting client to server, after connecton s made make client login to access the rest of the database
        
          
-        Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2022-11-03");
+        Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2024-11-03");
         
         Department dep = new Department("Admin", "Admin");
 
-        Staff staff = new Staff(319219,"graham","Tickle","18765993666","Admin","ACS");
+        Staff staff = new Staff(349219,"graham","Tickle","18765993666","Admin","ACS");
+
+        Staff staff2 = new Staff(389219,"graham","Tickle","18765993666","Admin","ACS");
         
        
+            /*
             System.out.println("Task 1");
             new Client().addEntity(cust);
-    
+
             System.out.println("Task 2");
-            new Client().getList("Department");
+            new Client().addEntity(staff2);
     
             System.out.println("Task 3");
-            new Client().findEntity("Staff","idNum", "339219");
-
-            System.out.println("Task 4");
-            new Client().findEntity(staff, staff.getIdNum());
+            new Client().getList("Department");
     
+            System.out.println("Task 4");
+            new Client().findEntity("Staff","idNum", "319219");
+
             System.out.println("Task 5");
+            new Client().findEntity(staff2, staff2.getIdNum());
+    
+            System.out.println("Task 6");
             new Client().alterEntity(staff, staff.getIdNum());     
             
-            System.out.println("Task 6");
-            new Client().removeEntity(new Staff(), 339219); 
+            System.out.println("Task 7");
+            new Client().removeEntity(new Staff(), 399219); */
         
         new landingPage();
 

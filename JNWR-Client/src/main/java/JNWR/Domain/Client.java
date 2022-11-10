@@ -1,5 +1,6 @@
 package JNWR.Domain;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -104,32 +105,12 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try {
-            System.out.println((String) objIs.readObject());
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     public void sendClass(Class classObject) {
         try {
             objOs.writeObject(classObject);
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            System.out.println((String) objIs.readObject());
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -254,6 +235,7 @@ public class Client {
             e.printStackTrace();
         }
 
+
     }
 
     public void alterEntity(DBEntity entity,  Integer ID) {
@@ -291,7 +273,6 @@ public class Client {
         }
 
     }
-
 
     //endregion
     

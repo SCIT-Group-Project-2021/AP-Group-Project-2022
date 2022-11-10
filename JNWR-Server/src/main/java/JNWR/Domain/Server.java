@@ -17,10 +17,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
-import org.hibernate.MappingException;
-import org.hibernate.QueryException;
 import org.hibernate.boot.MappingNotFoundException;
-import org.hibernate.hql.internal.ast.QuerySyntaxException;
 
 import Entity.*;
 
@@ -235,13 +232,15 @@ public class Server {
             em.remove(dbEntity);
         
             transaction.commit();
-
-            sendAction("Task Completed");
             
         } catch (EntityNotFoundException e) {
             // TODO: handle exception
             e.printStackTrace();
+        }catch (IllegalArgumentException e) {
+            // TODO: handle exception
+            e.printStackTrace();
         }
+        
     }
 
     private DBEntity findEntity(String Table,String IDType, String ID) throws EntityNotFoundException{
@@ -275,8 +274,6 @@ public class Server {
 
             dbEntity = em.find(Entitiy.getClass(), ID);
 
-            sendAction("Task Completed");
-            
         } catch (EntityNotFoundException e) {
             // TODO: handle exception
             e.printStackTrace();
