@@ -16,6 +16,7 @@ public interface defaultPanelAccessories {
     Font heading1 = new Font("Outfit", Font.BOLD, 40);
     Font heading2 = new Font("Outfit", Font.BOLD, 30);
     Font heading3 = new Font("Outfit", Font.BOLD, 24);
+    //Font subHeading = new Font("Outfit",Medium,24);
     Font medText = new Font("Outfit", Font.PLAIN, 22);
     Font smText = new Font("Outfit", Font.PLAIN, 18);
 
@@ -194,6 +195,9 @@ public interface defaultPanelAccessories {
             g.fillRoundRect(0, 0, size.width, size.height, 25, 25);
         }
 
+
+
+
     }
 
     public static String getCurrentTime() {
@@ -238,14 +242,14 @@ public interface defaultPanelAccessories {
     }
 
     public static JButton defaultButton() {
-    
+
         JButton newJButton = new JButton("Default Button");
         newJButton.setSize(175, 25);
         newJButton.setVisible(true);
         newJButton.setUI(new StyledButtonUI());
-    
+
         return newJButton;
-    
+
     }
 
     public static JPanel createJPanel(int rnd,int fixedWidth, int fixedHeight) {

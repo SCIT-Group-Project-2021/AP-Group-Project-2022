@@ -44,7 +44,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         JLabel date = new JLabel(defaultPanelAccessories.getTodayDate());
         date.setFont(heading3);
 
-        Image clockImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-clock-100-2.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
+        Image clockImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-clock-100-2.png").getImage().getScaledInstance(45,45, Image.SCALE_SMOOTH);
         ImageIcon clockIcon = new ImageIcon(clockImage);
         JLabel clock = new JLabel(clockIcon);
         JLabel time = new JLabel(defaultPanelAccessories.getCurrentTime());
@@ -152,7 +152,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(25, 25, 25, 5);
+        mpCons.insets = new Insets(25, 20, 25, 5);
         dateTimePanel.add(calendar, mpCons);
 
         mpCons.weightx = 0;
@@ -162,14 +162,21 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.insets = new Insets(25, 5, 25, 5);
         dateTimePanel.add(date, mpCons);
 
-        /*mpCons.weightx = 0;
+        mpCons.weightx = 0;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx++;
+        JLabel separator = new JLabel();
+        separator.setFont(new Font("Roboto", Font.BOLD, 40));
+        //Color c = new Color(r,g,b,a);
+        separator.setForeground(Color.decode("#dedee0"));
+        separator.setText("  |  ");
+        dateTimePanel.add(separator);
         //TODO: Fix separator
-        JSeparator line = new JSeparator(SwingConstants.VERTICAL);
+        /*JSeparator line = new JSeparator(SwingConstants.VERTICAL);
         line.setPreferredSize(new Dimension(25,25));
         dateTimePanel.add(line);*/
+
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
