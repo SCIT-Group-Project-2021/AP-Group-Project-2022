@@ -32,7 +32,7 @@ CREATE TABLE `invoice` (
   KEY `staffID_idx` (`staffID`),
   CONSTRAINT `customerIDInvoice` FOREIGN KEY (`customerID`) REFERENCES `customer` (`customerID`),
   CONSTRAINT `staffIDInvoice` FOREIGN KEY (`staffID`) REFERENCES `staff` (`idNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-09 17:53:14
+-- Dump completed on 2022-11-11  4:18:25

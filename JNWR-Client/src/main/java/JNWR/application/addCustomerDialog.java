@@ -1,42 +1,40 @@
 package JNWR.application;
 
+import Entity.Customer;
 import Entity.DBEntity;
 import Entity.Inventory;
 import Entity.InvoiceItem;
-import JNWR.application.utilities.defaultPanelAccessories;
 import JNWR.Domain.Client;
+import JNWR.application.utilities.defaultPanelAccessories;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class searchDialog extends JFrame implements defaultPanelAccessories {
+public class addCustomerDialog extends JFrame implements defaultPanelAccessories {
     int qty = 1;
     final int frameWidth = 550;
     final int frameHeight = 585;
 
-    JLabel addIconLabel;
-    JTextField qtyTextField;
     JTextField searchBox;
     JButton cancelButton;
-    JButton addItemButton;
+    JButton addCustomerButton;
     JButton searchButton;
+    JButton clearCustomerButton;
 
     JComboBox<String> filter;
     public static searchDialog Instance;
 
-
+    ArrayList<DBEntity> list;
     DefaultTableModel headerModel = new DefaultTableModel();
-    String headers[] = { "Product Code", "Name", "Stock","Unit Price"};
-    String filterOptions[] = { "productCode", "Name"};
-
-    public searchDialog(posPage posPage) {
+    String headers[] = {"ID#", "First Name", "Last Name", "Telephone Number", "Expiry Date"};
+    String filterOptions[] = { "customerID", "fName", "lName","telephoneNum"};
+    Customer cust;
+    public addCustomerDialog(posPage posPage) {
         //region Base Frame Setup
         this.setUndecorated(true);
         this.setShape(new RoundRectangle2D.Double(0,0,frameWidth,frameHeight,30,30));
@@ -89,36 +87,27 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         //region Customer Table Bar
 
         headerModel.setColumnIdentifiers(headers);
-        JTable searchTable = new JTable(headerModel) {
+        JTable customerTable = new JTable(headerModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
-            //all cells false
-            return false;
+                //all cells false
+                return false;
             }
         };
 
-        searchTable.setShowGrid(false);
-        searchTable.setRowHeight(50);
+        customerTable.setShowGrid(false);
+        customerTable.setRowHeight(50);
 
         UIDefaults defaults = UIManager.getLookAndFeelDefaults();
         defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
 
-        JScrollPane tableScroll = new JScrollPane(searchTable){
+        JScrollPane tableScroll = new JScrollPane(customerTable){
             @Override
             public Dimension getPreferredSize() {
                 return new Dimension(100, 100);
             }
         };
         //endregion
-
-        qtyTextField = new JTextField();
-        qtyTextField.setEditable(false);
-        qtyTextField.setText(Integer.toString(qty));
-        qtyTextField.setFont(medText);
-
-        JButton addButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100-2.png");
-
-        JButton removeButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-delete-100.png");
 
 
         JPanel exitBtnsPanel = defaultPanelAccessories.createJPanel(0,350,80);
@@ -128,8 +117,11 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         cancelButton = defaultPanelAccessories.defaultButton();
         cancelButton.setText("Cancel");
 
-        addItemButton = defaultPanelAccessories.defaultButton();
-        addItemButton.setText("Add Item");
+        addCustomerButton = defaultPanelAccessories.defaultButton();
+        addCustomerButton.setText("Add Customer");
+
+        clearCustomerButton = defaultPanelAccessories.defaultButton();
+        clearCustomerButton.setText("Clear Customer");
 
         //region Frame.Add
 
@@ -180,39 +172,10 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         mpCons.gridx = 0;
         mainSection.add(tableScroll,mpCons);
 
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy = 3;
-        mpCons.gridx = 0;
-        mainSection.add(quantityLabel,mpCons);
-
-        mpCons.gridwidth = 1;
-        mpCons.weightx = 0;
-        mpCons.weighty = 0;
-        mpCons.gridy = 4;
-        mpCons.gridx = 0;
-        mpCons.insets = new Insets(0,0,5,0);
-        mainSection.add(removeButton,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy = 4;
-        mpCons.gridx = 1;
-        mpCons.insets = new Insets(0,10,5,10);
-        qtyTextField.setHorizontalAlignment(SwingConstants.CENTER);
-        mainSection.add(qtyTextField,mpCons);
-
-        mpCons.weightx = 0;
-        mpCons.weighty = 0;
-        mpCons.gridy = 4;
-        mpCons.gridx = 2;
-        mpCons.insets = new Insets(0,0,5,0);
-        mainSection.add(addButton,mpCons);
-
         mpCons.gridwidth = 3;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
-        mpCons.gridy = 5;
+        mpCons.gridy = 3;
         mpCons.gridx = 0;
         mainSection.add(exitBtnsPanel,mpCons);
 
@@ -227,7 +190,13 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
-        exitBtnsPanel.add(addItemButton,mpCons);
+        exitBtnsPanel.add(clearCustomerButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
+        exitBtnsPanel.add(addCustomerButton,mpCons);
 
         //endregion
 
@@ -240,43 +209,25 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                 String searchFilter = String.valueOf(filter.getSelectedItem());
                 searchId = searchBox.getText();
 
-                ArrayList<DBEntity> list = new Client().getSpecificList("Inventory",searchFilter,searchId);
 
-                for (DBEntity entity : list) {
-
-                    //Inventory inven = (Inventory) list.get(i);
-                    Inventory inven = (Inventory) entity;
-
-                    headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getStock(),inven.getUnitPrice()});
-                }
-            }
-        });
-
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(qty > 1){
-                    qty--;
-                    qtyTextField.setText(Integer.toString(qty));
+                DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+                model.setRowCount(0);
+                if(searchId.equals("")){
+                    updateTable();
                 }
                 else{
-                    //TODO: Add prompt
-                    System.out.println("Quantity cannot be equal or less than 0");
+                    list = new Client().getSpecificList("Customer",searchFilter,searchId);
+                    for (DBEntity entity : list) {
+                        //Inventory inven = (Inventory) list.get(i);
+                        cust = (Customer) entity;
+
+                        headerModel.addRow(new Object[] {cust.getCustomerId(),cust.getfName(),cust.getlName(),cust.getTelephoneNum(),cust.getDateOfMembershipExpiry()});
+                    }
                 }
+
+
             }
         });
-
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                    qty++;
-                    qtyTextField.setText(Integer.toString(qty));
-            }
-        });
-
-
-
-
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -285,42 +236,14 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
             }
         });
 
-        addItemButton.addActionListener(new ActionListener() {
+        addCustomerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Check that qty isnt more than stock
                 try{
-                    DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
-                    int selectedRowIndex = searchTable.getSelectedRow();
-                    ArrayList<InvoiceItem> invoiceItemArrayList = posPage.getInvoiceItemArrayList();
-                    qty = Integer.parseInt(qtyTextField.getText());
+                    DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+                    int selectedRowIndex = customerTable.getSelectedRow();
 
-                    if(qty < Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
-                        InvoiceItem newItem = new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty);
-                        for(int i = 0; i < invoiceItemArrayList.size();i++){
-                            if(invoiceItemArrayList.get(i).getProductCode().equals(newItem.getProductCode())){
-                                if(invoiceItemArrayList.get(i).getItemQuantity() + newItem.getItemQuantity() < Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
-                                    invoiceItemArrayList.get(i).setItemQuantity(invoiceItemArrayList.get(i).getItemQuantity() + newItem.getItemQuantity());
-                                    posPage.changeQuantityInSearch(invoiceItemArrayList.get(i));
-                                    return;
-                                }
-                                else{
-                                    //TODO: Make popup for error
-                                    System.out.println("Stock is less than requested quantity");
-                                    return;
-                                }
-                            }
-                        }
-                        System.out.println(newItem);
-                        invoiceItemArrayList.add(new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty));
-                        posPage.setInvoiceItemArrayList(invoiceItemArrayList);
-                        posPage.updateInvoice();
-                        //dispose();
-                    }
-                    else{
-                        //TODO: Make popup for error
-                        System.out.println("Stock is less than requested quantity");
-                    }
+                    posPage.updateCustomer((Customer) list.get(selectedRowIndex));
                 }
                 catch(ArrayIndexOutOfBoundsException ex){
                     logger.error("The invoice item was not selected.");
@@ -332,12 +255,36 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
 
             }
         });
+
+        clearCustomerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                posPage.updateCustomer(null);
+                dispose();
+            }
+        });
+
+        updateTable();
     }
 
     private void refresh() {
         repaint();
         setSize(new Dimension(getWidth()+1,getHeight()+1));
         setSize(new Dimension(getWidth()-1,getHeight()-1));
+    }
+
+    public void updateTable() {
+
+        list = new Client().getList("Customer");
+
+        for (int i = 0; i < list.size(); i++) {
+
+            Customer cust = (Customer) list.get(i);
+
+            headerModel.addRow(new Object[] {cust.getCustomerId(),cust.getfName(),cust.getlName(),cust.getTelephoneNum(),cust.getDateOfMembershipExpiry()});
+
+        }
+
     }
 
 }

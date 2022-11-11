@@ -42,7 +42,7 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 /*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
-INSERT INTO `inventory` VALUES ('35893434','Serge\'s Cow Milk','Milk fresh from the farm',NULL,45,435.23,'DAI');
+INSERT INTO `inventory` VALUES ('35893434','Serge\'s Cow Milk','Milk fresh from the farm',NULL,45,435.23,'DAI'),('35893435','OtherBrand Milk','Milk less fresh than the farm',NULL,22,353.23,'DAI'),('35893436','Lasco Vanilla Milk','Vanilla Milk Mix Powder',NULL,15,102.32,'DRY');
 /*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-09 17:53:14
+-- Dump completed on 2022-11-11  4:18:25

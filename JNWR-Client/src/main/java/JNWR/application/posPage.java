@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import Entity.DBEntity;
+import Entity.Customer;
 import Entity.Inventory;
 import Entity.InvoiceItem;
 import JNWR.Domain.Client;
@@ -24,11 +26,31 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
     ButtonGroup paymentBtns = new ButtonGroup();
     posPage posPage = this;
+    JLabel selectedItemName;
+    JLabel unitPriceLabel;
+    JLabel shortDescrip;
+    JLabel qtyLabel;
+    JTable itemTable;
+    JButton addCustomer;
+    JLabel subtotalAmt;
+    JLabel discountLabel;
+
+    JLabel totalAmt;
+    float discountPercent = 0;
+    Customer invoiceCustomer;
+
+    JLabel discountAmtLabel;
+    float subtotal = 0;
+    JLabel taxAmt;
+    public Customer getInvoiceCustomer() {
+        return invoiceCustomer;
+    }
+
+    int qty = 0;
     DefaultTableModel headerModel = new DefaultTableModel();
     ArrayList<InvoiceItem> invoiceItemArrayList = new ArrayList<>();
     String headers[] = { "PRODUCT NAME", "UNIT PRICE", "QTY","TOTAL"};
     ArrayList checkOutItems= new ArrayList<>();
-    float subtotal = 0;
     float total = 0;
     final float tax = (float)0.16;
 
@@ -64,7 +86,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         //region Jan's Wholesale Text
         JLabel companyLabel = new JLabel("Jan's Wholesale and Retail");
         companyLabel.setFont(heading1);
-    //endregion
+        //endregion
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
@@ -83,7 +105,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         leftSection.setLayout(new GridBagLayout());
 
         headerModel.setColumnIdentifiers(headers);
-        JTable itemTable = new JTable(headerModel);
+        itemTable = new JTable(headerModel);
         JScrollPane userTableScroll = new JScrollPane(itemTable);
         userTableScroll.setBorder(round);
 
@@ -118,7 +140,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         Image addCustomerImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-contact-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon addCustomerIcon = new ImageIcon(addCustomerImage);
-        JButton addCustomer = defaultPanelAccessories.defaultButton();
+        addCustomer = defaultPanelAccessories.defaultButton();
         addCustomer.setBackground(Color.white);
         addCustomer.setPreferredSize(new Dimension(150,70));
         addCustomer.setIcon(addCustomerIcon);
@@ -150,38 +172,47 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         rightSection.setBackground(Color.decode("#292c2d"));
 
         //TODO:Get based on product selected (Get object with info and use this.get[attribute])
+        //TODO: Create an array with sources and link category id to array
+        String[] categoryIconArray = new String[9];
         Image categoryImage = new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cauliflower-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH);
         ImageIcon categoryIcon = new ImageIcon(categoryImage);
         JLabel categoryIconLabel = new JLabel(categoryIcon);
 
-        JLabel selectedItemName = new JLabel(getItemName());
+        selectedItemName = new JLabel(getItemName());
         selectedItemName.setFont(heading1);
         JLabel priceLabel = new JLabel("Price ea.");
         priceLabel.setFont(heading3);
-        JLabel unitPriceLabel = new JLabel("$16.36");
+        unitPriceLabel = new JLabel("$16.36");
         unitPriceLabel.setFont(heading2);
 
-        JLabel shortDescrip = new JLabel("This is a short description");
+        shortDescrip = new JLabel("This is a short description");
         shortDescrip.setFont(medText);
-
+        /*
         Image deleteImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-delete-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon deleteIcon = new ImageIcon(deleteImage);
-        JLabel deleteIconLabel = new JLabel(deleteIcon);
+        JLabel deleteIconLabel = new JLabel(deleteIcon);*/
 
-        int qty = 5;
-        JLabel qtyLabel = new JLabel(Integer.toString(qty));
+
+        qtyLabel = new JLabel(Integer.toString(qty));
         qtyLabel.setFont(heading2);
-
+/*
         Image addImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-100-2.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon addIcon = new ImageIcon(addImage);
-        JLabel addIconLabel = new JLabel(addIcon);
+        JLabel addIconLabel = new JLabel(addIcon);*/
 
         Image removeImage = new ImageIcon("src/main/resources/JWR-Icons/icons8-remove-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon removeIcon = new ImageIcon(removeImage);
         JLabel removeIconLabel = new JLabel(removeIcon);
+
+        JButton removeButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/icons8-remove-100.png");
+
+        JButton addButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100-2.png");
+
+        JButton deleteButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-delete-100.png");
         //endregion
 
         //region Frame.Add
+
 
         mpCons.ipadx = 0;
         mpCons.ipady = 0;
@@ -356,7 +387,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
-        infoQuantityPanel.add(deleteIconLabel, mpCons);
+        infoQuantityPanel.add(deleteButton, mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
@@ -368,13 +399,13 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
-        infoQuantityPanel.add(addIconLabel, mpCons);
+        infoQuantityPanel.add(addButton, mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
-        infoQuantityPanel.add(removeIconLabel, mpCons);
+        infoQuantityPanel.add(removeButton, mpCons);
 
 
         //endregion
@@ -412,16 +443,16 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 3;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0, 25, 5, 25);
-        JLabel subtotal = new JLabel("Subtotal");
-        subtotal.setFont(medText);
-        subtotal.setForeground(Color.WHITE);
-        rightSection.add(subtotal, mpCons);
+        JLabel subtotalLabel = new JLabel("Subtotal");
+        subtotalLabel.setFont(medText);
+        subtotalLabel.setForeground(Color.WHITE);
+        rightSection.add(subtotalLabel, mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 3;
         mpCons.gridx = 1;
-        JLabel subtotalAmt = new JLabel(getSubtotal());
+        subtotalAmt = new JLabel("$0.00");
         subtotalAmt.setFont(medText);
         subtotalAmt.setForeground(Color.WHITE);
         subtotalAmt.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -431,7 +462,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 4;
         mpCons.gridx = 0;
-        JLabel discountLabel = new JLabel("Discount 10%");
+        discountLabel = new JLabel("Discount 10%");
         discountLabel.setFont(medText);
         discountLabel.setForeground(Color.WHITE);
         rightSection.add(discountLabel, mpCons);
@@ -440,11 +471,11 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 4;
         mpCons.gridx = 1;
-        JLabel discountAmt = new JLabel(getSubtotal());
-        discountAmt.setHorizontalAlignment(SwingConstants.RIGHT);
-        discountAmt.setFont(medText);
-        discountAmt.setForeground(Color.WHITE);
-        rightSection.add(discountAmt, mpCons);
+        discountAmtLabel = new JLabel("$0.00");
+        discountAmtLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        discountAmtLabel.setFont(medText);
+        discountAmtLabel.setForeground(Color.WHITE);
+        rightSection.add(discountAmtLabel, mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
@@ -459,7 +490,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 5;
         mpCons.gridx = 1;
-        JLabel taxAmt = new JLabel(getSubtotal());
+        taxAmt = new JLabel("$0.00");
         taxAmt.setHorizontalAlignment(SwingConstants.RIGHT);
         taxAmt.setFont(medText);
         taxAmt.setForeground(Color.WHITE);
@@ -488,7 +519,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 7;
         mpCons.gridx = 1;
-        JLabel totalAmt = new JLabel(getSubtotal());
+        totalAmt = new JLabel("$0.00");
         totalAmt.setHorizontalAlignment(SwingConstants.RIGHT);
         totalAmt.setFont(heading2);
         totalAmt.setForeground(Color.WHITE);
@@ -617,11 +648,144 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 new searchDialog(posPage).setVisible(true);
             }
         });
+
+        addCustomer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new addCustomerDialog(posPage);
+            }
+        });
+
+        itemTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                int selectedRowIndex = itemTable.getSelectedRow();
+                if(selectedRowIndex != -1){
+                    selectedRowIndex = itemTable.getSelectedRow();
+                    InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
+                    Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",selectedItem.getProductCode());
+                    selectedItemName.setText(inven.getName());
+                    unitPriceLabel.setText("$" + inven.getUnitPrice());
+                    shortDescrip.setText(inven.getShortDescrip());
+                    qtyLabel.setText(Integer.toString(selectedItem.getItemQuantity()));
+                    qty = selectedItem.getItemQuantity();
+                }
+                else{
+                    selectedItemName.setText("Product Name");
+                    unitPriceLabel.setText("$0.00");
+                    shortDescrip.setText("This is a short description.");
+                    qtyLabel.setText("0");
+                }
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if(qty > 1){
+                        qty--;
+                        qtyLabel.setText(Integer.toString(qty));
+                        int selectedRowIndex = itemTable.getSelectedRow();
+                        InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
+                        selectedItem.setItemQuantity(qty);
+
+                        DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+                        model.setValueAt(qty,selectedRowIndex,2);
+
+                        float totalItemCost;
+                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,3).toString())+Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
+                        totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
+                        model.setValueAt(totalItemCost,selectedRowIndex,3);
+                        getTotalCost();
+                    }
+                    else{
+                        //TODO: Add prompt
+                        System.out.println("Quantity cannot be equal or less than 0");
+                    }
+                }
+                catch(ArrayIndexOutOfBoundsException ex){
+                    logger.error("Item in table wasn't selected");
+                }
+
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    int selectedRowIndex = itemTable.getSelectedRow();
+                    InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
+                    Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",selectedItem.getProductCode());
+
+                    if(qty != inven.getStock()){
+                        qty++;
+                        qtyLabel.setText(Integer.toString(qty));
+                        selectedItem.setItemQuantity(qty);
+                        DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+                        model.setValueAt(qty,selectedRowIndex,2);
+                        float totalItemCost;
+                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,3).toString())+Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
+                        totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
+                        model.setValueAt(totalItemCost,selectedRowIndex,3);
+                    }
+                    else{
+                        //TODO: Exceed stock error pop up
+                        logger.error("Item quantity cannot exceed stock");
+                    }
+
+
+
+                    getTotalCost();
+                }
+                catch(ArrayIndexOutOfBoundsException ex){
+                    logger.error("Item in table wasn't selected");
+                }
+
+            }
+        });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRowIndex = itemTable.getSelectedRow();
+                System.out.println(selectedRowIndex);
+                InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
+                DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+                invoiceItemArrayList.remove(selectedRowIndex);
+                updateTable();
+                System.out.println("Row " + selectedRowIndex + " removed");
+                getTotalCost();
+            }
+        });
     }
 
-    private String getSubtotal() {
-        float subtotal = (float)8953.32;
-        return "$" + Float.toString(subtotal);
+    public float getTax(){
+        float taxValue = subtotal * tax;
+        System.out.println(taxValue);
+        taxValue = (float) (Math.round(taxValue*100) / 100.0);
+        taxAmt.setText("$"+taxValue);
+        return taxValue;
+    }
+
+    private float getTotalCost() {
+        float totalCost = getSubtotal();
+        totalCost += getTax();
+        totalCost -= getDiscountValue();
+        totalCost = (float) (Math.round(totalCost*100) / 100.0);
+        totalAmt.setText("$"+totalCost);
+        return totalCost;
+    }
+
+    private float getSubtotal() {
+        subtotal = 0;
+        DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+        for(int i = 0; i < model.getRowCount(); i++){
+            subtotal += Float.parseFloat((model.getValueAt(i,3).toString()));
+        }
+        subtotal = (float) (Math.round(subtotal*100) / 100.0);
+        subtotalAmt.setText("$" + subtotal);
+        return subtotal;
     }
 
     private String getItemName() {
@@ -629,6 +793,31 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         String itemName = "Avocado";
         return itemName;
     }
+
+    public void updateCustomer(Customer cust){
+        this.invoiceCustomer = cust;
+        if(cust != null){
+            addCustomer.setText(invoiceCustomer.getfName()+ " " + invoiceCustomer.getlName());
+            discountPercent = (float)0.1;
+            discountLabel.setForeground(Color.decode("#4DB449"));
+            discountAmtLabel.setForeground(Color.decode("#4DB449"));
+        }
+        else{
+            addCustomer.setText("Add Customer");
+            discountPercent = 0;
+            discountLabel.setForeground(Color.white);
+            discountAmtLabel.setForeground(Color.white);
+        }
+        getTotalCost();
+    }
+
+    public float getDiscountValue(){
+        float discountValue = (float) (subtotal * discountPercent);
+        discountValue = (float) (Math.round(discountValue*100) / 100.0);
+        discountAmtLabel.setText("$"+ String.valueOf(discountValue));
+        return discountValue;
+    }
+
 
     private int getInvoiceNum() {
         int idNum = 437823;
@@ -643,9 +832,35 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         InvoiceItem newItem = invoiceItemArrayList.get(invoiceItemArrayList.size() - 1);
         newItem.setInvoiceNum(getInvoiceNum());
         Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",newItem.getProductCode());
-        headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),newItem.getItemQuantity(), (newItem.getItemQuantity() * inven.getUnitPrice())});
+        float totalItemCost = newItem.getItemQuantity() * inven.getUnitPrice();
+        totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
+        headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),newItem.getItemQuantity(), totalItemCost});
+        getTotalCost();
+    }
+
+    public void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+        model.setRowCount(0);
+        for (InvoiceItem item : invoiceItemArrayList) {
+            Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",item.getProductCode());
+            headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),item.getItemQuantity(), (item.getItemQuantity() * inven.getUnitPrice())});
+        }
+    }
+
+    public void changeQuantityInSearch(InvoiceItem item){
+        DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
+        for (int i = 0;i<invoiceItemArrayList.size();i++) {
+            if(item.getProductCode().equals(invoiceItemArrayList.get(i).getProductCode())){
+                invoiceItemArrayList.get(i).setItemQuantity(item.getItemQuantity());
+                model.setValueAt(item.getItemQuantity(),i,2);
+                model.setValueAt(Float.parseFloat(model.getValueAt(i,1).toString())*item.getItemQuantity(),i,3);
+                getTotalCost();
+                break;
+            }
+        }
 
     }
+
 }
     
 
