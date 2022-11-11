@@ -10,14 +10,20 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.text.DateFormatter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import javax.swing.JPanel;
-import javax.swing.text.MaskFormatter;
 
 public interface defaultPanelAccessories {
     public static final Logger logger = LogManager.getLogger(ClientApplication.class);
@@ -305,13 +311,16 @@ public interface defaultPanelAccessories {
 
     public static String getCurrentTime() {
         //TODO: Get current time function
-        String time = "16:35";
+        LocalTime dateTime = LocalTime.now();
+        //LocalDateTime date = LocalDateTime.parse(LocalDateTime.now().toString(), dtf);
+        String time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm ")).toString();
         return time;
     }
 
     public static String getTodayDate() {
         //TODO: Get month and day
-        String dateString = "9 November";
+        LocalDate dateTime = LocalDate.now();
+        String dateString = dateTime.format(DateTimeFormatter.ofPattern("MMMM d ")).toString();
         /*
         Date = getDate();
         String dateString = "";

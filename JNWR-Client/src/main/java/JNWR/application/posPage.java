@@ -50,7 +50,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     DefaultTableModel headerModel = new DefaultTableModel();
     ArrayList<InvoiceItem> invoiceItemArrayList = new ArrayList<>();
     String headers[] = { "PRODUCT NAME", "UNIT PRICE", "QTY","TOTAL"};
-    ArrayList checkOutItems= new ArrayList<>();
+    ArrayList<Inventory> checkOutItems= new ArrayList<>();
     float total = 0;
     final float tax = (float)0.16;
 
@@ -149,20 +149,19 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         addCustomer.setIconTextGap(8);
         addCustomer.setHorizontalAlignment(SwingConstants.LEFT);
 
-        JPanel itemInfo = defaultPanelAccessories.createJPanel(0,100,280);
+        JPanel itemInfo = defaultPanelAccessories.createJPanel(25,100,280);
         itemInfo.setLayout(new GridBagLayout());
+        itemInfo.setBackground(Color.decode("#4C71B9"));
 
         PanelRound namePricePanel = (PanelRound)defaultPanelAccessories.createJPanel(0,100,100);
         namePricePanel.setLayout(new GridBagLayout());
-        namePricePanel.setBackground(Color.cyan);
-        namePricePanel.setRoundTopLeft(25);
+        namePricePanel.setBackground(Color.white);
         namePricePanel.setRoundTopRight(25);
 
 
         PanelRound infoQuantityPanel = (PanelRound)defaultPanelAccessories.createJPanel(0,100,100);
         infoQuantityPanel.setLayout(new GridBagLayout());
-        infoQuantityPanel.setBackground(Color.MAGENTA);
-        infoQuantityPanel.setRoundBottomLeft(25);
+        infoQuantityPanel.setBackground(Color.white);
         infoQuantityPanel.setRoundBottomRight(25);
         //endregion
 
@@ -202,7 +201,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         Image removeImage = new ImageIcon("src/main/resources/JWR-Icons/icons8-remove-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon removeIcon = new ImageIcon(removeImage);
-        JLabel removeIconLabel = new JLabel(removeIcon);
 
         JButton removeButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/icons8-remove-100.png");
 
@@ -302,7 +300,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx++;
-        //mpCons.insets = new Insets(0, 5 , 0,10);
+        mpCons.insets = new Insets(0, 30 , 0,0);
         upperPane.add(itemInfo, mpCons);
 
 
@@ -329,7 +327,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(0, 30, 0, 0);
+        mpCons.insets = new Insets(0, 15, 0, 0);
         itemInfo.add(namePricePanel, mpCons);
 
         mpCons.weightx = 1;
@@ -609,7 +607,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridx = 0;
         rightSection.add(Box.createGlue(),mpCons);
 
-        mpCons.fill = GridBagConstraints.VERTICAL;
+        mpCons.fill = GridBagConstraints.BOTH;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 13;
@@ -620,15 +618,15 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         payButton.setText("Pay Now");
         payButton.setForeground(Color.decode("#292C2D"));
         payButton.setBackground(Color.white);
-        mpCons.insets = new Insets(0, 25, 0, 25);
+        mpCons.insets = new Insets(0, 60, 0, 60);
         rightSection.add(payButton, mpCons);
 
         mpCons.gridwidth = 1;
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy = 14;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(0, 25, 25, 25);
+        mpCons.insets = new Insets(0, 25, 50, 25);
         rightSection.add(Box.createGlue(),mpCons);
 
         //endregion
@@ -699,7 +697,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                         getTotalCost();
                     }
                     else{
-                        //TODO: Add prompt
+                        JOptionPane.showMessageDialog(new JFrame(),"Quantity cannot be equal or less than 0","ERROR", JOptionPane.ERROR_MESSAGE);
                         System.out.println("Quantity cannot be equal or less than 0");
                     }
                 }
@@ -730,7 +728,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                         model.setValueAt(totalItemCost,selectedRowIndex,3);
                     }
                     else{
-                        //TODO: Exceed stock error pop up
+                        JOptionPane.showMessageDialog(new JFrame(),"Item quantity cannot exceed stock","ERROR", JOptionPane.ERROR_MESSAGE);
                         logger.error("Item quantity cannot exceed stock");
                     }
 
@@ -789,8 +787,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     }
 
     private String getItemName() {
-        //TODO: Get item name in POS page
-        String itemName = "Avocado";
+        String itemName = "Product Name";
         return itemName;
     }
 

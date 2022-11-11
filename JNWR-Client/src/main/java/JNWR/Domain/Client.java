@@ -1,13 +1,11 @@
 package JNWR.Domain;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.net.ConnectException;
 
 import Entity.*;
@@ -28,8 +26,6 @@ public class Client {
             e.printStackTrace();
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
         }
         
     }
@@ -45,16 +41,6 @@ public class Client {
             objOs = new ObjectOutputStream(connectionSocket.getOutputStream());
 
             objIs = new ObjectInputStream(connectionSocket.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeConnection() {
-        try {
-            objIs.close();
-            objOs.close();
-            connectionSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,7 +93,7 @@ public class Client {
         }
     }
 
-    public void sendClass(Class classObject) {
+    public void sendClass(Class<?> classObject) {
         try {
             objOs.writeObject(classObject);
         } catch (IOException e) {

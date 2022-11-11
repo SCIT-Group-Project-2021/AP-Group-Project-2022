@@ -7,20 +7,17 @@ import JNWR.application.utilities.defaultPanelAccessories;
 import JNWR.Domain.Client;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class searchDialog extends JFrame implements defaultPanelAccessories {
     int qty = 1;
     final int frameWidth = 550;
     final int frameHeight = 585;
 
+    ArrayList<DBEntity> list;
     JLabel addIconLabel;
     JTextField qtyTextField;
     JTextField searchBox;
@@ -240,17 +237,40 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                 String searchFilter = String.valueOf(filter.getSelectedItem());
                 searchId = searchBox.getText();
 
-                ArrayList<DBEntity> list = new Client().getSpecificList("Inventory",searchFilter,searchId);
+                list = new Client().getSpecificList("Inventory",searchFilter,searchId);
 
-                for (DBEntity entity : list) {
+                DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
+                model.setRowCount(0);
+                if (searchId.equals("Search...")) {
+                    updateTable();
+                } else {
+                    for (DBEntity entity : list) {
 
-                    //Inventory inven = (Inventory) list.get(i);
-                    Inventory inven = (Inventory) entity;
-
-                    headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getStock(),inven.getUnitPrice()});
+                        //Inventory inven = (Inventory) list.get(i);
+                        Inventory inven = (Inventory) entity;
+    
+                        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getStock(),inven.getUnitPrice()});
+                    }
                 }
+
+                
             }
         });
+
+        searchBox.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                if(searchBox.getText().equals("Search...")){
+                    searchBox.setText("");
+                }
+              
+            }
+      
+            public void focusLost(FocusEvent e) {
+                if(searchBox.getText().equals("")){
+                    searchBox.setText("Search...");
+                }
+            }}
+        );
 
         removeButton.addActionListener(new ActionListener() {
             @Override
@@ -260,8 +280,9 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                     qtyTextField.setText(Integer.toString(qty));
                 }
                 else{
-                    //TODO: Add prompt
+                    JOptionPane.showMessageDialog(new JFrame(),"Quantity cannot be equal or less than 0","ERROR", JOptionPane.ERROR_MESSAGE);
                     System.out.println("Quantity cannot be equal or less than 0");
+                    
                 }
             }
         });
@@ -273,10 +294,6 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                     qtyTextField.setText(Integer.toString(qty));
             }
         });
-
-
-
-
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -305,7 +322,8 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                                     return;
                                 }
                                 else{
-                                    //TODO: Make popup for error
+                                    new JOptionPane();
+                                    JOptionPane.showMessageDialog(new JFrame(),"Stock is less than requested quantity","ERROR", JOptionPane.ERROR_MESSAGE);
                                     System.out.println("Stock is less than requested quantity");
                                     return;
                                 }
@@ -318,7 +336,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                         //dispose();
                     }
                     else{
-                        //TODO: Make popup for error
+                        JOptionPane.showMessageDialog(new JFrame(),"Stock is less than requested quantity","ERROR", JOptionPane.ERROR_MESSAGE);
                         System.out.println("Stock is less than requested quantity");
                     }
                 }
@@ -332,6 +350,8 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
 
             }
         });
+    
+        updateTable();
     }
 
     private void refresh() {
@@ -340,4 +360,18 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
+
+    public void updateTable() {
+
+        list = new Client().getList("Inventory");
+
+        for (int i = 0; i < list.size(); i++) {
+
+            Inventory inven = (Inventory) list.get(i);
+
+            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getStock(),inven.getUnitPrice()});
+
+        }
+
+    }
 }

@@ -53,7 +53,6 @@ public class Customer extends DBEntity implements Serializable {
         LocalDate date = LocalDate.parse(dateOfMembership, dtf);
         LocalDate dateEnd = date.withYear(date.getYear()+ 1);
         String DOME = dtf.format(dateEnd);
-        //TODO: Data of expiry should be auto generated based on date of membership
         this.dateOfMembershipExpiry = DOME;
     }
 

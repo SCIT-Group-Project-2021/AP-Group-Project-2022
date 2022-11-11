@@ -53,6 +53,15 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         JLabel clock = new JLabel(clockIcon);
         JLabel time = new JLabel(defaultPanelAccessories.getCurrentTime());
         time.setFont(heading3);
+        Timer timeTimer = new Timer(60000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time.setText(defaultPanelAccessories.getCurrentTime());
+               
+            }
+        });
+        timeTimer.start();
+        
         //endregion
 
         //region Log Out Label & Button
@@ -209,11 +218,6 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         separator.setForeground(Color.decode("#dedee0"));
         separator.setText("  |  ");
         dateTimePanel.add(separator);
-        //TODO: Fix separator
-        /*JSeparator line = new JSeparator(SwingConstants.VERTICAL);
-        line.setPreferredSize(new Dimension(25,25));
-        dateTimePanel.add(line);*/
-
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;

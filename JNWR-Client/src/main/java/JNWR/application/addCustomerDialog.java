@@ -2,10 +2,11 @@ package JNWR.application;
 
 import Entity.Customer;
 import Entity.DBEntity;
-import Entity.Inventory;
-import Entity.InvoiceItem;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.defaultPanelAccessories;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -212,7 +213,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
 
                 DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                 model.setRowCount(0);
-                if(searchId.equals("")){
+                if(searchId.equals("Search...")){
                     updateTable();
                 }
                 else{
@@ -228,6 +229,20 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
 
             }
         });
+
+        searchBox.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                if(searchBox.getText().equals("Search...")){
+                    searchBox.setText("");
+                }
+              
+            }
+      
+            public void focusLost(FocusEvent e) {
+                if(searchBox.getText().equals("")){
+                    searchBox.setText("Search...");
+                }
+            }});
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
