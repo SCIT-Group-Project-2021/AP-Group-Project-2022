@@ -38,6 +38,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(1380,820));
         setLayout(new GridBagLayout());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         //endregion
 
         //region GridBagConstraints

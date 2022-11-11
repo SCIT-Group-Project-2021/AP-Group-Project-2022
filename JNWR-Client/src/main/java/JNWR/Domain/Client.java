@@ -20,7 +20,8 @@ public class Client {
     public Client () {
         try {
             this.createConnection();
-            this.configureStreams();
+            this.configureStreams();      
+
         }catch (ConnectException e) {
         // TODO: handle exception
             e.printStackTrace();
@@ -38,6 +39,7 @@ public class Client {
 
     private void configureStreams() throws NullPointerException{
         try {
+
             objOs = new ObjectOutputStream(connectionSocket.getOutputStream());
 
             objIs = new ObjectInputStream(connectionSocket.getInputStream());
@@ -46,9 +48,19 @@ public class Client {
         }
     }
 
+    private void closeConnection() {
+        try {
+            objIs.close();
+            objOs.close();
+            connectionSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createConnection() throws ConnectException {
         try {
-            connectionSocket = new Socket("127.0.0.1",8888);
+            connectionSocket = new Socket("localHost",8888);
         }catch (ConnectException e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -60,6 +72,9 @@ public class Client {
     private void createConnection(String ip) {
         try {
             connectionSocket = new Socket(ip,8888);
+        }catch (ConnectException e) {
+            // TODO: handle exception
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,6 +85,7 @@ public class Client {
     public void sendAction(String action) {
         try {
             objOs.writeObject(action);
+            objOs.flush();
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -79,6 +95,7 @@ public class Client {
     public void sendInteger(Integer value) {
         try {
             objOs.writeObject(value);
+            objOs.flush();
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -88,14 +105,16 @@ public class Client {
     public void sendEntity(DBEntity entity) {
         try {
             objOs.writeObject(entity);
+            objOs.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendClass(Class<?> classObject) {
+    public void sendClass(Class classObject) {
         try {
             objOs.writeObject(classObject);
+            objOs.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -219,6 +238,7 @@ public class Client {
 
         try {
             System.out.println((String) objIs.readObject());
+
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -18,38 +18,43 @@ public class ClientApplication {
 		SpringApplication.run(ClientApplication.class, args);
         System.setProperty("java.awt.headless", "false");
          
-        Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2024-11-03");
         
-        Department dep = new Department("Admin", "Admin");
 
-        Staff staff = new Staff(349219,"graham","Tickle","18765993666","Admin","ACS");
-
-        Staff staff2 = new Staff(389219,"graham","Tickle","18765993666","Admin","ACS");
+            Client client = new Client();
+            Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2024-11-03");
         
-       
-            /*
+            Department dep = new Department("Admin", "Admin");
+
+            Staff staff = new Staff(349219,"graham","Tickle","18765993666","Admin","ACS");
+
+            Staff staff2 = new Staff(389219,"graham","Tickle","18765993666","Admin","ACS");
+    
+            
             System.out.println("Task 1");
-            new Client().addEntity(cust);
+            client.addEntity(cust);
 
-            System.out.println("Task 2");
-            new Client().addEntity(staff2);
+            //System.out.println("Task 2");
+            //client.addEntity(staff2);
     
             System.out.println("Task 3");
-            new Client().getList("Department");
+            client.getList("Department");
     
             System.out.println("Task 4");
-            new Client().findEntity("Staff","idNum", "319219");
+            client.findEntity("Staff","idNum", "399219");
 
             System.out.println("Task 5");
-            new Client().findEntity(staff2, staff2.getIdNum());
+            client.findEntity(staff2, staff2.getIdNum());
     
             System.out.println("Task 6");
-            new Client().alterEntity(staff, staff.getIdNum());     
+            client.alterEntity(staff, staff.getIdNum());     
             
             System.out.println("Task 7");
-            new Client().removeEntity(new Staff(), 399219); */
+            client.sendAction("shutDown");
+            //new Client().removeEntity(new Staff(), 399219); 
+
         
-        new landingPage();
+        
+        //new landingPage();
 
         
 	}
