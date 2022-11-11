@@ -243,7 +243,7 @@ public class Server {
 
                             break;
                         case "shutDown":
-                            System.out.println("Server shutdown");
+                            System.out.println("Client Disconnected");
                             try {
                                 if (objOs != null) {
                                     objOs.close();
@@ -276,10 +276,6 @@ public class Server {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-            finally {
-                
-            }
-                
             }
                
         }
@@ -411,7 +407,6 @@ public class Server {
     
             try {
                 entityList = em2.createQuery("SELECT a FROM " + Table + " a",DBEntity.class).getResultList();
-                System.out.println(Arrays.toString(entityList.toArray()));
             } catch (IllegalArgumentException e) {
                 // TODO: handle exception
                 e.printStackTrace();
@@ -429,7 +424,6 @@ public class Server {
     
             try {
                 entityList = em2.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '%" + ID + "%'",DBEntity.class).getResultList();
-                System.out.println(Arrays.toString(entityList.toArray()));
             } catch (IllegalArgumentException e) {
                 // TODO: handle exception
                 e.printStackTrace();

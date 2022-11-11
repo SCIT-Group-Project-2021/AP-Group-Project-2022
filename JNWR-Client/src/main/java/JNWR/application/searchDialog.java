@@ -28,12 +28,16 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
     JComboBox<String> filter;
     public static searchDialog Instance;
 
+    Client client;
+
 
     DefaultTableModel headerModel = new DefaultTableModel();
     String headers[] = { "Product Code", "Name", "Stock","Unit Price"};
     String filterOptions[] = { "productCode", "Name"};
 
-    public searchDialog(posPage posPage) {
+    public searchDialog(posPage posPage, Client client) {
+
+        this.client = client;
         //region Base Frame Setup
         this.setUndecorated(true);
         this.setShape(new RoundRectangle2D.Double(0,0,frameWidth,frameHeight,30,30));
@@ -237,7 +241,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                 String searchFilter = String.valueOf(filter.getSelectedItem());
                 searchId = searchBox.getText();
 
-                list = new Client().getSpecificList("Inventory",searchFilter,searchId);
+                list = client.getSpecificList("Inventory",searchFilter,searchId);
 
                 DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
                 model.setRowCount(0);
@@ -363,7 +367,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
 
     public void updateTable() {
 
-        list = new Client().getList("Inventory");
+        list = client.getList("Inventory");
 
         for (int i = 0; i < list.size(); i++) {
 

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
 public class dashboardPage extends JPanel implements defaultPanelAccessories {
@@ -16,7 +17,12 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         
     String headers[] = { "Time Management", "Clocked Users"};
 
-    dashboardPage() {
+    Client client;
+
+    dashboardPage(Client client) {
+
+        this.client = client;
+
         RoundedBorder round = new RoundedBorder(25);
 
         //region GridBagConstraints

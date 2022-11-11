@@ -24,12 +24,16 @@ import java.util.ArrayList;
 
 public class prodPage extends JPanel implements defaultPanelAccessories{
 
+    Client client;
+
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
     String Category[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
 
-    prodPage() {
+    prodPage(Client client) {
+
+        this.client = client;
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -224,7 +228,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
     public void updateTable() {
 
-        ArrayList<DBEntity> list = new Client().getList("Inventory");
+        ArrayList<DBEntity> list = client.getList("Inventory");
 
         for (DBEntity entity : list) {
 

@@ -27,7 +27,11 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         
     String headers[] = { "ID#", "First Name", "Last Name", "DOB", "Telephone Number", "Email", "Date of Membership", "Expiry Date", "Options"};
 
-    custPage() {
+    Client client;
+
+    custPage(Client client) {
+
+        this.client = client;
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -217,7 +221,7 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
     public void updateTable() {
 
-        ArrayList<DBEntity> list = new Client().getList("Customer");
+        ArrayList<DBEntity> list = client.getList("Customer");
 
         for (int i = 0; i < list.size(); i++) {
 

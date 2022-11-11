@@ -42,6 +42,9 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     JLabel discountAmtLabel;
     float subtotal = 0;
     JLabel taxAmt;
+
+    Client client;
+
     public Customer getInvoiceCustomer() {
         return invoiceCustomer;
     }
@@ -63,8 +66,9 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     }
     JLabel invoiceNum;
 
-    public posPage() {
+    public posPage(Client client) {
 
+        this.client = client;
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -643,14 +647,14 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         searchByCode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new searchDialog(posPage).setVisible(true);
+                new searchDialog(posPage,client).setVisible(true);
             }
         });
 
         addCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new addCustomerDialog(posPage);
+                new addCustomerDialog(posPage,client);
             }
         });
 
@@ -660,7 +664,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 if(selectedRowIndex != -1){
                     selectedRowIndex = itemTable.getSelectedRow();
                     InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
-                    Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",selectedItem.getProductCode());
+                    Inventory inven = (Inventory)client.findEntity("Inventory","productCode",selectedItem.getProductCode());
                     selectedItemName.setText(inven.getName());
                     unitPriceLabel.setText("$" + inven.getUnitPrice());
                     shortDescrip.setText(inven.getShortDescrip());
@@ -714,7 +718,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 try{
                     int selectedRowIndex = itemTable.getSelectedRow();
                     InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
-                    Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",selectedItem.getProductCode());
+                    Inventory inven = (Inventory)client.findEntity("Inventory","productCode",selectedItem.getProductCode());
 
                     if(qty != inven.getStock()){
                         qty++;
@@ -828,7 +832,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     public void updateInvoice(){
         InvoiceItem newItem = invoiceItemArrayList.get(invoiceItemArrayList.size() - 1);
         newItem.setInvoiceNum(getInvoiceNum());
-        Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",newItem.getProductCode());
+        Inventory inven = (Inventory)client.findEntity("Inventory","productCode",newItem.getProductCode());
         float totalItemCost = newItem.getItemQuantity() * inven.getUnitPrice();
         totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
         headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),newItem.getItemQuantity(), totalItemCost});
@@ -839,7 +843,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
         model.setRowCount(0);
         for (InvoiceItem item : invoiceItemArrayList) {
-            Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",item.getProductCode());
+            Inventory inven = (Inventory)client.findEntity("Inventory","productCode",item.getProductCode());
             headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),item.getItemQuantity(), (item.getItemQuantity() * inven.getUnitPrice())});
         }
     }

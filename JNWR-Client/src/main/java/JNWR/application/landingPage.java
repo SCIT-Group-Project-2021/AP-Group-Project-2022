@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
 public class landingPage extends JFrame implements defaultPanelAccessories{
@@ -39,6 +40,13 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setMinimumSize(new Dimension(1380,820));
         setLayout(new GridBagLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        Client client = new Client();
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                client.sendAction("shutDown");
+            }
+        }, "Shutdown-thread"));
         //endregion
 
         //region GridBagConstraints
@@ -174,10 +182,10 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //endregion
 
-        dashBoard = new dashboardPage();
-        customer = new custPage();
-        inventory = new prodPage();
-        pos = new posPage();
+        dashBoard = new dashboardPage(client);
+        customer = new custPage(client);
+        inventory = new prodPage(client);
+        pos = new posPage(client);
 
         //region Buttons
         dashBoardButton.addActionListener(
@@ -268,4 +276,5 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         refresh();
         
     }
+
 }

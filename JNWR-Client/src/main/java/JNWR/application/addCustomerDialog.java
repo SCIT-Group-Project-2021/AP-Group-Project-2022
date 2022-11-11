@@ -35,7 +35,13 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
     String headers[] = {"ID#", "First Name", "Last Name", "Telephone Number", "Expiry Date"};
     String filterOptions[] = { "customerID", "fName", "lName","telephoneNum"};
     Customer cust;
-    public addCustomerDialog(posPage posPage) {
+
+    Client client;
+
+    public addCustomerDialog(posPage posPage,Client client) {
+
+        this.client = client;
+
         //region Base Frame Setup
         this.setUndecorated(true);
         this.setShape(new RoundRectangle2D.Double(0,0,frameWidth,frameHeight,30,30));
@@ -217,7 +223,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
                     updateTable();
                 }
                 else{
-                    list = new Client().getSpecificList("Customer",searchFilter,searchId);
+                    list = client.getSpecificList("Customer",searchFilter,searchId);
                     for (DBEntity entity : list) {
                         //Inventory inven = (Inventory) list.get(i);
                         cust = (Customer) entity;
@@ -290,7 +296,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
 
     public void updateTable() {
 
-        list = new Client().getList("Customer");
+        list = client.getList("Customer");
 
         for (int i = 0; i < list.size(); i++) {
 

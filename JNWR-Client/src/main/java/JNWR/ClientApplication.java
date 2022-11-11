@@ -18,8 +18,7 @@ public class ClientApplication {
 		SpringApplication.run(ClientApplication.class, args);
         System.setProperty("java.awt.headless", "false");
          
-        
-
+            /*
             Client client = new Client();
             Customer cust = new Customer("chase","Doe","2001-07-16","18765553606","gabe@gmail.com", "2024-11-03");
         
@@ -33,8 +32,8 @@ public class ClientApplication {
             System.out.println("Task 1");
             client.addEntity(cust);
 
-            //System.out.println("Task 2");
-            //client.addEntity(staff2);
+            System.out.println("Task 2");
+            client.addEntity(staff2);
     
             System.out.println("Task 3");
             client.getList("Department");
@@ -49,12 +48,12 @@ public class ClientApplication {
             client.alterEntity(staff, staff.getIdNum());     
             
             System.out.println("Task 7");
-            client.sendAction("shutDown");
-            //new Client().removeEntity(new Staff(), 399219); 
+            new Client().removeEntity(new Staff(), 399219); 
+             */
 
         
         
-        //new landingPage();
+        new landingPage();
 
         
 	}
