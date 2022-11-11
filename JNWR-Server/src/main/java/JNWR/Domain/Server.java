@@ -166,7 +166,7 @@ public class Server {
                             break;
                         case "getList":
 
-                            System.out.println("Getting List");
+                            System.out.println("Getting full list");
 
                             try {
                                 sendList(listEntity((String) objIs.readObject()));

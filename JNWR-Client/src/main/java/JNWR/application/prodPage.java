@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import Entity.Customer;
 import Entity.DBEntity;
 import Entity.Inventory;
 import JNWR.Domain.Client;
@@ -217,13 +218,12 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         for (DBEntity entity : list) {
 
-            //Inventory inven = (Inventory) list.get(i);
             Inventory inven = (Inventory) entity;
 
             headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
 
         }
-        
+
     }
 
 }

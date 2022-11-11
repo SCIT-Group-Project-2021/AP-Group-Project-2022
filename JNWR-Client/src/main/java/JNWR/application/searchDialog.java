@@ -8,10 +8,11 @@ import JNWR.Domain.Client;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class searchDialog extends JFrame implements defaultPanelAccessories {
@@ -34,7 +35,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
     String headers[] = { "Product Code", "Name", "Stock","Unit Price"};
     String filterOptions[] = { "productCode", "Name"};
 
-    public searchDialog(posPage posPage){
+    public searchDialog(posPage posPage) {
         //region Base Frame Setup
         this.setUndecorated(true);
         this.setShape(new RoundRectangle2D.Double(0,0,frameWidth,frameHeight,30,30));
@@ -107,21 +108,20 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         };
         tableScroll.setBackground(Color.GREEN);
         //endregion
-        qtyTextField = new JTextField(Integer.toString(qty));
+
+        qtyTextField = new JTextField();
+        qtyTextField.setEditable(false);
+        qtyTextField.setText(Integer.toString(qty));
         qtyTextField.setFont(medText);
 
         JButton addButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100-2.png");
 
-
-        //Image removeImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-delete-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        //ImageIcon removeIcon = new ImageIcon(removeImage);
         JButton removeButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-delete-100.png");
-        //removeButton.setIcon(removeIcon);
+
 
         JPanel exitBtnsPanel = defaultPanelAccessories.createJPanel(0,350,80);
         mainSection.setLayout(new GridBagLayout());
         mainSection.setBackground(Color.green);
-
 
         cancelButton = defaultPanelAccessories.defaultButton();
         cancelButton.setText("Cancel");
@@ -287,29 +287,33 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Check that qty isnt more than stock
+                try{
+                    DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
+                    int selectedRowIndex = searchTable.getSelectedRow();
+                    ArrayList<InvoiceItem> invoiceItemArrayList = posPage.getInvoiceItemArrayList();
+                    qty = Integer.parseInt(qtyTextField.getText());
 
-                DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
-                int selectedRowIndex = searchTable.getSelectedRow();
-                ArrayList<InvoiceItem> invoiceItemArrayList = posPage.getInvoiceItemArrayList();
+                    if(qty < Integer.parseInt((model.getValueAt(selectedRowIndex,0).toString()))){
+                        InvoiceItem newItem = new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty);
+                        System.out.println(newItem);
+                        invoiceItemArrayList.add(new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty));
+                        posPage.setInvoiceItemArrayList(invoiceItemArrayList);
+                        posPage.updateInvoice();
+                        dispose();
+                    }
+                    else{
+                        //TODO: Make popup for error
+                        System.out.println("Stock is less than requested quantity");
+                    }
+                }
+                catch(ArrayIndexOutOfBoundsException ex){
+                    logger.error("The invoice item was not selected.");
+                }
 
-                if(qty < Integer.parseInt((model.getValueAt(selectedRowIndex,0).toString()))){
-                    InvoiceItem newItem = new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty);
-                    System.out.println(newItem);
-                    invoiceItemArrayList.add(new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty));
-                    posPage.setInvoiceItemArrayList(invoiceItemArrayList);
-                    posPage.updateInvoice();
-                    dispose();
-                }
-                else{
-                    //TODO: Make popup for error
-                    System.out.println("Stock is less than requested quantity");
-                }
 
             }
         });
     }
-
-
 
     private void refresh() {
         repaint();

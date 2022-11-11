@@ -643,7 +643,8 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         InvoiceItem newItem = invoiceItemArrayList.get(invoiceItemArrayList.size() - 1);
         newItem.setInvoiceNum(getInvoiceNum());
         Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",newItem.getProductCode());
-        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),newItem.getItemQuantity(),inven.getUnitPrice(), (newItem.getItemQuantity() * inven.getUnitPrice())});
+        headerModel.addRow(new Object[] {inven.getName(),inven.getUnitPrice(),newItem.getItemQuantity(), (newItem.getItemQuantity() * inven.getUnitPrice())});
+
     }
 }
     

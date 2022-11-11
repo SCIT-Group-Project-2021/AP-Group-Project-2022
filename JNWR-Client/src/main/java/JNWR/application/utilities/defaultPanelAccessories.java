@@ -1,5 +1,9 @@
 package JNWR.application.utilities;
 
+import JNWR.ClientApplication;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.*;
 
 import javax.swing.*;
@@ -13,8 +17,10 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
+import javax.swing.text.MaskFormatter;
 
 public interface defaultPanelAccessories {
+    public static final Logger logger = LogManager.getLogger(ClientApplication.class);
     Font heading1 = new Font("Outfit", Font.BOLD, 40);
     Font heading2 = new Font("Outfit", Font.BOLD, 30);
     Font heading3 = new Font("Outfit", Font.BOLD, 24);
@@ -445,4 +451,6 @@ public interface defaultPanelAccessories {
         // got from
         // https://stackoverflow.com/questions/16046824/making-a-java-swing-frame-movable-and-setundecorated
     }
+
+
 }
