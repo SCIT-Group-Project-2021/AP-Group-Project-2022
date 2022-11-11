@@ -100,7 +100,6 @@ public class Server {
                             System.out.println("Finding Entity");
 
                             try {
-
                                 sendEntity(findEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
                                 sendAction("Task Completed");
 
@@ -181,8 +180,25 @@ public class Server {
                                 e.printStackTrace();
                             }
 
-                            
-                            
+                            break;
+
+                            case "getSpecificList":
+
+                            System.out.println("Getting List");
+
+                            try {
+                                sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            } catch (MappingNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+
+
                             break;
                         case "shutDown":
                             System.out.println("Server shutdown");
@@ -327,6 +343,24 @@ public class Server {
 
         return entityList;
         
+    }
+
+    public List<DBEntity> listSpecificEntity(String Table,String IDType, String ID) throws MappingNotFoundException{
+        EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        List<DBEntity> entityList = null;
+
+        try {
+            entityList = em2.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '%" + ID + "%'",DBEntity.class).getResultList();
+            System.out.println(Arrays.toString(entityList.toArray()));
+        } catch (IllegalArgumentException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+
+        return entityList;
+
     }
 
     public void sendList(List<DBEntity> entityList) {

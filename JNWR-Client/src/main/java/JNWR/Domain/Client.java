@@ -151,6 +151,44 @@ public class Client {
   
     }
 
+    public ArrayList<DBEntity> getSpecificList(String Table,String IDType, String ID) {
+
+        ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
+        //Calls the get list function
+        sendAction("getSpecificList");
+        //Tells the functionwhat table to return
+        sendAction(Table);
+        sendAction(IDType);
+        sendAction(ID);
+
+        try {
+            list =(ArrayList<Entity.DBEntity>) objIs.readObject();
+            System.out.println(Arrays.toString(list.toArray()));
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return list;
+
+    }
+
     public void addEntity(DBEntity entity) {
 
         sendAction("addEntity");
@@ -169,16 +207,17 @@ public class Client {
         
     }
 
-    public void findEntity(String Table,String IDType, String ID) {
+    public DBEntity findEntity(String Table,String IDType, String ID) {
         //Calls the get list function
         sendAction("findEntity");
         //Tells the functionwhat table to return
         sendAction(Table);
         sendAction(IDType);
         sendAction(ID);
+        DBEntity entity = null;
 
         try {
-            DBEntity entity = (DBEntity)objIs.readObject();
+            entity = (DBEntity)objIs.readObject();
             System.out.println(entity);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
@@ -201,7 +240,7 @@ public class Client {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        return entity;
     }
 
     public void findEntity(DBEntity entity,  Integer ID) {

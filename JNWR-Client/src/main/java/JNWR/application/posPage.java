@@ -7,22 +7,39 @@ import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Entity.DBEntity;
+import Entity.Inventory;
+import Entity.InvoiceItem;
+import JNWR.Domain.Client;
 import JNWR.application.utilities.defaultPanelAccessories;
 
 import java.awt.GridBagConstraints;  
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class posPage extends JPanel implements defaultPanelAccessories{
 
+    ButtonGroup paymentBtns = new ButtonGroup();
+    posPage posPage = this;
     DefaultTableModel headerModel = new DefaultTableModel();
-        
+    ArrayList<InvoiceItem> invoiceItemArrayList = new ArrayList<>();
     String headers[] = { "PRODUCT NAME", "UNIT PRICE", "QTY","TOTAL"};
     ArrayList checkOutItems= new ArrayList<>();
     float subtotal = 0;
     float total = 0;
     final float tax = (float)0.16;
+
+    public ArrayList<InvoiceItem> getInvoiceItemArrayList() {
+        return invoiceItemArrayList;
+    }
+
+    public void setInvoiceItemArrayList(ArrayList<InvoiceItem> invoiceItemArrayList) {
+        this.invoiceItemArrayList = invoiceItemArrayList;
+    }
+    JLabel invoiceNum;
 
     public posPage() {
 
@@ -277,7 +294,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridx = 0;
         buttonBox.add(addCustomer, mpCons);
 
-
         mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
@@ -366,23 +382,246 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         //region rightSection.Add
         
-        mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(25, 25, 25, 25);
-        JLabel invoiceNum = new JLabel(getInvoiceNum());
-        invoiceNum.setFont(heading3);
+        mpCons.insets = new Insets(25, 25, 0, 25);
+        invoiceNum = new JLabel("Invoice #" + Integer.toString(getInvoiceNum()));
+        invoiceNum.setFont(heading2);
         invoiceNum.setForeground(Color.WHITE);
         rightSection.add(invoiceNum, mpCons);
 
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 1;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 25, 0, 25);
+        empName.setFont(heading3);
+        empName.setForeground(Color.gray);
+        rightSection.add(empName, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 2;
+        mpCons.gridx = 0;
+        rightSection.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 3;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 25, 5, 25);
+        JLabel subtotal = new JLabel("Subtotal");
+        subtotal.setFont(medText);
+        subtotal.setForeground(Color.WHITE);
+        rightSection.add(subtotal, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 3;
+        mpCons.gridx = 1;
+        JLabel subtotalAmt = new JLabel(getSubtotal());
+        subtotalAmt.setFont(medText);
+        subtotalAmt.setForeground(Color.WHITE);
+        subtotalAmt.setHorizontalAlignment(SwingConstants.RIGHT);
+        rightSection.add(subtotalAmt, mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 4;
+        mpCons.gridx = 0;
+        JLabel discountLabel = new JLabel("Discount 10%");
+        discountLabel.setFont(medText);
+        discountLabel.setForeground(Color.WHITE);
+        rightSection.add(discountLabel, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 4;
+        mpCons.gridx = 1;
+        JLabel discountAmt = new JLabel(getSubtotal());
+        discountAmt.setHorizontalAlignment(SwingConstants.RIGHT);
+        discountAmt.setFont(medText);
+        discountAmt.setForeground(Color.WHITE);
+        rightSection.add(discountAmt, mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 5;
+        mpCons.gridx = 0;
+        JLabel taxLabel = new JLabel("Tax 16%");
+        taxLabel.setFont(medText);
+        taxLabel.setForeground(Color.WHITE);
+        rightSection.add(taxLabel, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 5;
+        mpCons.gridx = 1;
+        JLabel taxAmt = new JLabel(getSubtotal());
+        taxAmt.setHorizontalAlignment(SwingConstants.RIGHT);
+        taxAmt.setFont(medText);
+        taxAmt.setForeground(Color.WHITE);
+        rightSection.add(taxAmt, mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 6;
+        mpCons.gridx = 0;
+        mpCons.gridwidth = 2;
+        mpCons.fill = GridBagConstraints.HORIZONTAL;
+        JSeparator sep = new JSeparator(JSeparator.HORIZONTAL);
+        sep.setPreferredSize(new Dimension(100,2));
+        rightSection.add(sep, mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 7;
+        mpCons.gridx = 0;
+        JLabel totalLabel = new JLabel("Total");
+        totalLabel.setFont(heading2);
+        totalLabel.setForeground(Color.WHITE);
+        rightSection.add(totalLabel, mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 7;
+        mpCons.gridx = 1;
+        JLabel totalAmt = new JLabel(getSubtotal());
+        totalAmt.setHorizontalAlignment(SwingConstants.RIGHT);
+        totalAmt.setFont(heading2);
+        totalAmt.setForeground(Color.WHITE);
+        rightSection.add(totalAmt, mpCons);
+
+        mpCons.gridwidth = 1;
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 8;
+        mpCons.gridx = 0;
+        rightSection.add(Box.createGlue(),mpCons);
+
+
+        //region Payment
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 9;
+        mpCons.gridx = 0;
+        mpCons.gridwidth = 2;
+        mpCons.insets = new Insets(0, 25, 30, 25);
+        JLabel paymentLabel = new JLabel("Payment Method");
+        paymentLabel.setFont(medText);
+        paymentLabel.setForeground(Color.decode("#C4C4C4"));
+        paymentLabel.setHorizontalAlignment(JLabel.CENTER);
+        rightSection.add(paymentLabel, mpCons);
+
+        RoundedBorder paymentOptionBorder = new RoundedBorder(Color.white,25);
+
+        mpCons.fill = GridBagConstraints.VERTICAL;
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 10;
+        mpCons.gridx = 0;
+        mpCons.gridwidth = 1;
+        mpCons.insets = new Insets(0, 25, 0, 25);
+        JIconToggleButton cashButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-us-dollar-circled-100.png","src/main/resources/JWR-Icons/Black/icons8-us-dollar-circled-100.png");
+        paymentBtns.add(cashButton);
+        cashButton.setHasBackground(false);
+        cashButton.setBorder(paymentOptionBorder);
+        cashButton.setBackground(Color.white);
+        cashButton.setText("");
+        cashButton.setSelected(true);
+        rightSection.add(cashButton, mpCons);
+
+
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 10;
+        mpCons.gridx = 1;
+        JIconToggleButton cardButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-credit-card-100.png","src/main/resources/JWR-Icons/Black/icons8-credit-card-100.png");
+        paymentBtns.add(cardButton);
+        cardButton.setBorder(paymentOptionBorder);
+        cardButton.setHasBackground(false);
+        cardButton.setBackground(null);
+        cardButton.setFocusPainted(false);
+        cardButton.setSelected(false);
+        cardButton.setBackground(Color.decode("#292C2D"));
+        cardButton.setText("");
+        rightSection.add(cardButton, mpCons);
+
+        mpCons.fill = GridBagConstraints.BOTH;
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 11;
+        mpCons.gridx = 0;
+        JLabel cashLabel = new JLabel("Cash");
+        cashLabel.setFont(medText);
+        cashLabel.setHorizontalAlignment(JLabel.CENTER);
+        cashLabel.setForeground(Color.white);
+        rightSection.add(cashLabel, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 11;
+        mpCons.gridx = 1;
+        JLabel cardLabel = new JLabel("Card");
+        cardLabel.setFont(medText);
+        cardLabel.setForeground(Color.white);
+        cardLabel.setHorizontalAlignment(JLabel.CENTER);
+        rightSection.add(cardLabel, mpCons);
+
+        mpCons.gridwidth = 1;
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 12;
+        mpCons.gridx = 0;
+        rightSection.add(Box.createGlue(),mpCons);
+
+        mpCons.fill = GridBagConstraints.VERTICAL;
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 13;
+        mpCons.gridx = 0;
+        mpCons.gridwidth = 2;
+        JButton payButton = defaultPanelAccessories.defaultButton();
+        payButton.setFont(medText);
+        payButton.setText("Pay Now");
+        payButton.setForeground(Color.decode("#292C2D"));
+        payButton.setBackground(Color.white);
+        mpCons.insets = new Insets(0, 25, 0, 25);
+        rightSection.add(payButton, mpCons);
+
+        mpCons.gridwidth = 1;
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 14;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 25, 25, 25);
+        rightSection.add(Box.createGlue(),mpCons);
+
         //endregion
+        //mpCons.fill = GridBagConstraints.BOTH;
+
 
         //endregion
 
         //endregion
 
-        
+        //endregion
+
+
+        searchByCode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new searchDialog(posPage).setVisible(true);
+            }
+        });
+    }
+
+    private String getSubtotal() {
+        float subtotal = (float)8953.32;
+        return "$" + Float.toString(subtotal);
     }
 
     private String getItemName() {
@@ -391,16 +630,21 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         return itemName;
     }
 
-    private String getInvoiceNum() {
-        String invoiceNum = "Invoice #";
+    private int getInvoiceNum() {
         int idNum = 437823;
         //SELECT * FROM Table ORDER BY ID DESC LIMIT 1
         //idNum = this.getIdNum();
         //
-        invoiceNum = invoiceNum + Integer.toString(idNum);
-        return invoiceNum;
+        //invoiceNum = invoiceNum + Integer.toString(idNum);
+        return idNum;
     }
 
+    public void updateInvoice(){
+        InvoiceItem newItem = invoiceItemArrayList.get(invoiceItemArrayList.size() - 1);
+        newItem.setInvoiceNum(getInvoiceNum());
+        Inventory inven = (Inventory)new Client().findEntity("Inventory","productCode",newItem.getProductCode());
+        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),newItem.getItemQuantity(),inven.getUnitPrice(), (newItem.getItemQuantity() * inven.getUnitPrice())});
+    }
 }
     
 

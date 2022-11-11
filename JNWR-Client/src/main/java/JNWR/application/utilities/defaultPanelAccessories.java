@@ -7,6 +7,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -23,8 +25,14 @@ public interface defaultPanelAccessories {
     public static class RoundedBorder implements Border {
         
         private int radius;
+        private Color color;
         
         public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        public RoundedBorder(Color color, int radius) {
+            this.color = color;
             this.radius = radius;
         }
         @Override
@@ -172,6 +180,9 @@ public interface defaultPanelAccessories {
 
         Icon primaryIcon = getIcon();
         Icon secondaryIcon = getIcon();
+        Color newBackGround = Color.white;
+
+        boolean hasBackground;
 
         public Icon getPrimaryIcon() {
 
@@ -185,6 +196,12 @@ public interface defaultPanelAccessories {
       
         }
 
+        public void setPrimaryIcon(Icon icon, Color bg, boolean hasBackGround) {
+
+            this.primaryIcon = icon;
+
+        }
+
         public Icon getSecondaryIcon() {
 
             return secondaryIcon;
@@ -195,6 +212,26 @@ public interface defaultPanelAccessories {
 
             this.secondaryIcon = icon;
             
+        }
+
+        public void setNewBackGround(Color bg) {
+
+            this.newBackGround = bg;
+
+        }
+
+        public Color getNewBackGround() {
+
+            return this.newBackGround;
+
+        }
+
+        public boolean hasBackground() {
+            return hasBackground;
+        }
+
+        public void setHasBackground(boolean hasBackground) {
+            this.hasBackground = hasBackground;
         }
 
         public JIconToggleButton (Icon icon, Icon icon2) {
@@ -210,10 +247,14 @@ public interface defaultPanelAccessories {
                 //setOpaque(true);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setColor(Color.white);
+                g.setColor(getNewBackGround());
                 g.fillRoundRect(0, 0, getSize().width, getSize().height, 25, 25);
             }else {
                 icon = getPrimaryIcon();
+                if(hasBackground()){
+                    g.setColor(getNewBackGround());
+                    g.fillRoundRect(0, 0, getSize().width, getSize().height, 25, 25);
+                }
                 //setOpaque(false);  
             }
             
@@ -313,13 +354,13 @@ public interface defaultPanelAccessories {
     
     }
 
-    public static JToggleButton iconToggleButton(int w,int h, String src, String src2) {
+    public static JIconToggleButton iconToggleButton(int w,int h, String src, String src2) {
         
         Image img = new ImageIcon(src).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(img);
         Image img2 = new ImageIcon(src2).getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
         ImageIcon icon2 = new ImageIcon(img2);
-        JToggleButton newJButton = new JIconToggleButton(icon,icon2);
+        JIconToggleButton newJButton = new JIconToggleButton(icon,icon2);
         newJButton.setSize(w, h);
         newJButton.setVisible(true);
         //newJButton.setUI(new StyledButtonUI());
@@ -332,13 +373,13 @@ public interface defaultPanelAccessories {
     
     }
 
-    public static JToggleButton iconToggleButton(int w,int h,int imgW, int imgH, String src, String src2) {
+    public static JIconToggleButton iconToggleButton(int w,int h,int imgW, int imgH, String src, String src2) {
         
         Image img = new ImageIcon(src).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(img);
         Image img2 = new ImageIcon(src2).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
         ImageIcon icon2 = new ImageIcon(img2);
-        JToggleButton newJButton = new JIconToggleButton(icon,icon2);
+        JIconToggleButton newJButton = new JIconToggleButton(icon,icon2);
         newJButton.setSize(w, h);
         newJButton.setVisible(true);
         //newJButton.setUI(new StyledButtonUI());
@@ -378,5 +419,30 @@ public interface defaultPanelAccessories {
     
         return newJPanel;
     
+    }
+
+    public static class FrameDragListener extends MouseAdapter {
+
+        private final JFrame frame;
+        private Point mouseDownCompCoords = null;
+
+        public FrameDragListener(JFrame frame) {
+            this.frame = frame;
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            mouseDownCompCoords = null;
+        }
+
+        public void mousePressed(MouseEvent e) {
+            mouseDownCompCoords = e.getPoint();
+        }
+
+        public void mouseDragged(MouseEvent e) {
+            Point currCoords = e.getLocationOnScreen();
+            frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+        }
+        // got from
+        // https://stackoverflow.com/questions/16046824/making-a-java-swing-frame-movable-and-setundecorated
     }
 }

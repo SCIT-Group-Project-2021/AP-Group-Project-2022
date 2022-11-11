@@ -333,5 +333,4 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         );
     
     }
-
 }

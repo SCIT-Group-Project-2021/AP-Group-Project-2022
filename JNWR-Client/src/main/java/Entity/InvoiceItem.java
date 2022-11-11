@@ -21,6 +21,11 @@ public class InvoiceItem extends DBEntity implements Serializable{
 
     public InvoiceItem(){}
 
+    public InvoiceItem(String productCode, int itemQuantity) {
+        this.productCode = productCode;
+        this.itemQuantity = itemQuantity;
+    }
+
     public InvoiceItem(String productCode, int invoiceNum, int itemQuantity) {
         this.productCode = productCode;
         this.invoiceNum = invoiceNum;

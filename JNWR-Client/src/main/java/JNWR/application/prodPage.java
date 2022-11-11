@@ -24,7 +24,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
-    String Category[] = { "Product Code"," roduct Category", "Name", "Short Description", "Stock", "Unit Price"};
+    String Category[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
 
     prodPage() {
 
@@ -215,12 +215,13 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         ArrayList<DBEntity> list = new Client().getList("Inventory");
 
-        for (int i = 0; i < list.size(); i++) {
+        for (DBEntity entity : list) {
 
-            Inventory inven = (Inventory) list.get(i);
+            //Inventory inven = (Inventory) list.get(i);
+            Inventory inven = (Inventory) entity;
 
             headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
-        
+
         }
         
     }
