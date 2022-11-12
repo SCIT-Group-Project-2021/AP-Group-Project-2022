@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,6 +25,8 @@ import org.hibernate.boot.MappingNotFoundException;
 import Entity.*;
 
 public class Server {
+
+	private static final Logger logger = LogManager.getLogger(Server.class);
 
     //Creates Entity Manager Factor using the entityManager(Hibernate) Set in the Persistence.xm
     private static EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
@@ -41,7 +45,7 @@ public class Server {
             serverSocket = new ServerSocket(8888);
             serverSocket.setReuseAddress(true);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error(ex.toString());    
         }
     }
 
@@ -50,7 +54,7 @@ public class Server {
         try {
 
             while (true) {
-                System.out.println("Waiting For Request");
+                logger.info("Waiting For Request");
 
                 connectionSocket = serverSocket.accept();
 
@@ -58,15 +62,15 @@ public class Server {
                 
                 new Thread(clientSock).start();
                 client++;
-                System.out.println("Client number " + client);
+                logger.info("Client number " + client);
                 
                 
             }
         } catch (EOFException ex) {
-            System.out.println("Client has Terminated connection with server");
-            ex.printStackTrace();            
+            logger.error("Client has Terminated connection with server");
+            logger.error(ex.toString());            
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error(ex.toString());    
         }
         finally {
 
@@ -116,7 +120,7 @@ public class Server {
             while (true) {
 
                 try {
-                    System.out.println("Waiting For Action");
+                    logger.info("Waiting For Action");
                     
                     action = (String) objIs.readObject();
 
@@ -125,7 +129,7 @@ public class Server {
                     switch (action) {
                         case "addEntity":
 
-                            System.out.println("Adding Entity");
+                            logger.info("Adding Entity");
 
                             try {
                                 
@@ -135,15 +139,14 @@ public class Server {
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());    
                             }
                             
                             
                             break;
                         case "findLastEntity":
 
-                            System.out.println("Finding Last Entity");
+                            logger.info("Finding Last Entity");
 
                             try {
                                 
@@ -151,42 +154,37 @@ public class Server {
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());    
                             }
                             
                             
                             break;
                         case "findEntity":
 
-                            System.out.println("Finding Entity");
+                           logger.info("Finding Entity");
 
                             try {
                                 sendEntity(findEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
                                 sendAction("Task Completed");
 
                             } catch (EntityNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());    
                             }catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());    
                             }
                         
                             break;
                         case "findEntitySimple":
-                            System.out.println("Finding Entity by Class");
+                            logger.info("Finding Entity by Class");
                             try {
 
                                 sendEntity(findEntity((Integer) objIs.readObject(), (DBEntity) objIs.readObject()));
                                 sendAction("Task Completed");
 
                             } catch (EntityNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                         
                             break;
@@ -195,7 +193,7 @@ public class Server {
                         
                         case "alterEntity":
 
-                            System.out.println("Altering Entity");
+                            logger.info("Altering Entity");
 
                             try {
 
@@ -204,13 +202,13 @@ public class Server {
                                 
                             } catch (ConnectException e) {
                                 // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());    
                             }
                         
                             break;
                         case "removeEntity":
 
-                            System.out.println("Removing Entity");
+                           logger.info("Removing Entity");
 
                             try {
 
@@ -219,66 +217,60 @@ public class Server {
                                 
                             } catch (ConnectException e) {
                                 // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                             
                             
                             break;
                         case "getList":
 
-                            System.out.println("Getting full list");
+                            logger.info("Getting full list");
 
                             try {
                                 sendList(listEntity((String) objIs.readObject()));
                                 sendAction("Task Completed");
                             } catch (MappingNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                             catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
 
                             break;
 
                         case "getSpecificList":
 
-                            System.out.println("Getting Specific List");
+                            logger.info("Getting Specific List");
 
                             try {
                                 sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
                                 sendAction("Task Completed");
                             } catch (MappingNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                             catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                             break;
 
                         case "getExactList":
 
-                            System.out.println("Getting Exact List");
+                            logger.info("Getting Exact List");
 
                             try {
                                 sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
                                 sendAction("Task Completed");
                             } catch (MappingNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
                             catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
+                                logger.error(e.toString());  
                             }
 
                         break;
-                        
+
                         case "shutDown":
-                            System.out.println("Client Disconnected");
+                            logger.info("Client Disconnected");
                             try {
                                 if (objOs != null) {
                                     objOs.close();
@@ -293,23 +285,23 @@ public class Server {
                             }
                             return;
                         default:
-                            System.out.println("No Task Completed");
+                            logger.info("No Task Completed");
                             break;
                     }
 
-                    System.out.println("Task Completed");
+                    logger.info("Task Completed");
 
                 } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex.toString());  
                     
                 } catch (ClassCastException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex.toString());  
                 
                 } catch (EOFException ex) {
-                    System.out.println("Client has Terminated connection with server");
-                    ex.printStackTrace();            
+                    logger.error("Client has Terminated connection with server");
+                    logger.error(ex.toString());            
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex.toString());  
                 } 
                 
             }
