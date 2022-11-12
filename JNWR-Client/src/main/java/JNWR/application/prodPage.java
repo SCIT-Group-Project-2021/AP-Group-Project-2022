@@ -35,6 +35,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
     JTextField searchBox;
     JButton searchButton;
     JComboBox<String> filter;
+    JButton addProductButton;
     String filterOptions[] = { "productCode", "name", "categoryID"};
 
 
@@ -88,6 +89,17 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
             }
         });
         timeTimer.start();
+
+        Image iconImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-contact-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
+        ImageIcon btnIcon = new ImageIcon(iconImage);
+        addProductButton = defaultPanelAccessories.defaultButton();
+        addProductButton.setBackground(Color.white);
+        addProductButton.setPreferredSize(new Dimension(150,70));
+        addProductButton.setIcon(btnIcon);
+        addProductButton.setText("Add New Product");
+        addProductButton.setFont(new Font("Outfit", Font.BOLD, 14));
+        addProductButton.setIconTextGap(8);
+        addProductButton.setHorizontalAlignment(SwingConstants.LEFT);
         //endregion
 
         //region Log Out Label & Button
@@ -110,6 +122,9 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         filter = new JComboBox<>(filterOptions);
 
+        JLabel tableHeading = new JLabel("Products");
+        tableHeading.setFont(heading2);
+
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);
         searchButton = defaultPanelAccessories.defaultButton();
@@ -120,26 +135,37 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        searchBar.add(tableHeading,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        searchBar.add(addProductButton,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
         searchBar.add(Box.createGlue(),mpCons);
-        mpCons.insets = new Insets(25,25,25,25);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 3;
+        searchBar.add(filter,mpCons);
 
         mpCons.weightx = .5;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 2;
+        mpCons.gridx = 4;
         mpCons.insets = new Insets(25,10,25,10);
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 1;
-        searchBar.add(filter,mpCons);
-
-        mpCons.weightx = 0;
-        mpCons.weighty = 0;
-        mpCons.gridy = 0;
-        mpCons.gridx = 3;
+        mpCons.gridx = 5;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -312,7 +338,12 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
     
                 }
             });
-        
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new addProductDialog(client);
+            }
+        });
         //endregion
 
 

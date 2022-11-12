@@ -33,11 +33,12 @@ public interface defaultPanelAccessories {
     //Font subHeading = new Font("Outfit",Medium,24);
     Font medText = new Font("Outfit", Font.PLAIN, 22);
     Font smText = new Font("Outfit", Font.PLAIN, 18);
+    Font miniText = new Font("Outfit", Font.PLAIN, 14);
 
     public static class RoundedBorder implements Border {
         
         private int radius;
-        private Color color;
+        private Color color = Color.decode("#CED4DA");
         
         public RoundedBorder(int radius) {
             this.radius = radius;
@@ -61,10 +62,17 @@ public interface defaultPanelAccessories {
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2 = (Graphics2D) g.create();
+            g2.setColor(color);
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.drawRoundRect(x,y,width-1,height-1,radius,radius);
-            
+
         }
+        /*
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(color);
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }*/
                         
     }
 
@@ -460,6 +468,7 @@ public interface defaultPanelAccessories {
         // got from
         // https://stackoverflow.com/questions/16046824/making-a-java-swing-frame-movable-and-setundecorated
     }
+
 
 
 }
