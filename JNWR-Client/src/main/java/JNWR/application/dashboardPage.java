@@ -308,7 +308,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, parent.pos);
+                        parent.replaceWindow(parent.mainPanel, new posPage(client));
                         parent.posButton.setSelected(true);
                         
                     }
@@ -321,7 +321,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, parent.reportPage);
+                        parent.replaceWindow(parent.mainPanel, new reportPage(client));
                         parent.invoiceButton.setSelected(true);
                         
                     }
@@ -334,7 +334,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, parent.inventory);
+                        parent.replaceWindow(parent.mainPanel, new prodPage(client));
                         parent.inventoryButton.setSelected(true);
                         
                     }

@@ -52,7 +52,7 @@ public class Invoice extends DBEntity implements Serializable{
         this.billingDate = billingDate;
     }
 
-    public int getCustomerID() {
+    public Integer getCustomerID() {
         return customerID;
     }
 

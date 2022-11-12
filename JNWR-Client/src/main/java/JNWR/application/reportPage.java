@@ -299,7 +299,6 @@ public class reportPage extends JPanel implements defaultPanelAccessories{
                     else{
                         list = client.getSpecificList("Invoice",searchFilter,searchId);
                         for (DBEntity entity : list) {
-                            //Inventory inven = (Inventory) list.get(i);
                             invoice = (Invoice) entity;
 
                             Integer customerID = null;

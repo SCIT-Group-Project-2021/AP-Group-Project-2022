@@ -16,7 +16,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     public JPanel mainPanel;
     public JPanel dashBoard;
     public JPanel customer;
-    public JPanel reportPage;
+    public JPanel report;
     public JPanel staff;
     public JPanel inventory;
     public JPanel pos;
@@ -184,11 +184,6 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         //endregion
 
         dashBoard = new dashboardPage(client);
-        customer = new custPage(client);
-        inventory = new prodPage(client);
-        staff = new staffPage(client);
-        reportPage = new reportPage(client);
-        pos = new posPage(client);
 
         //region Buttons
         dashBoardButton.addActionListener(
@@ -208,7 +203,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, pos);
+                        replaceWindow(mainPanel, new posPage(client));
 
                     }
                 }
@@ -219,7 +214,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    replaceWindow(mainPanel, customer);
+                    replaceWindow(mainPanel, new custPage(client));
                 
                 }
             }
@@ -230,7 +225,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    replaceWindow(mainPanel, inventory);
+                    replaceWindow(mainPanel, new prodPage(client));
                 
                 }
             }
@@ -241,7 +236,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, reportPage);
+                        replaceWindow(mainPanel, new reportPage(client));
 
                     }
                 }
@@ -252,7 +247,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, staff);
+                        replaceWindow(mainPanel, new staffPage(client));
 
                     }
                 }
@@ -270,6 +265,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     }
 
     private void refresh() {
+        revalidate();
         repaint();
         setSize(new Dimension(getWidth()+1,getHeight()+1));
         setSize(new Dimension(getWidth()-1,getHeight()-1));

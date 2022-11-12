@@ -175,7 +175,7 @@ public class Server {
                         
                             break;
                         case "findEntitySimple":
-                            System.out.println("Finding Entity");
+                            System.out.println("Finding Entity by Class");
                             try {
 
                                 sendEntity(findEntity((Integer) objIs.readObject(), (DBEntity) objIs.readObject()));
@@ -244,7 +244,7 @@ public class Server {
 
                         case "getSpecificList":
 
-                            System.out.println("Getting List");
+                            System.out.println("Getting Specific List");
 
                             try {
                                 sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
@@ -257,24 +257,26 @@ public class Server {
                                 // TODO: handle exception
                                 e.printStackTrace();
                             }
-
-                            case "getExactList":
-
-                            System.out.println("Getting List");
-
-                            try {
-                                sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
-                                sendAction("Task Completed");
-                            } catch (MappingNotFoundException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
-                            }
-                            catch (ConnectException e) {
-                                // TODO: handle exception
-                                e.printStackTrace();
-                            }
-
                             break;
+
+                        case "getExactList":
+
+                            System.out.println("Getting Exact List");
+
+                            try {
+                                sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            } catch (MappingNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+
+                        break;
+                        
                         case "shutDown":
                             System.out.println("Client Disconnected");
                             try {
@@ -333,7 +335,6 @@ public class Server {
     
             return dbEntity;
         }
-        
 
         public ObjectOutputStream getObjOs() {
             return this.objOs;
@@ -506,7 +507,6 @@ public class Server {
     
         }
     
-
         public void sendList(List<DBEntity> entityList) {
             try {
                 objOs.writeObject(entityList);
