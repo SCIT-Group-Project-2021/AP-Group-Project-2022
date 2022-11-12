@@ -32,14 +32,14 @@ project, within seven (7) days of this document being distributed.
 ## Deliverables
 
 - [ ]  Group Report
-- [ ]  Application User Manuals
-- [ ]  Server-side Application
+- [x]  Application User Manuals
+- [x]  Server-side Application
 - [ ]  Client-side Application
 
 ## Assessment
 
 - [ ]  Application Document
-    - [ ]  User Manuals
+    - [x]  User Manuals
     - [ ]  UML Classes
     - [x]  Database ER Diagrams
     - [ ]  Comments, Programming Conventions and documentation
@@ -48,19 +48,19 @@ project, within seven (7) days of this document being distributed.
     - [x]  Client/Server Networking Model
     - [x]  Database Connectivity
     - [ ]  Exception Handling & Logging, User & data input validation
-    - [ ]  Classes
-    - [ ]  Interfaces
+    - [x]  Classes
+    - [x]  Interfaces
     - [ ]  Inheritance and Polymorphism
     - [ ]  Customer Membership/Record Management (C.R.U.D.)
-        - [ ]  Member discount correctly applied
+        - [x]  Member discount correctly applied
     - [ ]  Staff data/record management(C.R.U.D.)
     - [ ]  Inventory management
-        - [ ]  Management dashboard
+        - [x]  Management dashboard
         - [ ]  CRUD
-        - [ ]  Real-time inventory update
+        - [x]  Real-time inventory update
     - [ ]  Checkout
         - [ ]  Invoice generation (printable)
-        - [ ]  Real-time inventory update
+        - [x]  Real-time inventory update
     - [ ]  Sales report
         - [ ]  Pull product data for specific period (Printable)
     - [ ]  45 minutes Grading Presentation – all group members must be present and able to fully present the project. Absence from the grading interview means no grade.
