@@ -258,6 +258,21 @@ public class Server {
                                 e.printStackTrace();
                             }
 
+                            case "getExactList":
+
+                            System.out.println("Getting List");
+
+                            try {
+                                sendList(listSpecificEntity((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            } catch (MappingNotFoundException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
 
                             break;
                         case "shutDown":
@@ -401,7 +416,7 @@ public class Server {
     
             try {
     
-                dbEntity = em.find(Entitiy.getClass(), ID);
+                dbEntity = em.find(Entitiy.getClass(), String.valueOf(ID));
     
             } catch (EntityNotFoundException e) {
                 // TODO: handle exception
@@ -473,7 +488,25 @@ public class Server {
             return entityList;
     
         }
+
+        public List<DBEntity> listExactEntity(String Table,String IDType, String ID) throws MappingNotFoundException{
+            EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
     
+            List<DBEntity> entityList = null;
+    
+            try {
+                entityList = em2.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '" + ID + "'",DBEntity.class).getResultList();
+            } catch (IllegalArgumentException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+    
+    
+            return entityList;
+    
+        }
+    
+
         public void sendList(List<DBEntity> entityList) {
             try {
                 objOs.writeObject(entityList);

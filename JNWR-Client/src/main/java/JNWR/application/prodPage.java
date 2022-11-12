@@ -7,6 +7,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -26,6 +29,15 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
     Client client;
 
+    ArrayList<DBEntity> list; 
+    Inventory inven;
+
+    JTextField searchBox;
+    JButton searchButton;
+    JComboBox<String> filter;
+    String filterOptions[] = { "productCode", "name", "categoryID"};
+
+
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
@@ -34,8 +46,6 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
     prodPage(Client client) {
 
         this.client = client;
-
-        RoundedBorder round = new RoundedBorder(25);
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -89,20 +99,62 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
-        //region Customer Bar
+        //region Search Bar
         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
         searchBar.setBackground(Color.GRAY);
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
-        //endregion
 
+        searchBox = new JTextField("Search...");
+
+        filter = new JComboBox<>(filterOptions);
+
+        Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        ImageIcon searchIcon = new ImageIcon(searchImage);
+        searchButton = defaultPanelAccessories.defaultButton();
+        searchButton.setIcon(searchIcon);
+        searchButton.setPreferredSize(new Dimension(25,200));
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        searchBar.add(Box.createGlue(),mpCons);
+        mpCons.insets = new Insets(25,25,25,25);
+
+        mpCons.weightx = .5;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
+        mpCons.insets = new Insets(25,10,25,10);
+        searchBar.add(searchBox,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        searchBar.add(filter,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 3;
+        mpCons.insets = new Insets(25,10,25,25);
+        searchBar.add(searchButton,mpCons);
+        //endregion
 
         //region Customer Table Bar
         
         headerModel.setColumnIdentifiers(headers);
 
-        JTable prodTable = new JTable(headerModel);
+        JTable prodTable = new JTable(headerModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
         
         prodTable.setShowGrid(false);
         prodTable.setRowHeight(50);
@@ -219,6 +271,51 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
  
         //endregion
 
+        //region Buttons
+        searchBox.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                if(searchBox.getText().equals("Search...")){
+                    searchBox.setText("");
+                }
+              
+            }
+      
+            public void focusLost(FocusEvent e) {
+                if(searchBox.getText().equals("")){
+                    searchBox.setText("Search...");
+                }
+            }});
+
+        searchButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String searchId;
+                    String searchFilter = String.valueOf(filter.getSelectedItem());
+                    searchId = searchBox.getText();
+    
+                    DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+                    model.setRowCount(0);
+                    if(searchId.equals("Search...")){
+                        updateTable();
+                    }
+                    else{
+                        list = client.getSpecificList("Inventory",searchFilter,searchId);
+                        for (DBEntity entity : list) {
+                            //Inventory inven = (Inventory) list.get(i);
+                            inven = (Inventory) entity;
+
+                            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+
+                            }
+                    }
+    
+    
+                }
+            });
+        
+        //endregion
+
+
         updateTable();
 
         repaint();
@@ -232,9 +329,9 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         for (DBEntity entity : list) {
 
-            Inventory inven = (Inventory) entity;
+            inven = (Inventory) entity;
 
-            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
 
         }
 

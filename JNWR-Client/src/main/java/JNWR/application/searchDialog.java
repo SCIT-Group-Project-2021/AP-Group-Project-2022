@@ -285,7 +285,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                 }
                 else{
                     JOptionPane.showMessageDialog(new JFrame(),"Quantity cannot be equal or less than 0","ERROR", JOptionPane.ERROR_MESSAGE);
-                    System.out.println("Quantity cannot be equal or less than 0");
+                    logger.warn("Quantity cannot be equal or less than 0");
                     
                 }
             }
@@ -328,12 +328,11 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                                 else{
                                     new JOptionPane();
                                     JOptionPane.showMessageDialog(new JFrame(),"Stock is less than requested quantity","ERROR", JOptionPane.ERROR_MESSAGE);
-                                    System.out.println("Stock is less than requested quantity");
+                                    logger.warn("Stock is less than requested quantity");
                                     return;
                                 }
                             }
                         }
-                        System.out.println(newItem);
                         invoiceItemArrayList.add(new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty));
                         posPage.setInvoiceItemArrayList(invoiceItemArrayList);
                         posPage.updateInvoice();
@@ -341,7 +340,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                     }
                     else{
                         JOptionPane.showMessageDialog(new JFrame(),"Stock is less than requested quantity","ERROR", JOptionPane.ERROR_MESSAGE);
-                        System.out.println("Stock is less than requested quantity");
+                        logger.warn("Stock is less than requested quantity");
                     }
                 }
                 catch(ArrayIndexOutOfBoundsException ex){
@@ -363,7 +362,6 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         setSize(new Dimension(getWidth()+1,getHeight()+1));
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
-
 
     public void updateTable() {
 

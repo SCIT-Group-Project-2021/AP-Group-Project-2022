@@ -261,7 +261,6 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                     int selectedRowIndex = customerTable.getSelectedRow();
 
                     posPage.updateCustomer((Customer) list.get(selectedRowIndex));

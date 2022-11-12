@@ -111,7 +111,13 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         leftSection.setLayout(new GridBagLayout());
 
         headerModel.setColumnIdentifiers(headers);
-        itemTable = new JTable(headerModel);
+        itemTable = new JTable(headerModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
         JScrollPane userTableScroll = new JScrollPane(itemTable);
         userTableScroll.setBorder(round);
 
@@ -187,7 +193,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         selectedItemName.setFont(heading1);
         JLabel priceLabel = new JLabel("Price ea.");
         priceLabel.setFont(heading3);
-        unitPriceLabel = new JLabel("$16.36");
+        unitPriceLabel = new JLabel("$0.00");
         unitPriceLabel.setFont(heading2);
 
         shortDescrip = new JLabel("This is a short description");
@@ -200,13 +206,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
         qtyLabel = new JLabel(Integer.toString(qty));
         qtyLabel.setFont(heading2);
-/*
-        Image addImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-100-2.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        ImageIcon addIcon = new ImageIcon(addImage);
-        JLabel addIconLabel = new JLabel(addIcon);*/
-
-        Image removeImage = new ImageIcon("src/main/resources/JWR-Icons/icons8-remove-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        ImageIcon removeIcon = new ImageIcon(removeImage);
 
         JButton removeButton = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/icons8-remove-100.png");
 
@@ -347,13 +346,14 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(10, 30, 0, 26);
+        mpCons.insets = new Insets(10, 25, 0, 10);
         namePricePanel.add(categoryIconLabel, mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
+        mpCons.insets = new Insets(10, 15, 0, 10);
         namePricePanel.add(selectedItemName, mpCons);
 
         mpCons.weightx = 1;
@@ -372,13 +372,14 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
+        mpCons.insets = new Insets(5, 15, 0, 25);
         namePricePanel.add(unitPriceLabel, mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(5, 30, 0, 26);
+        mpCons.insets = new Insets(5, 30, 0, 25);
         infoQuantityPanel.add(shortDescrip, mpCons);
 
         mpCons.weightx = 1;
@@ -689,8 +690,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 try{
                     int selectedRowIndex = itemTable.getSelectedRow();
                     InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
-                    Inventory inven = (Inventory)client.findEntity("Inventory","productCode",selectedItem.getProductCode());
-
+                    
                     if(qty > 1){
                         qty--;
                         qtyLabel.setText(Integer.toString(qty));
@@ -707,7 +707,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                     }
                     else{
                         JOptionPane.showMessageDialog(new JFrame(),"Quantity cannot be equal or less than 0","ERROR", JOptionPane.ERROR_MESSAGE);
-                        System.out.println("Quantity cannot be equal or less than 0");
+                        logger.warn("Quantity cannot be equal or less than 0");
                     }
                     getTotalCost();
                 }
@@ -756,12 +756,8 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRowIndex = itemTable.getSelectedRow();
-                System.out.println(selectedRowIndex);
-                InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
-                DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
                 invoiceItemArrayList.remove(selectedRowIndex);
                 updateTable();
-                System.out.println("Row " + selectedRowIndex + " removed");
                 getTotalCost();
             }
         });
@@ -769,9 +765,14 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LocalDate dateTime = LocalDate.now();
-                String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
-                if (invoiceCustomer != null) {
+                if (invoiceItemArrayList.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(new JFrame(),"cant Process Empty Invoice","ERROR", JOptionPane.ERROR_MESSAGE);
+                    
+                }else{
+                    LocalDate dateTime = LocalDate.now();
+                    String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
+                    if (invoiceCustomer != null) {
                     
                     Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
                     client.addEntity(invoice);
@@ -783,7 +784,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 } else {
                     //TODO: Login must set StaffID
                     
-
                     Invoice invoice = new Invoice(dateString,319219);
                     client.addEntity(invoice);
                     for (InvoiceItem checkoutItems : invoiceItemArrayList) {
@@ -793,6 +793,10 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 }
 
             invoiceItemArrayList.clear();
+
+                }
+               
+                
 
             updateTable();
             getTotalCost();
@@ -810,7 +814,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
     public float getTax(){
         float taxValue = subtotal * tax;
-        System.out.println(taxValue);
         taxValue = (float) (Math.round(taxValue*100) / 100.0);
         taxAmt.setText("$"+taxValue);
         return taxValue;
@@ -867,9 +870,14 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
     private Integer getInvoiceNum() {
         
-        Invoice entity = (Invoice) client.findLastEntity("Invoice");
-        Integer idNum = entity.getInvoiceNum()+ 1;
-    
+        Integer idNum = 1000;
+        try {
+            Invoice entity = (Invoice) client.findLastEntity("Invoice");
+            idNum = entity.getInvoiceNum()+ 1;   
+        } catch (NullPointerException e) {
+            logger.warn("No Invoices in database throwing Up Default Start Invoice Number");
+        }
+        
         return idNum;
     }
 

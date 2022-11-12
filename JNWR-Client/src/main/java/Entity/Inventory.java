@@ -101,6 +101,14 @@ public class Inventory extends DBEntity implements Serializable{
         this.unitPrice = unitPrice;
     }
 
+    public String getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
+    }
+
     //endregion
 
 

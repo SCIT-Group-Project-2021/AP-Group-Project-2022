@@ -5,17 +5,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.net.ConnectException;
 
 import Entity.*;
 
 public class Client {
 
+    private static final Logger logger = LogManager.getLogger(Client.class);
+
     private ObjectInputStream objIs;
     private static ObjectOutputStream objOs;
     private Socket connectionSocket;
-    private String action = "";
 
     public Client () {
         try {
@@ -23,10 +27,9 @@ public class Client {
             this.configureStreams();      
 
         }catch (ConnectException e) {
-        // TODO: handle exception
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         
     }
@@ -44,17 +47,7 @@ public class Client {
 
             objIs = new ObjectInputStream(connectionSocket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeConnection() {
-        try {
-            objIs.close();
-            objOs.close();
-            connectionSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
@@ -62,10 +55,9 @@ public class Client {
         try {
             connectionSocket = new Socket("localHost",8888);
         }catch (ConnectException e) {
-            // TODO: handle exception
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
@@ -73,10 +65,9 @@ public class Client {
         try {
             connectionSocket = new Socket(ip,8888);
         }catch (ConnectException e) {
-            // TODO: handle exception
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
@@ -87,8 +78,9 @@ public class Client {
             objOs.writeObject(action);
             objOs.flush();
             objOs.reset();
+            logger.info("Sent Action: " + action);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
 
         }
     }
@@ -98,8 +90,9 @@ public class Client {
             objOs.writeObject(value);
             objOs.flush();
             objOs.reset();
+            logger.info("Sent Integer: " + value);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
 
         }
     }
@@ -109,18 +102,20 @@ public class Client {
             objOs.writeObject(entity);
             objOs.flush();
             objOs.reset();
+            logger.info("Sent Entity: " + entity);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
-    public void sendClass(Class classObject) {
+    public void sendClass(Class<?> classObject) {
         try {
             objOs.writeObject(classObject);
             objOs.flush();
             objOs.reset();
+            logger.info("Sent Class: " + classObject);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
@@ -133,27 +128,21 @@ public class Client {
         sendAction(Table);
 
         try {
-            list =(ArrayList<DBEntity>) objIs.readObject();
-            System.out.println(Arrays.toString(list.toArray()));
+            list = (ArrayList<DBEntity>) objIs.readObject();
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         return list;
@@ -172,31 +161,58 @@ public class Client {
 
         try {
             list =(ArrayList<Entity.DBEntity>) objIs.readObject();
-            System.out.println(Arrays.toString(list.toArray()));
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         return list;
 
     }
+
+    public ArrayList<DBEntity> getExactList(String Table,String IDType, String ID) {
+
+        ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
+        //Calls the get list function
+        sendAction("getExactList");
+        //Tells the functionwhat table to return
+        sendAction(Table);
+        sendAction(IDType);
+        sendAction(ID);
+
+        try {
+            list =(ArrayList<Entity.DBEntity>) objIs.readObject();
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        } catch (NullPointerException e) {
+            logger.error(e.toString());
+        }
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+
+        return list;
+
+    }
+
 
     public  DBEntity findLastEntity(String table) {
         //Calls the get list function
@@ -207,27 +223,22 @@ public class Client {
 
         try {
             entity = (DBEntity)objIs.readObject();
-            System.out.println(entity);
+            logger.info(entity);
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         
 
         try {
             System.out.println((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         return entity;
@@ -241,13 +252,11 @@ public class Client {
         sendEntity(entity);
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         
     }
@@ -264,63 +273,54 @@ public class Client {
 
         try {
             entity = (DBEntity)objIs.readObject();
-            System.out.println(entity);
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
 
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         return entity;
     }
 
-    public void findEntity(DBEntity entity,  Integer ID) {
+    public DBEntity findEntity(DBEntity entity,  Integer ID) {
         //Calls the get list function
         sendAction("findEntitySimple");
         sendInteger(ID);
         sendEntity(entity);
 
+        DBEntity entityOut = null;
+
         try {
-            DBEntity entityOut = (DBEntity)objIs.readObject();
-            System.out.println(entityOut);
+            entityOut = (DBEntity)objIs.readObject();
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
+        return entityOut;
 
     }
 
@@ -331,13 +331,11 @@ public class Client {
         sendEntity(entity);
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
     }
@@ -349,13 +347,11 @@ public class Client {
         sendEntity(entity);
 
         try {
-            System.out.println((String) objIs.readObject());
+            logger.info((String) objIs.readObject());
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
     }

@@ -7,6 +7,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,6 +31,14 @@ public class custPage extends JPanel implements defaultPanelAccessories{
     String headers[] = { "ID#", "First Name", "Last Name", "DOB", "Telephone Number", "Email", "Date of Membership", "Expiry Date", "Options"};
 
     Client client;
+
+    ArrayList<DBEntity> list; 
+    Customer cust;
+
+    JTextField searchBox;
+    JButton searchButton;
+    JComboBox<String> filter;
+    String filterOptions[] = { "customerID", "fName", "lName","telephoneNum"};
 
     custPage(Client client) {
 
@@ -84,19 +95,62 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
-        //region Customer Bar
+        //region Search Bar
         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
         searchBar.setBackground(Color.GRAY);
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
+
+        searchBox = new JTextField("Search...");
+
+        filter = new JComboBox<>(filterOptions);
+
+        Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        ImageIcon searchIcon = new ImageIcon(searchImage);
+        searchButton = defaultPanelAccessories.defaultButton();
+        searchButton.setIcon(searchIcon);
+        searchButton.setPreferredSize(new Dimension(25,200));
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        searchBar.add(Box.createGlue(),mpCons);
+        mpCons.insets = new Insets(25,25,25,25);
+
+        mpCons.weightx = .5;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
+        mpCons.insets = new Insets(25,10,25,10);
+        searchBar.add(searchBox,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        searchBar.add(filter,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 3;
+        mpCons.insets = new Insets(25,10,25,25);
+        searchBar.add(searchButton,mpCons);
         //endregion
 
         //region Customer Table Bar
         
         headerModel.setColumnIdentifiers(headers);
 
-        JTable customerTable = new JTable(headerModel);
+        JTable customerTable = new JTable(headerModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
         
         customerTable.setShowGrid(false);
         customerTable.setRowHeight(50);
@@ -207,8 +261,52 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
  
-         //endregion
+        //endregion
  
+
+        //endregion
+
+        //region Buttons
+        searchBox.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                if(searchBox.getText().equals("Search...")){
+                    searchBox.setText("");
+                }
+              
+            }
+      
+            public void focusLost(FocusEvent e) {
+                if(searchBox.getText().equals("")){
+                    searchBox.setText("Search...");
+                }
+            }});
+
+            searchButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String searchId;
+                    String searchFilter = String.valueOf(filter.getSelectedItem());
+                    searchId = searchBox.getText();
+    
+                    DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+                    model.setRowCount(0);
+                    if(searchId.equals("Search...")){
+                        updateTable();
+                    }
+                    else{
+                        list = client.getSpecificList("Customer",searchFilter,searchId);
+                        for (DBEntity entity : list) {
+                            //Inventory inven = (Inventory) list.get(i);
+                            cust = (Customer) entity;
+
+                            headerModel.addRow(new Object[] {cust.getCustomerId(),cust.getfName(),cust.getlName(),cust.getDob(),cust.getTelephoneNum(),cust.getEmail(),cust.getDateOfMembership(),cust.getDateOfMembershipExpiry(),"exit"});
+        
+                            }
+                    }
+    
+    
+                }
+            });
 
         //endregion
 
@@ -221,11 +319,11 @@ public class custPage extends JPanel implements defaultPanelAccessories{
 
     public void updateTable() {
 
-        ArrayList<DBEntity> list = client.getList("Customer");
+        list = client.getList("Customer");
 
         for (int i = 0; i < list.size(); i++) {
 
-            Customer cust = (Customer) list.get(i);
+            cust = (Customer) list.get(i);
 
             headerModel.addRow(new Object[] {cust.getCustomerId(),cust.getfName(),cust.getlName(),cust.getDob(),cust.getTelephoneNum(),cust.getEmail(),cust.getDateOfMembership(),cust.getDateOfMembershipExpiry(),"exit"});
         
