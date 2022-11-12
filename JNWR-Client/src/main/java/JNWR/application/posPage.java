@@ -9,9 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import Entity.Customer;
-import Entity.Inventory;
-import Entity.InvoiceItem;
+import Entity.*;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.defaultPanelAccessories;
 
@@ -20,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class posPage extends JPanel implements defaultPanelAccessories{
@@ -42,6 +42,8 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     JLabel discountAmtLabel;
     float subtotal = 0;
     JLabel taxAmt;
+
+    Integer currentInvoiceNum;
 
     Client client;
 
@@ -420,7 +422,8 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(25, 25, 0, 25);
-        invoiceNum = new JLabel("Invoice #" + Integer.toString(getInvoiceNum()));
+        currentInvoiceNum = getInvoiceNum();
+        invoiceNum = new JLabel("Invoice #" + Integer.toString(currentInvoiceNum));
         invoiceNum.setFont(heading2);
         invoiceNum.setForeground(Color.WHITE);
         rightSection.add(invoiceNum, mpCons);
@@ -684,26 +687,29 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    int selectedRowIndex = itemTable.getSelectedRow();
+                    InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
+                    Inventory inven = (Inventory)client.findEntity("Inventory","productCode",selectedItem.getProductCode());
+
                     if(qty > 1){
                         qty--;
                         qtyLabel.setText(Integer.toString(qty));
-                        int selectedRowIndex = itemTable.getSelectedRow();
-                        InvoiceItem selectedItem = invoiceItemArrayList.get(selectedRowIndex);
-                        selectedItem.setItemQuantity(qty);
+                        selectedItem.setItemQuantity(qty);                        
 
                         DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
                         model.setValueAt(qty,selectedRowIndex,2);
 
                         float totalItemCost;
-                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,3).toString())+Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
+                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,2).toString())*Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
                         totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
                         model.setValueAt(totalItemCost,selectedRowIndex,3);
-                        getTotalCost();
+                        
                     }
                     else{
                         JOptionPane.showMessageDialog(new JFrame(),"Quantity cannot be equal or less than 0","ERROR", JOptionPane.ERROR_MESSAGE);
                         System.out.println("Quantity cannot be equal or less than 0");
                     }
+                    getTotalCost();
                 }
                 catch(ArrayIndexOutOfBoundsException ex){
                     logger.error("Item in table wasn't selected");
@@ -724,10 +730,12 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                         qty++;
                         qtyLabel.setText(Integer.toString(qty));
                         selectedItem.setItemQuantity(qty);
+
                         DefaultTableModel model = (DefaultTableModel) itemTable.getModel();
                         model.setValueAt(qty,selectedRowIndex,2);
+
                         float totalItemCost;
-                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,3).toString())+Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
+                        totalItemCost = Float.parseFloat(model.getValueAt(selectedRowIndex,2).toString())*Float.parseFloat(model.getValueAt(selectedRowIndex,1).toString());
                         totalItemCost = (float) (Math.round(totalItemCost*100) / 100.0);
                         model.setValueAt(totalItemCost,selectedRowIndex,3);
                     }
@@ -735,9 +743,6 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                         JOptionPane.showMessageDialog(new JFrame(),"Item quantity cannot exceed stock","ERROR", JOptionPane.ERROR_MESSAGE);
                         logger.error("Item quantity cannot exceed stock");
                     }
-
-
-
                     getTotalCost();
                 }
                 catch(ArrayIndexOutOfBoundsException ex){
@@ -760,6 +765,47 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                 getTotalCost();
             }
         });
+    
+        payButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocalDate dateTime = LocalDate.now();
+                String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
+                if (invoiceCustomer != null) {
+                    
+                    Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
+                    client.addEntity(invoice);
+                    for (InvoiceItem checkoutItems : invoiceItemArrayList) {
+                        checkoutItems.setInvoiceNum(currentInvoiceNum);
+                        client.addEntity(checkoutItems);   
+                    }
+
+                } else {
+                    //TODO: Login must set StaffID
+                    
+
+                    Invoice invoice = new Invoice(dateString,319219);
+                    client.addEntity(invoice);
+                    for (InvoiceItem checkoutItems : invoiceItemArrayList) {
+                        checkoutItems.setInvoiceNum(currentInvoiceNum);
+                        client.addEntity(checkoutItems);   
+                    }
+                }
+
+            invoiceItemArrayList.clear();
+
+            updateTable();
+            getTotalCost();
+            
+            invoiceCustomer = null;
+            currentInvoiceNum = getInvoiceNum();
+            invoiceNum.setText("Invoice #" + Integer.toString(currentInvoiceNum));
+            updateCustomer(invoiceCustomer);
+        
+
+            }
+        });
+
     }
 
     public float getTax(){
@@ -819,13 +865,11 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         return discountValue;
     }
 
-
-    private int getInvoiceNum() {
-        int idNum = 437823;
-        //SELECT * FROM Table ORDER BY ID DESC LIMIT 1
-        //idNum = this.getIdNum();
-        //
-        //invoiceNum = invoiceNum + Integer.toString(idNum);
+    private Integer getInvoiceNum() {
+        
+        Invoice entity = (Invoice) client.findLastEntity("Invoice");
+        Integer idNum = entity.getInvoiceNum()+ 1;
+    
         return idNum;
     }
 

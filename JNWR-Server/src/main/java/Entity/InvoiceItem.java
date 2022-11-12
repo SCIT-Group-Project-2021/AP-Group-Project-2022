@@ -3,9 +3,9 @@ package Entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-@IdClass(InvoiceItem.class) //https://www.objectdb.com/java/jpa/entity/id#composite_primary_key
 @Entity
 @Table(name="invoiceitem")
+@IdClass(InvoiceItemID.class) //https://www.objectdb.com/java/jpa/entity/id#composite_primary_key
 public class InvoiceItem extends DBEntity implements Serializable{
 
     @Id
@@ -20,6 +20,11 @@ public class InvoiceItem extends DBEntity implements Serializable{
     int itemQuantity;
 
     public InvoiceItem(){}
+
+    public InvoiceItem(String productCode, int itemQuantity) {
+        this.productCode = productCode;
+        this.itemQuantity = itemQuantity;
+    }
 
     public InvoiceItem(String productCode, int invoiceNum, int itemQuantity) {
         this.productCode = productCode;

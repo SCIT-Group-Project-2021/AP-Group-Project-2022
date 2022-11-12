@@ -321,8 +321,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        //TODO Create Invoice Page
-                        //parent.replaceWindow(parent.mainPanel, null);
+                        parent.replaceWindow(parent.mainPanel, parent.reportPage);
                         parent.invoiceButton.setSelected(true);
                         
                     }

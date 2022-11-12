@@ -16,6 +16,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     public JPanel mainPanel;
     public JPanel dashBoard;
     public JPanel customer;
+    public JPanel reportPage;
+    public JPanel staff;
     public JPanel inventory;
     public JPanel pos;
 
@@ -24,7 +26,6 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     public JToggleButton customerButton;
     public JToggleButton inventoryButton;
     public JToggleButton invoiceButton;
-    public JToggleButton reportButton;
     public JToggleButton settingButton;
 
     public landingPage() {
@@ -121,10 +122,10 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         inventoryButton.setText("");
         sideBarButtons.add(inventoryButton);
 
-        reportButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png","src/main/resources/JWR-Icons/Black/icons8-futures-100.png");
-        reportButton.setBorder(round);
-        reportButton.setText("");
-        sideBarButtons.add(reportButton);
+        invoiceButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png","src/main/resources/JWR-Icons/Black/icons8-futures-100.png");
+        invoiceButton.setBorder(round);
+        invoiceButton.setText("");
+        sideBarButtons.add(invoiceButton);
 
         settingButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png","src/main/resources/JWR-Icons/Black/icons8-adjust-100.png");
         settingButton.setBorder(round);
@@ -168,7 +169,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         sideBar.add(inventoryButton,mpCons);
 
         mpCons.gridy++;
-        sideBar.add(reportButton,mpCons);
+        sideBar.add(invoiceButton,mpCons);
 
         mpCons.gridy++;
         mpCons.weighty = 1;
@@ -185,6 +186,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         dashBoard = new dashboardPage(client);
         customer = new custPage(client);
         inventory = new prodPage(client);
+        staff = new staffPage(client);
+        reportPage = new reportPage(client);
         pos = new posPage(client);
 
         //region Buttons
@@ -233,12 +236,23 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             }
         );
 
-        reportButton.addActionListener(
+        invoiceButton.addActionListener(
                 new ActionListener()
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, null);
+                        replaceWindow(mainPanel, reportPage);
+
+                    }
+                }
+        );
+
+        settingButton.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        replaceWindow(mainPanel, staff);
 
                     }
                 }

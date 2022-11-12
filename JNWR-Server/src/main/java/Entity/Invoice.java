@@ -15,21 +15,20 @@ public class Invoice extends DBEntity implements Serializable{
     String billingDate;
 
     @Column(name="customerID")
-    int customerID;
+    Integer customerID;
 
     @Column(name = "staffID", nullable = false)
     int staffID;
 
     public Invoice(){}
-
-    public Invoice(int invoiceNum, String billingDate, int staffID) {
-        this.invoiceNum = invoiceNum;
+    
+    public Invoice(String billingDate, int staffID) {
         this.billingDate = billingDate;
+        this.customerID = null;
         this.staffID = staffID;
     }
 
-    public Invoice(int invoiceNum, String billingDate, int customerID, int staffID) {
-        this.invoiceNum = invoiceNum;
+    public Invoice(String billingDate, Integer customerID, int staffID) {
         this.billingDate = billingDate;
         this.customerID = customerID;
         this.staffID = staffID;
@@ -57,7 +56,7 @@ public class Invoice extends DBEntity implements Serializable{
         return customerID;
     }
 
-    public void setCustomerID(int customerID) {
+    public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }
 

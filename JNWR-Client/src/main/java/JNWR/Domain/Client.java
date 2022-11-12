@@ -86,6 +86,7 @@ public class Client {
         try {
             objOs.writeObject(action);
             objOs.flush();
+            objOs.reset();
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -96,6 +97,7 @@ public class Client {
         try {
             objOs.writeObject(value);
             objOs.flush();
+            objOs.reset();
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -106,6 +108,7 @@ public class Client {
         try {
             objOs.writeObject(entity);
             objOs.flush();
+            objOs.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,6 +118,7 @@ public class Client {
         try {
             objOs.writeObject(classObject);
             objOs.flush();
+            objOs.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -194,6 +198,42 @@ public class Client {
 
     }
 
+    public  DBEntity findLastEntity(String table) {
+        //Calls the get list function
+        sendAction("findLastEntity");
+        sendAction(table);
+
+        DBEntity entity = null;
+
+        try {
+            entity = (DBEntity)objIs.readObject();
+            System.out.println(entity);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+
+        try {
+            System.out.println((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return entity;
+
+    }
+
     public void addEntity(DBEntity entity) {
 
         sendAction("addEntity");
@@ -213,6 +253,7 @@ public class Client {
     }
 
     public DBEntity findEntity(String Table,String IDType, String ID) {
+        
         //Calls the get list function
         sendAction("findEntity");
         //Tells the functionwhat table to return

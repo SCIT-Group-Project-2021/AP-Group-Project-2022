@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -116,6 +117,7 @@ public class Server {
 
                 try {
                     System.out.println("Waiting For Action");
+                    
                     action = (String) objIs.readObject();
 
                     DBEntity dbEntity = null;
@@ -130,6 +132,22 @@ public class Server {
                                 dbEntity = (DBEntity)objIs.readObject();
 
                                 addEntity(dbEntity);
+                                sendAction("Task Completed");
+
+                            } catch (ConnectException e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                            
+                            
+                            break;
+                        case "findLastEntity":
+
+                            System.out.println("Finding Last Entity");
+
+                            try {
+                                
+                                sendEntity(findLastEntity((String)objIs.readObject()));
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
@@ -270,16 +288,38 @@ public class Server {
                 } catch (ClassCastException ex) {
                     ex.printStackTrace();
                 
-                }catch (EOFException ex) {
+                } catch (EOFException ex) {
                     System.out.println("Client has Terminated connection with server");
                     ex.printStackTrace();            
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                }
+                } 
+                
             }
                
         }
     
+        private DBEntity findLastEntity(String table) {
+            EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+    
+            DBEntity dbEntity = null;
+    
+            try {
+                dbEntity = em.createQuery("SELECT a FROM " + table + " a WHERE invoiceNum=(SELECT max(invoiceNum) FROM " + table+")",DBEntity.class).getSingleResult(); 
+                
+            } catch (EntityNotFoundException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+            catch (NoResultException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+    
+            return dbEntity;
+        }
+        
+
         public ObjectOutputStream getObjOs() {
             return this.objOs;
         }
