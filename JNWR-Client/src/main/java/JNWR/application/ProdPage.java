@@ -233,9 +233,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         prodTable.setFillsViewportHeight(true);
         prodTable.setBorder(null);
 
-        //UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        //defaults.put("TableHeader.font", heading1);
-        //defaults.putIfAbsent("Table.alternateRowColor", Color.green);
         prodTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                            boolean hasFocus, int row, int column) {

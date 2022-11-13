@@ -13,7 +13,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
 
 import Entity.DBEntity;
 import Entity.Invoice;
@@ -161,9 +164,35 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
         
         invoiceTable.setShowGrid(false);
         invoiceTable.setRowHeight(50);
+        invoiceTable.setFillsViewportHeight(true);
+        invoiceTable.setBorder(null);
 
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+        invoiceTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected)
+                    c.setBackground(row % 2 == 0 ? Color.decode("#E5EBF4") : Color.decode("#ECF3FA"));
+                return c;
+            };
+        });
+
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setBorder(null);
+        renderer.setBackground(Color.decode("#ECF3FA"));
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        //renderer.setFont(new Font("SansSerif",Font.BOLD,50));
+        renderer.setForeground(Color.decode("#707070"));
+        renderer.setPreferredSize(new Dimension(100,50));
+
+
+        JTableHeader jTableHeader = invoiceTable.getTableHeader();
+        jTableHeader.setFont(new Font("SansSerif",Font.BOLD,50));
+        jTableHeader.setDefaultRenderer(renderer);
+
+
+        final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
+        invoiceTable.setRowSorter(sorter);
 
         JScrollPane tableScroll = new JScrollPane(invoiceTable){
             @Override
