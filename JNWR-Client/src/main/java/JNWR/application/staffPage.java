@@ -102,9 +102,12 @@ public class staffPage extends JPanel implements defaultPanelAccessories{
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
 
-        searchBox = new JTextField("Search...");
+        searchBox = new CustomRoundTextField();
+        searchBox.setText("Search...");
 
-        filter = new JComboBox<>(filterOptions);
+        filter = new CustomRoundComboBox();
+        filter.setModel(new javax.swing.DefaultComboBoxModel(filterOptions));
+        
 
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);

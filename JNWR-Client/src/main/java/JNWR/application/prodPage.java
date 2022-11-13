@@ -143,11 +143,12 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         addProductButton =  defaultPanelAccessories.iconButton(150,20,20,20,"src/main/resources/JWR-Icons/White/icons8-plus-math-100.png");
         addProductButton.setText("Add New Product");
+        addProductButton.setUI(new StyledButtonUI());
         addProductButton.setForeground(Color.white);
         addProductButton.setFont(new Font("Outfit", Font.BOLD, 14));
         addProductButton.setIconTextGap(8);
         addProductButton.setBackground(Color.decode("#101E2D"));
-        addProductButton.setOpaque(true);
+
         addProductButton.setHorizontalAlignment(SwingConstants.LEFT);
 
 
@@ -161,7 +162,8 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         searchBox = new CustomRoundTextField();
         searchBox.setText("Search...");
 
-        filter = new JComboBox<>(filterOptions);
+        filter = new CustomRoundComboBox();
+        filter.setModel(new javax.swing.DefaultComboBoxModel(filterOptions));
 
         JLabel tableHeading = new JLabel("Products");
         tableHeading.setFont(heading2);
@@ -183,6 +185,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
+        mpCons.insets = new Insets(25,10,25,10);
         searchBar.add(addProductButton,mpCons);
 
         mpCons.weightx = 1;
@@ -201,7 +204,6 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 4;
-        mpCons.insets = new Insets(25,10,25,10);
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
