@@ -21,6 +21,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     public JPanel inventory;
     public JPanel pos;
 
+    public CardLayout card;
+
     public JToggleButton dashBoardButton;
     public JToggleButton posButton;
     public JToggleButton customerButton;
@@ -59,6 +61,28 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //region Side Bar
         JPanel sideBar = defaultPanelAccessories.createJPanel(0,50,720);
+        sideBar.setVisible(false);
+        JPanel sideBartrigger = defaultPanelAccessories.createJPanel(0,25,720);
+
+        sideBartrigger.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (sideBar.isVisible()) {
+                }else {
+                    sideBar.setVisible(true);
+                    sideBartrigger.setVisible(false);
+                }
+            }   
+        });
+
+        sideBar.addMouseListener(new java.awt.event.MouseAdapter() {               
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                if (sideBar.isVisible()) {
+                    sideBar.setVisible(false);
+                    sideBartrigger.setVisible(true);
+                }
+            }
+        });
+        
         sideBar.setBackground(Color.decode("#212020"));
         sideBar.setLayout(new GridBagLayout());
         //endregion
@@ -67,7 +91,8 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         //JPanel mainPanel = createJPanel(0);
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.decode("#f2f3f5"));
-        mainPanel.setLayout(new GridBagLayout());
+        card = new CardLayout();
+        mainPanel.setLayout(card);
         //endregion
 
         //region Frame.Add
@@ -79,10 +104,18 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         mpCons.ipady = 0;
         add(sideBar,mpCons);
 
-        mpCons.weightx = 1;
+        mpCons.weightx = 0;
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
+        mpCons.ipadx = 0;
+        mpCons.ipady = 0;
+        add(sideBartrigger,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
         mpCons.ipadx = 1000;
         mpCons.ipadx = 0;
         add(mainPanel,mpCons);
@@ -184,6 +217,12 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         //endregion
 
         dashBoard = new dashboardPage(client);
+        customer = new custPage(client);
+        report = new reportPage(client);
+        staff = new staffPage(client);
+        inventory = new prodPage(client);
+        pos = new posPage(client);
+
 
         //region Buttons
         dashBoardButton.addActionListener(
@@ -191,7 +230,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, dashBoard);
+                        replaceWindow(mainPanel, card, "dashBoard");
 
                     }
                 }
@@ -203,7 +242,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, new posPage(client));
+                        replaceWindow(mainPanel, card, "pos");
 
                     }
                 }
@@ -214,7 +253,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    replaceWindow(mainPanel, new custPage(client));
+                    replaceWindow(mainPanel, card, "customer");
                 
                 }
             }
@@ -225,7 +264,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    replaceWindow(mainPanel, new prodPage(client));
+                    replaceWindow(mainPanel, card, "inventory");
                 
                 }
             }
@@ -236,7 +275,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, new reportPage(client));
+                        replaceWindow(mainPanel, card, "invoice");
 
                     }
                 }
@@ -247,18 +286,19 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        replaceWindow(mainPanel, new staffPage(client));
+                        replaceWindow(mainPanel, card, "staff");
 
                     }
                 }
         );
         //endregion
 
-        mpCons.fill = GridBagConstraints.BOTH;
-        mpCons.weightx = 1;
-        mpCons.weighty = 1;
-        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-        mainPanel.add(dashBoard,mpCons);
+        mainPanel.add(dashBoard,"dashBoard");
+        mainPanel.add(customer,"customer");
+        mainPanel.add(report,"invoice");
+        mainPanel.add(staff,"staff");
+        mainPanel.add(inventory,"inventory");
+        mainPanel.add(pos,"pos");
         refresh();
         pack();
 
@@ -271,19 +311,10 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
-    public void replaceWindow(JPanel mainPanel, JPanel replacPanel) {
-        GridBagConstraints mpCons = new GridBagConstraints();
-        mpCons.fill = GridBagConstraints.BOTH;
-        mpCons.insets = new Insets(0, 0, 0, 0);
-        mpCons.anchor = GridBagConstraints.NORTH;
-
-        mpCons.fill = GridBagConstraints.BOTH;
-        mpCons.weightx = 1;
-        mpCons.weighty = 1;
-        mpCons.insets = new Insets(0, 0, bottomOffset, 0);
-        mainPanel.removeAll();
-        mainPanel.add(replacPanel,mpCons);
-        refresh();
+    public void replaceWindow(JPanel mainPanel,CardLayout card, String replacPanel) {
+       
+        card.show(mainPanel, replacPanel);
+        //refresh();
         
     }
 

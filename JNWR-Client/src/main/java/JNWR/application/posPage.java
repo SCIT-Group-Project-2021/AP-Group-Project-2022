@@ -18,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -104,6 +106,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         JPanel mainSection = new JPanel();
+        
         mainSection.setLayout(new GridBagLayout());
 
         //region left section
@@ -230,6 +233,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 1;
         mpCons.gridy = 1;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 0, 60, 0);
         add(mainSection,mpCons);
 
         mpCons.weightx = 1;
@@ -774,39 +778,37 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                     String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
                     if (invoiceCustomer != null) {
                     
-                    Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
-                    client.addEntity(invoice);
-                    for (InvoiceItem checkoutItems : invoiceItemArrayList) {
-                        checkoutItems.setInvoiceNum(currentInvoiceNum);
-                        client.addEntity(checkoutItems);   
-                    }
-
-                } else {
+                        Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
+                        client.addEntity(invoice);
+                        for (InvoiceItem checkoutItems : invoiceItemArrayList) {
+                            checkoutItems.setInvoiceNum(currentInvoiceNum);
+                            client.addEntity(checkoutItems);   
+                        }
+                        
+                    } 
+                    else {
                     //TODO: Login must set StaffID
                     
-                    Invoice invoice = new Invoice(dateString,319219);
-                    client.addEntity(invoice);
-                    for (InvoiceItem checkoutItems : invoiceItemArrayList) {
-                        checkoutItems.setInvoiceNum(currentInvoiceNum);
-                        client.addEntity(checkoutItems);   
+                        Invoice invoice = new Invoice(dateString,319219);
+                        client.addEntity(invoice);
+                        for (InvoiceItem checkoutItems : invoiceItemArrayList) {
+                            checkoutItems.setInvoiceNum(currentInvoiceNum);
+                            client.addEntity(checkoutItems);   
+                        }
                     }
+
+                invoiceItemArrayList.clear();
+
                 }
 
-            invoiceItemArrayList.clear();
-
-                }
-               
-                
-
-            updateTable();
-            getTotalCost();
+                updateTable();
+                getTotalCost();
             
-            invoiceCustomer = null;
-            currentInvoiceNum = getInvoiceNum();
-            invoiceNum.setText("Invoice #" + Integer.toString(currentInvoiceNum));
-            updateCustomer(invoiceCustomer);
+                invoiceCustomer = null;
+                currentInvoiceNum = getInvoiceNum();
+                invoiceNum.setText("Invoice #" + Integer.toString(currentInvoiceNum));
+                updateCustomer(invoiceCustomer);
         
-
             }
         });
 
@@ -912,6 +914,25 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             }
         }
 
+    }
+
+    public void printInvoice(int invoiceNum) {
+
+        try {
+            File myObj = new File("invoice#"+invoiceNum + ".pdf");
+            if (myObj.createNewFile()) {
+              System.out.println("File created: " + myObj.getName());
+            } else {
+              System.out.println("File already exists.");
+            }
+            //File.writeString
+          } catch (IOException e) {
+            logger.error("An error occurred.");
+            logger.error(e.toString());
+          }
+
+        String.format("%20s %20s \r\n", "column 1", "column 2");
+        
     }
 
 }

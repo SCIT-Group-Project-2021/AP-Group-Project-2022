@@ -248,7 +248,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(25, 25, 25, 25);
+        mpCons.insets = new Insets(0, 30, 60, 30);
         mainSection.add(userBox, mpCons);
 
         //region userBox.Add
@@ -308,7 +308,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, new posPage(client));
+                        parent.replaceWindow(parent.mainPanel,parent.card, "pos");
                         parent.posButton.setSelected(true);
                         
                     }
@@ -321,7 +321,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, new reportPage(client));
+                        parent.replaceWindow(parent.mainPanel,parent.card, "invoice");
                         parent.invoiceButton.setSelected(true);
                         
                     }
@@ -334,7 +334,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
-                        parent.replaceWindow(parent.mainPanel, new prodPage(client));
+                        parent.replaceWindow(parent.mainPanel,parent.card, "inventory");
                         parent.inventoryButton.setSelected(true);
                         
                     }

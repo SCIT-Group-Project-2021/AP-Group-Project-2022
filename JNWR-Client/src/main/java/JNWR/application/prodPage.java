@@ -223,6 +223,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 1;
         mpCons.gridy = 2;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 60, 60, 60);
         add(tableScroll,mpCons);
 
          //region TopBar.Add
