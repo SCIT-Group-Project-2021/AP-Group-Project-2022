@@ -11,6 +11,7 @@ import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
 import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,11 +39,9 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
     JLabel lastNameLabel;
     CustomRoundTextField lastNameField;
     JLabel telephoneNumberLabel;
-    CustomRoundTextField telephoneNumberField;
-    JScrollPane shortDescripPane;
+    JFormattedTextField telephoneNumberField;
     JLabel emailLabel;
     CustomRoundTextField emailField;
-    JScrollPane longDescripPane;
     JLabel inventoryHeading;
     JLabel customerIdLabel;
     JLabel membershipDate;
@@ -53,9 +53,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
     JButton cancelButton;
     JButton addCustomerButton;
     DateFormat dateFormat;
-
-    String category[] = { "Select a Category","Baked Goods", "Beverages","Canned Goods","Dairy","Baking/Dry Goods","Frozen Goods","Household & Cleaning Supplies","Meat","Produce","Personal Care","Pet Care","Seafood","Snacks","Other"};
-
+    MaskFormatter fmt;
 
     public CreateNewCustomerDialog(Client client, CustPage custPage) {
 
@@ -133,8 +131,16 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
 
         telephoneNumberLabel = new JLabel("Telephone Number");
         telephoneNumberLabel.setFont(smText);
-        telephoneNumberField = new CustomRoundTextField();
-        telephoneNumberField.setFont(miniText);
+
+
+        try {
+            fmt = new MaskFormatter("1-###-###-####");
+            telephoneNumberField = new JFormattedTextField(fmt);
+            telephoneNumberField.setFont(miniText);
+        } catch (ParseException e) {
+           logger.error(e.toString());
+        }
+
 
         emailLabel = new JLabel("Email");
         emailLabel.setFont(smText);
@@ -417,9 +423,9 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
                         Date currentDate = new Date();
                         if(enteredDate.after(currentDate)){
                            throw new FutureDateException("Membership date cannot be after today.");
-
                         }
-
+                        String telephoneNumber;
+                        telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
                         String email = "";
                         String membershipStartDate = dateFormat.format(membershipDateField.getDate());
                         String dob = null;
@@ -434,7 +440,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
                             }
                         }
 
-                        cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumberField.getText(),emailField.getText(),membershipStartDate,expiryDateField.getText());
+                        cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
 
                         client.addEntity(cust);
                         custPage.updateTable();

@@ -1,6 +1,8 @@
 package JNWR.application.utilities;
 
 import javax.swing.*;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 public class CustomRoundTextField extends JFormattedTextField {
     private CustomRoundTextFieldUI textUI;
@@ -8,6 +10,13 @@ public class CustomRoundTextField extends JFormattedTextField {
     public CustomRoundTextField() {
         textUI = new CustomRoundTextFieldUI(this);
         setUI(textUI);
+    }
+
+    public CustomRoundTextField(MaskFormatter fmt) {
+        textUI = new CustomRoundTextFieldUI(this);
+        setUI(textUI);
+        DefaultFormatterFactory factory = new DefaultFormatterFactory(fmt);
+        this.setFormatterFactory(factory);
     }
 
     public void addItemSuggestion(String text) {
