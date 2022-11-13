@@ -3,13 +3,18 @@ package JNWR.application;
 import Entity.Customer;
 import Entity.DBEntity;
 import JNWR.Domain.Client;
+import JNWR.application.utilities.CustomRoundComboBox;
 import JNWR.application.utilities.defaultPanelAccessories;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +32,7 @@ public class AddCustomerDialog extends JFrame implements defaultPanelAccessories
     JButton searchButton;
     JButton clearCustomerButton;
 
-    JComboBox<String> filter;
+    CustomRoundComboBox<String> filter;
     public static SearchDialog Instance;
 
     ArrayList<DBEntity> list;
@@ -74,7 +79,8 @@ public class AddCustomerDialog extends JFrame implements defaultPanelAccessories
 
         searchBox = new JTextField("Search...");
 
-        filter = new JComboBox<>(filterOptions);
+        filter = new CustomRoundComboBox();
+        filter.setModel(new javax.swing.DefaultComboBoxModel(filterOptions));
 
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);
@@ -104,9 +110,35 @@ public class AddCustomerDialog extends JFrame implements defaultPanelAccessories
 
         customerTable.setShowGrid(false);
         customerTable.setRowHeight(50);
+        customerTable.setFillsViewportHeight(true);
+        customerTable.setBorder(null);
 
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+        customerTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected)
+                    c.setBackground(row % 2 == 0 ? Color.decode("#E5EBF4") : Color.decode("#ECF3FA"));
+                return c;
+            };
+        });
+
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setBorder(null);
+        renderer.setBackground(Color.decode("#ECF3FA"));
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        //renderer.setFont(new Font("SansSerif",Font.BOLD,50));
+        renderer.setForeground(Color.decode("#707070"));
+        renderer.setPreferredSize(new Dimension(100,50));
+
+
+        JTableHeader jTableHeader = customerTable.getTableHeader();
+        jTableHeader.setFont(new Font("SansSerif",Font.BOLD,50));
+        jTableHeader.setDefaultRenderer(renderer);
+
+
+        final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
+        customerTable.setRowSorter(sorter);
 
         JScrollPane tableScroll = new JScrollPane(customerTable){
             @Override

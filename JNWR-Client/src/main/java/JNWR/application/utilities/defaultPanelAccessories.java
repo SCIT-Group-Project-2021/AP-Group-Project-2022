@@ -325,7 +325,6 @@ public interface defaultPanelAccessories {
     }
 
     public static String getCurrentTime() {
-        //TODO: Get current time function
         LocalTime dateTime = LocalTime.now();
         //LocalDateTime date = LocalDateTime.parse(LocalDateTime.now().toString(), dtf);
         String time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm ")).toString();
@@ -333,7 +332,6 @@ public interface defaultPanelAccessories {
     }
 
     public static String getTodayDate() {
-        //TODO: Get month and day
         LocalDate dateTime = LocalDate.now();
         String dateString = dateTime.format(DateTimeFormatter.ofPattern("MMMM d ")).toString();
         /*
@@ -346,7 +344,6 @@ public interface defaultPanelAccessories {
 
     public static String getCurrentUser() {
         String empName = "Cassie C.";
-        //TODO: Get current user's name
         return empName;
     }
 

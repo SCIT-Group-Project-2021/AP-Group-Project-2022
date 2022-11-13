@@ -7,7 +7,10 @@ import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
 
 import Entity.*;
 import JNWR.Domain.Client;
@@ -88,8 +91,6 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         this.client = client;
 
-        RoundedBorder round = new RoundedBorder(25);
-
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
         mpCons.fill = GridBagConstraints.BOTH;
@@ -135,8 +136,42 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                 return false;
             }
         };
+
+        itemTable.setShowGrid(false);
+        itemTable.setRowHeight(50);
+        itemTable.setFillsViewportHeight(true);
+        itemTable.setBorder(null);
+
+        itemTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected)
+                    c.setBackground(row % 2 == 0 ? Color.decode("#E5EBF4") : Color.decode("#ECF3FA"));
+                return c;
+            };
+        });
+
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setBorder(null);
+        renderer.setBackground(Color.decode("#ECF3FA"));
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        //renderer.setFont(new Font("SansSerif",Font.BOLD,50));
+        renderer.setForeground(Color.decode("#707070"));
+        renderer.setPreferredSize(new Dimension(100,50));
+
+
+        JTableHeader jTableHeader = itemTable.getTableHeader();
+        jTableHeader.setFont(new Font("SansSerif",Font.BOLD,50));
+        jTableHeader.setDefaultRenderer(renderer);
+
+
+        final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
+        itemTable.setRowSorter(sorter);
+
+
         JScrollPane userTableScroll = new JScrollPane(itemTable);
-        userTableScroll.setBorder(round);
+        //userTableScroll.setBorder(round);
 
         JPanel upperPane  = defaultPanelAccessories.createJPanel(0,300,250);
         upperPane.setLayout(new GridBagLayout());
@@ -999,8 +1034,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                 try {
                     Desktop.getDesktop().open(new File("Invoice/invoice#"+getInvoiceNum()+".pdf"));
                 } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    logger.error(e1.toString());
                 };    
             }
             

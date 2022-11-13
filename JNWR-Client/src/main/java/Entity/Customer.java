@@ -3,10 +3,6 @@ package Entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 @Entity
 @Table(name = "customer")
 public class Customer extends DBEntity implements Serializable {

@@ -3,9 +3,12 @@ package JNWR.application;
 import Entity.DBEntity;
 import Entity.Inventory;
 import Entity.InvoiceItem;
+import JNWR.application.utilities.CustomRoundComboBox;
 import JNWR.application.utilities.defaultPanelAccessories;
 import JNWR.Domain.Client;
 import javax.swing.*;
+import javax.swing.table.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -70,7 +73,8 @@ public class SearchDialog extends JFrame implements defaultPanelAccessories {
 
         searchBox = new JTextField("Search...");
 
-        filter = new JComboBox<>(filterOptions);
+        filter = new CustomRoundComboBox();
+        filter.setModel(new javax.swing.DefaultComboBoxModel(filterOptions));
 
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);
@@ -100,9 +104,35 @@ public class SearchDialog extends JFrame implements defaultPanelAccessories {
 
         searchTable.setShowGrid(false);
         searchTable.setRowHeight(50);
+        searchTable.setFillsViewportHeight(true);
+        searchTable.setBorder(null);
 
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+        searchTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected)
+                    c.setBackground(row % 2 == 0 ? Color.decode("#E5EBF4") : Color.decode("#ECF3FA"));
+                return c;
+            };
+        });
+
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setBorder(null);
+        renderer.setBackground(Color.decode("#ECF3FA"));
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        //renderer.setFont(new Font("SansSerif",Font.BOLD,50));
+        renderer.setForeground(Color.decode("#707070"));
+        renderer.setPreferredSize(new Dimension(100,50));
+
+
+        JTableHeader jTableHeader = searchTable.getTableHeader();
+        jTableHeader.setFont(new Font("SansSerif",Font.BOLD,50));
+        jTableHeader.setDefaultRenderer(renderer);
+
+
+        final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
+        searchTable.setRowSorter(sorter);
 
         JScrollPane tableScroll = new JScrollPane(searchTable){
             @Override
