@@ -1,6 +1,12 @@
 package JNWR.application;
 
 import Entity.Customer;
+<<<<<<< Updated upstream
+=======
+import Entity.Inventory;
+import Entity.Invoice;
+import Entity.Staff;
+>>>>>>> Stashed changes
 import JNWR.Domain.Client;
 import JNWR.application.customException.FutureDateException;
 import JNWR.application.utilities.*;
@@ -31,7 +37,7 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
     JLabel descriptionHeading;
     JLabel firstNameLabel;
     CustomRoundTextField firstNameField;
-    CustomRoundTextField customerIdField;
+    CustomRoundTextField staffIdField;
     JLabel lastNameLabel;
     CustomRoundTextField lastNameField;
     JLabel telephoneNumberLabel;
@@ -39,19 +45,22 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
     JLabel emailLabel;
     CustomRoundTextField emailField;
     JLabel inventoryHeading;
-    JLabel customerIdLabel;
-    JLabel membershipDate;
-    JXDatePicker membershipDateField;
+    JLabel staffIdLabel;
+    JLabel departmentLabel;
     JLabel dobLabel;
-    JXDatePicker dobDateField;
-    JLabel expiryDateLabel;
-    CustomRoundTextField expiryDateField; //TODO: Add dollar sign icon in textfield
+    JLabel empTypeLabel;
     JButton cancelButton;
-    JButton addCustomerButton;
-    DateFormat dateFormat;
+    JButton addEmployeeButton;
     MaskFormatter fmt;
-    
-    public AddStaffDialog(Client client, CustPage custPage) {
+
+    CustomRoundComboBox<String> departmentCombo;
+    CustomRoundComboBox<String> empTypeCombo;
+
+    String department[] = {"Select a department","Accounting and Sales", "Inventory","Management"};
+
+    String empType[] = {"Select a employee type","Manager", "Supervisor", "Line worker"};
+
+    public AddStaffDialog(Client client, StaffPage staffPage) {
 
         this.client = client;
         //region Base Frame Setup
@@ -103,7 +112,7 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         //endregion
 
         //region GUI Elements' Initialization
-        headingLabel = new JLabel("Add New Customer");
+        headingLabel = new JLabel("Add New Staff");
         headingLabel.setFont(heading2);
 
         descriptionHeading = new JLabel("Personal Information");
@@ -121,9 +130,6 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
 
         dobLabel = new JLabel("Date of Birth");
         dobLabel.setFont(smText);
-        UIManager.put(CalendarHeaderHandler.uiControllerID, SpinningCalendarHeaderHandler.class.getName());
-        dobDateField = new JXDatePicker();
-        dobDateField.getMonthView().setZoomable(true);
 
         telephoneNumberLabel = new JLabel("Telephone Number");
         telephoneNumberLabel.setFont(smText);
@@ -144,36 +150,31 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         emailField = new CustomRoundTextField();
         emailField.setFont(miniText);
 
-        inventoryHeading = new JLabel("Membership Information");
+        inventoryHeading = new JLabel("Depertment Information");
         inventoryHeading.setFont(heading3);
 
-        customerIdLabel = new JLabel("Customer ID");
-        customerIdLabel.setFont(smText);
-        customerIdField = new CustomRoundTextField();
-        customerIdField.setFont(miniText);
-        customerIdField.setEditable(false);
-        customerIdField.setText(Integer.toString(getCustomerId()));
+        staffIdLabel = new JLabel("Staff ID");
+        staffIdLabel.setFont(smText);
+        staffIdField = new CustomRoundTextField();
+        staffIdField.setFont(miniText);
 
 
-        membershipDate = new JLabel("Date of Membership");
-        membershipDate.setFont(smText);
+        departmentLabel = new JLabel("Department");
+        departmentLabel.setFont(smText);
 
-        UIManager.put(CalendarHeaderHandler.uiControllerID, SpinningCalendarHeaderHandler.class.getName());
-        membershipDateField = new JXDatePicker();
-        membershipDateField.getMonthView().setZoomable(true);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        membershipDateField.setFormats(dateFormat);
-        membershipDateField.setDate(new Date());
+        departmentCombo = new CustomRoundComboBox();
+        departmentCombo.sendFont(miniText);
+        departmentCombo.setModel(new javax.swing.DefaultComboBoxModel(department));
+
 
         //membershipDateField.setFont(miniText);
 
-        expiryDateLabel = new JLabel("Date of Membership Expiry");
-        expiryDateLabel.setFont(smText);
+        empTypeLabel = new JLabel("Employee Type");
+        empTypeLabel.setFont(smText);
 
-        expiryDateField = new CustomRoundTextField();
-        expiryDateField.setEditable(false);
-        expiryDateField.setFont(miniText);
-        expiryDateField.setText(getExpiryDate());
+        empTypeCombo = new CustomRoundComboBox();
+        empTypeCombo.sendFont(miniText);
+        empTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(empType));
 
         cancelButton = defaultPanelAccessories.defaultButton();
         cancelButton.setText("Cancel");
@@ -181,12 +182,12 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         cancelButton.setPreferredSize(new Dimension(20,50));
         cancelButton.setBorder(round);
 
-        addCustomerButton = defaultPanelAccessories.defaultButton();
-        addCustomerButton.setText("Create Customer");
-        addCustomerButton.setFont(smText);
-        addCustomerButton.setForeground(Color.white);
-        addCustomerButton.setBackground(Color.decode("#005DFB"));
-        addCustomerButton.setPreferredSize(new Dimension(20,50));
+        addEmployeeButton = defaultPanelAccessories.defaultButton();
+        addEmployeeButton.setText("Add Employee");
+        addEmployeeButton.setFont(smText);
+        addEmployeeButton.setForeground(Color.white);
+        addEmployeeButton.setBackground(Color.decode("#005DFB"));
+        addEmployeeButton.setPreferredSize(new Dimension(20,50));
         //endregion
 
 
@@ -260,30 +261,6 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         personalInfoSection.add(telephoneNumberField,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(emailLabel,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(emailField,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(dobLabel,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(dobDateField,mpCons);
-
-        mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy++;
         mpCons.gridx = 0;
@@ -308,37 +285,37 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0,0,5,0);
-        membershipInfoSection.add(customerIdLabel,mpCons);
+        membershipInfoSection.add(staffIdLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(customerIdField,mpCons);
+        membershipInfoSection.add(staffIdField,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(membershipDate,mpCons);
+        membershipInfoSection.add(departmentLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(membershipDateField,mpCons);
+        membershipInfoSection.add(departmentCombo,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(expiryDateLabel,mpCons);
+        membershipInfoSection.add(empTypeLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(expiryDateField,mpCons);
+        membershipInfoSection.add(empTypeCombo,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
@@ -372,7 +349,7 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         mpCons.gridy = 0;
         mpCons.gridx++;
         mpCons.insets = new Insets(0, 50, 0, 0);
-        buttonBox.add(addCustomerButton,mpCons);
+        buttonBox.add(addEmployeeButton,mpCons);
 
         mpCons.weightx = 1;
         mpCons.gridwidth = 1;
@@ -387,27 +364,15 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
+                SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                 dispose();
             }
         });
 
-        membershipDateField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
-                LocalDate date = LocalDate.parse(dateFormat.format(membershipDateField.getDate()), dtf);
-                LocalDate dateEnd = date.withYear(date.getYear()+ 1);
-                String DOME = dtf.format(dateEnd);
-                expiryDateField.setText(DOME);
-            }
-        });
 
 
-
-
-
-        addCustomerButton.addActionListener(new ActionListener() {
+/*
+        addEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
@@ -439,8 +404,8 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
                         cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
 
                         client.addEntity(cust);
-                        custPage.updateTable();
-                        SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
+                        staffPage.updateTable();
+                        SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                         dispose();
                     }
                     else{
@@ -452,7 +417,7 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
                     logger.error(ex.toString());
                 }
             }
-        });
+        });*/
 
 
     }
@@ -462,24 +427,4 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
-    public String getExpiryDate(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
-        LocalDate date = LocalDate.parse(dateFormat.format(membershipDateField.getDate()), dtf);
-        LocalDate dateEnd = date.withYear(date.getYear()+ 1);
-        String DOME = dtf.format(dateEnd);
-        return DOME;
-    }
-
-    private Integer getCustomerId() {
-
-        Integer customerId = 100000;
-        try {
-            Customer entity = (Customer) client.findLastEntity("Customer","customerId");
-            customerId = entity.getCustomerId()+ 1;
-        } catch (NullPointerException e) {
-            logger.warn("No customers in database throwing Up default start customer ID");
-        }
-
-        return customerId;
-    }
 }

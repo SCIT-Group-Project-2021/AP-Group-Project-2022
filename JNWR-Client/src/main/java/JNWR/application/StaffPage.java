@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class StaffPage extends JPanel implements defaultPanelAccessories{
 
+    StaffPage staffPage = this;
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "ID#", "First Name", "Last Name", "Telephone Number", "Employee Type", "Department Code"};
@@ -40,6 +41,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
 
     JTextField searchBox;
     JButton searchButton;
+    JButton addNewEmpButton;
     JComboBox<String> filter;
     String filterOptions[] = { "idNum", "fName", "lName","employeeType","departmentCode"};
 
@@ -101,7 +103,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
         //region Search Bar
         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
-        searchBar.setBackground(Color.GRAY);
+        searchBar.setBackground(Color.decode("#E5EBF4"));
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
 
@@ -118,30 +120,57 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
         searchButton.setIcon(searchIcon);
         searchButton.setPreferredSize(new Dimension(25,200));
 
-        mpCons.weightx = 1;
+        JLabel tableHeading = new JLabel("Staff");
+        tableHeading.setFont(heading2);
+
+        Image image = new ImageIcon("src/main/resources/JWR-Icons/White/icons8-add-contact-100.png").getImage().getScaledInstance(33,33, Image.SCALE_SMOOTH);
+        ImageIcon btnIcon = new ImageIcon(image);
+        addNewEmpButton = defaultPanelAccessories.defaultButton();
+        addNewEmpButton.setBackground(Color.white);
+        addNewEmpButton.setPreferredSize(new Dimension(150,70));
+        addNewEmpButton.setIcon(btnIcon);
+        addNewEmpButton.setText("Add new staff");
+        addNewEmpButton.setForeground(Color.white);
+        addNewEmpButton.setBackground(Color.decode("#101E2D"));
+        addNewEmpButton.setFont(new Font("Outfit", Font.BOLD, 14));
+        addNewEmpButton.setIconTextGap(8);
+        addNewEmpButton.setHorizontalAlignment(SwingConstants.LEFT);
+
+        mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        searchBar.add(Box.createGlue(),mpCons);
-        mpCons.insets = new Insets(25,25,25,25);
-
-        mpCons.weightx = .5;
-        mpCons.weighty = 0;
-        mpCons.gridy = 0;
-        mpCons.gridx = 2;
         mpCons.insets = new Insets(25,10,25,10);
-        searchBar.add(searchBox,mpCons);
+        searchBar.add(tableHeading,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
-        searchBar.add(filter,mpCons);
+        searchBar.add(addNewEmpButton,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
+        searchBar.add(Box.createGlue(),mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 3;
+        searchBar.add(filter,mpCons);
+
+        mpCons.weightx = .5;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 4;
+        searchBar.add(searchBox,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 6;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -343,6 +372,14 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
  
 
         //endregion
+
+        addNewEmpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddStaffDialog(client, staffPage);
+                SwingUtilities.getWindowAncestor(staffPage).setEnabled(false);
+            }
+        });
 
         updateTable();
 

@@ -28,7 +28,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
     public JToggleButton customerButton;
     public JToggleButton inventoryButton;
     public JToggleButton invoiceButton;
-    public JToggleButton settingButton;
+    public JToggleButton staffButton;
 
     public Font outfitBold;
 
@@ -37,8 +37,6 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
     }
 
     public LandingPage() {
-
-
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -177,10 +175,10 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         invoiceButton.setText("");
         sideBarButtons.add(invoiceButton);
 
-        settingButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-adjust-100.png","src/main/resources/JWR-Icons/Black/icons8-adjust-100.png");
-        settingButton.setBorder(round);
-        settingButton.setText("");
-        sideBarButtons.add(settingButton);
+        staffButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-name-tag-100.png","src/main/resources/JWR-Icons/Black/icons8-name-tag-100.png");
+        staffButton.setBorder(round);
+        staffButton.setText("");
+        sideBarButtons.add(staffButton);
 
         //endregion
 
@@ -228,7 +226,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         mpCons.gridy++;
         mpCons.weighty = 0;
         mpCons.insets = new Insets(0, 10, 25, 10);
-        sideBar.add(settingButton,mpCons);
+        sideBar.add(staffButton,mpCons);
 
 
         //endregion
@@ -298,7 +296,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
                 }
         );
 
-        settingButton.addActionListener(
+        staffButton.addActionListener(
                 new ActionListener()
                 {
                     @Override

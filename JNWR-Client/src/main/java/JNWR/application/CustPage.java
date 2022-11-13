@@ -381,6 +381,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new CreateNewCustomerDialog(client, custPage);
+                SwingUtilities.getWindowAncestor(custPage).setEnabled(false);
             }
         });
 
