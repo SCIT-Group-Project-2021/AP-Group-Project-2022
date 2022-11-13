@@ -155,9 +155,6 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         customerTable.setShowGrid(false);
         customerTable.setRowHeight(50);
 
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
-
         JScrollPane tableScroll = new JScrollPane(customerTable){
             @Override
             public Dimension getPreferredSize() {

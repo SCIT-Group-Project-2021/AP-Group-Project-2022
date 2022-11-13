@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -319,6 +320,22 @@ public class Server {
                 } catch (ClassCastException ex) {
                     logger.error(ex.toString());  
                 
+                } catch (SocketException ex) {
+                    logger.info("Client Disconnected");
+                    try {
+                        if (objOs != null) {
+                            objOs.close();
+                        }
+                        if (objIs != null) {
+                            objIs.close();
+                            clientSocket.close();
+                        }
+                    }
+                    catch (IOException e) {
+                        logger.error(e.toString());
+                    }
+                    return;        
+
                 } catch (EOFException ex) {
                     logger.error("Client has Terminated connection with server");
                     logger.error(ex.toString());            

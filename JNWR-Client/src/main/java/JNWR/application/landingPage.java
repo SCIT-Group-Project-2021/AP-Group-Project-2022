@@ -36,6 +36,10 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         ButtonGroup sideBarButtons = new ButtonGroup();
 
+        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+        defaults.putIfAbsent("Table.alternateRowColor", Color.decode("#e5ebf4"));
+        defaults.putIfAbsent("Table.rowColor", Color.decode("#e5ebf4"));
+
         //region Base Frame Setup
         setSize(1280, 720);
         setVisible(true);
@@ -64,7 +68,6 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         JPanel sideBar = defaultPanelAccessories.createJPanel(0,50,720);
         sideBar.setVisible(false);
         JPanel sideBartrigger = defaultPanelAccessories.createJPanel(0,40,720);
-        sideBartrigger.setBackground(Color.red);
         sideBartrigger.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (sideBar.isVisible()) {

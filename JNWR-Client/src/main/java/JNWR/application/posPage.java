@@ -935,7 +935,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
     public void printInvoice(int invoiceNum, Invoice invoice, ArrayList<InvoiceItem> invoiceItems, String date) {         
 
-        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter("invoice#"+getInvoiceNum()+".pdf"))) {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter("Invoice/invoice#"+getInvoiceNum()+".pdf"))) {
 			Document doc = new Document(pdfDoc);
             LineSeparator linebreak = new LineSeparator(new DashedLine());
 
