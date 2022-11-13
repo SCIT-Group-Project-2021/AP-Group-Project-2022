@@ -13,7 +13,7 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class invoiceDialog extends JFrame implements defaultPanelAccessories {
+public class InvoiceDialog extends JFrame implements defaultPanelAccessories {
     final int frameWidth = 550;
     final int frameHeight = 585;
 
@@ -22,7 +22,7 @@ public class invoiceDialog extends JFrame implements defaultPanelAccessories {
 
     int invoiceNum;
 
-    public static searchDialog Instance;
+    public static SearchDialog Instance;
 
     Client client;
 
@@ -30,7 +30,7 @@ public class invoiceDialog extends JFrame implements defaultPanelAccessories {
     String headers[] = { "Product Code", "Name", "Quantity","Total Price"};
     String filterOptions[] = { "productCode", "Name"};
 
-    public invoiceDialog(Client client, int invoiceNum,JPanel reportPage) {
+    public InvoiceDialog(Client client, int invoiceNum, JPanel reportPage) {
 
         this.invoiceNum = invoiceNum;
 

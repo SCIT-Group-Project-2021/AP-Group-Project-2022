@@ -12,7 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
 
-public class addProductDialog extends JFrame implements defaultPanelAccessories {
+public class AddProductDialog extends JFrame implements defaultPanelAccessories {
     Client client;
     int frameWidth = 1100;
     int frameHeight = 720;
@@ -42,7 +42,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
     String category[] = { "Select a Category","Baked Goods", "Beverages","Canned Goods","Dairy","Baking/Dry Goods","Frozen Goods","Household & Cleaning Supplies","Meat","Produce","Personal Care","Pet Care","Seafood","Snacks","Other"};
 
 
-    public addProductDialog(Client client, prodPage prodPage) {
+    public AddProductDialog(Client client, ProdPage prodPage) {
 
         this.client = client;
         //region Base Frame Setup

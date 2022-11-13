@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,10 +37,10 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
-public class posPage extends JPanel implements defaultPanelAccessories{
+public class PosPage extends JPanel implements defaultPanelAccessories{
 
     ButtonGroup paymentBtns = new ButtonGroup();
-    posPage posPage = this;
+    PosPage posPage = this;
     JLabel selectedItemName;
     JLabel unitPriceLabel;
     JLabel shortDescrip;
@@ -85,7 +84,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     }
     JLabel invoiceNum;
 
-    public posPage(Client client) {
+    public PosPage(Client client) {
 
         this.client = client;
 
@@ -642,7 +641,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridwidth = 2;
         JButton payButton = defaultPanelAccessories.defaultButton();
         payButton.setFont(medText);
-        payButton.setText("Pay Now");
+        payButton.setText("Check out");
         payButton.setForeground(Color.decode("#292C2D"));
         payButton.setBackground(Color.white);
         mpCons.insets = new Insets(0, 60, 0, 60);
@@ -670,7 +669,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         searchByCode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new searchDialog(posPage,client).setVisible(true);
+                new SearchDialog(posPage,client).setVisible(true);
                 SwingUtilities.getWindowAncestor(posPage).setEnabled(false);
             }
         });
@@ -678,7 +677,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         addCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new addCustomerDialog(posPage,client);
+                new AddCustomerDialog(posPage,client);
                 SwingUtilities.getWindowAncestor(posPage).setEnabled(false);
             }
         });
@@ -893,7 +892,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         
         Integer idNum = 1000;
         try {
-            Invoice entity = (Invoice) client.findLastEntity("Invoice");
+            Invoice entity = (Invoice) client.findLastEntity("Invoice", "invoiceNum");
             idNum = entity.getInvoiceNum()+ 1;   
         } catch (NullPointerException e) {
             logger.warn("No Invoices in database throwing Up Default Start Invoice Number");

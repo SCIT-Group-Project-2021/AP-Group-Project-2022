@@ -5,7 +5,7 @@ import Entity.InvenCategory;
 import Entity.Inventory;
 import JNWR.ClientApplication;
 import JNWR.Domain.Client;
-import JNWR.application.prodPage;
+import JNWR.application.ProdPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +16,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DateFormatter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,16 +23,16 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.swing.JPanel;
 
 public interface defaultPanelAccessories {
+
     public static final Logger logger = LogManager.getLogger(ClientApplication.class);
+    Font outfitBold = null;
     Font heading1 = new Font("Outfit", Font.BOLD, 40);
     Font heading2 = new Font("Outfit", Font.BOLD, 30);
     Font heading3 = new Font("Outfit", Font.BOLD, 24);
@@ -41,6 +40,7 @@ public interface defaultPanelAccessories {
     Font medText = new Font("Outfit", Font.PLAIN, 22);
     Font smText = new Font("Outfit", Font.PLAIN, 18);
     Font miniText = new Font("Outfit", Font.PLAIN, 14);
+
 
     public static class RoundedBorder implements Border {
         
@@ -493,7 +493,7 @@ public interface defaultPanelAccessories {
             setHorizontalAlignment(SwingConstants.LEFT);
             setFont(miniText);
         }
-        public void filterInventoryTable(String filterValue, prodPage prodPage, Client client, DefaultTableModel headerModel){
+        public void filterInventoryTable(String filterValue, ProdPage prodPage, Client client, DefaultTableModel headerModel){
             InvenCategory category = (InvenCategory) client.findEntity("InvenCategory","name",filterValue);
             String categoryId = category.getCategoryID();
             ArrayList<DBEntity> list = client.getSpecificList("Inventory","categoryID",categoryId);

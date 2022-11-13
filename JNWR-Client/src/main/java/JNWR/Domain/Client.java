@@ -214,10 +214,11 @@ public class Client {
     }
 
 
-    public  DBEntity findLastEntity(String table) {
+    public  DBEntity findLastEntity(String table, String columnName) {
         //Calls the get list function
         sendAction("findLastEntity");
         sendAction(table);
+        sendAction(columnName);
 
         DBEntity entity = null;
 

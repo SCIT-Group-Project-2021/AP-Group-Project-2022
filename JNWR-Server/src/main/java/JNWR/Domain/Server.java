@@ -172,7 +172,7 @@ public class Server {
 
                             try {
                                 
-                                sendEntity(findLastEntity((String)objIs.readObject()));
+                                sendEntity(findLastEntity((String)objIs.readObject(),(String)objIs.readObject()));
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
@@ -347,21 +347,22 @@ public class Server {
                
         }
     
-        private DBEntity findLastEntity(String table) {
+        private DBEntity findLastEntity(String table,String columnName) {
             EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
     
             DBEntity dbEntity = null;
     
             try {
-                dbEntity = em.createQuery("SELECT a FROM " + table + " a WHERE invoiceNum=(SELECT max(invoiceNum) FROM " + table+")",DBEntity.class).getSingleResult(); 
+                dbEntity = em.createQuery("SELECT a FROM " + table + " a WHERE " + columnName + "=(SELECT max(" + columnName + ") FROM " + table+")",DBEntity.class).getSingleResult();
                 
             } catch (EntityNotFoundException e) {
-                // TODO: handle exception
-                e.printStackTrace();
+                logger.error(e.toString());
             }
             catch (NoResultException e) {
-                // TODO: handle exception
-                e.printStackTrace();
+                logger.error(e.toString());
+            }
+            catch(IllegalArgumentException e){
+                logger.error(e.toString());
             }
     
             return dbEntity;

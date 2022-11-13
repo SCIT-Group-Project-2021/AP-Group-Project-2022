@@ -9,7 +9,7 @@ import javax.swing.*;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
-public class landingPage extends JFrame implements defaultPanelAccessories{
+public class LandingPage extends JFrame implements defaultPanelAccessories{
 
     final int bottomOffset = 60;
 
@@ -30,7 +30,15 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
     public JToggleButton invoiceButton;
     public JToggleButton settingButton;
 
-    public landingPage() {
+    public Font outfitBold;
+
+    public Font getOutfitBold() {
+        return outfitBold;
+    }
+
+    public LandingPage() {
+
+
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -225,12 +233,12 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
 
         //endregion
 
-        dashBoard = new dashboardPage(client);
-        customer = new custPage(client);
-        report = new reportPage(client);
-        staff = new staffPage(client);
-        inventory = new prodPage(client);
-        pos = new posPage(client);
+        dashBoard = new DashboardPage(client);
+        customer = new CustPage(client);
+        report = new ReportPage(client);
+        staff = new StaffPage(client);
+        inventory = new ProdPage(client);
+        pos = new PosPage(client);
 
 
         //region Buttons

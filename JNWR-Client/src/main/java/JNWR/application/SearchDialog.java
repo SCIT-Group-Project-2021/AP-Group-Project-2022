@@ -12,7 +12,7 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class searchDialog extends JFrame implements defaultPanelAccessories {
+public class SearchDialog extends JFrame implements defaultPanelAccessories {
     int qty = 1;
     final int frameWidth = 550;
     final int frameHeight = 585;
@@ -26,7 +26,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
     JButton searchButton;
 
     JComboBox<String> filter;
-    public static searchDialog Instance;
+    public static SearchDialog Instance;
 
     Client client;
 
@@ -35,7 +35,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
     String headers[] = { "Product Code", "Name", "Stock","Unit Price"};
     String filterOptions[] = { "productCode", "Name"};
 
-    public searchDialog(posPage posPage, Client client) {
+    public SearchDialog(PosPage posPage, Client client) {
 
         this.client = client;
         //region Base Frame Setup

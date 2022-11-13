@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
-public class dashboardPage extends JPanel implements defaultPanelAccessories {
+public class DashboardPage extends JPanel implements defaultPanelAccessories {
 
     DefaultTableModel headerModel = new DefaultTableModel();
         
@@ -19,7 +19,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
 
     Client client;
 
-    dashboardPage(Client client) {
+    DashboardPage(Client client) {
 
         this.client = client;
         RoundedBorder round = new RoundedBorder(25);
@@ -305,7 +305,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
+                        LandingPage parent = (LandingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
                         parent.replaceWindow(parent.mainPanel,parent.card, "pos");
                         parent.posButton.setSelected(true);
                         
@@ -318,7 +318,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
+                        LandingPage parent = (LandingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
                         parent.replaceWindow(parent.mainPanel,parent.card, "invoice");
                         parent.invoiceButton.setSelected(true);
                         
@@ -331,7 +331,7 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
                 {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        landingPage parent = (landingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
+                        LandingPage parent = (LandingPage) SwingUtilities.getAncestorOfClass(JFrame.class, getParent());
                         parent.replaceWindow(parent.mainPanel,parent.card, "inventory");
                         parent.inventoryButton.setSelected(true);
                         

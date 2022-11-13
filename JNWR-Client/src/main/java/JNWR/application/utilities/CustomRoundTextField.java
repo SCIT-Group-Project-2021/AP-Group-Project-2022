@@ -2,7 +2,7 @@ package JNWR.application.utilities;
 
 import javax.swing.*;
 
-public class CustomRoundTextField extends JTextField {
+public class CustomRoundTextField extends JFormattedTextField {
     private CustomRoundTextFieldUI textUI;
 
     public CustomRoundTextField() {

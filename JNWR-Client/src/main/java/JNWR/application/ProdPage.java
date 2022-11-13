@@ -11,8 +11,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.*;
 
 import Entity.DBEntity;
 import Entity.Inventory;
@@ -25,7 +24,7 @@ import java.awt.Insets;
 import java.util.ArrayList; 
 
 
-public class prodPage extends JPanel implements defaultPanelAccessories{
+public class ProdPage extends JPanel implements defaultPanelAccessories{
 
     Client client;
 
@@ -59,10 +58,10 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
 
-    prodPage(Client client) {
+    ProdPage(Client client) {
 
         this.client = client;
-        prodPage prodPage = this;
+        ProdPage prodPage = this;
 
 
         //region GridBagConstraints
@@ -70,6 +69,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.fill = GridBagConstraints.BOTH;
         mpCons.insets = new Insets(0, 0, 0, 0);
         mpCons.anchor = GridBagConstraints.NORTH;
+        setBackground(Color.decode("#F2F3F5"));
         //endregion
 
         //region Main Panel
@@ -78,7 +78,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         //region Top Bar
         JPanel topBar = defaultPanelAccessories.createJPanel(0,80,120);
-        //topBar.setBackground(Color.YELLOW);
+        topBar.setBackground(null);
         topBar.setLayout(new GridBagLayout());
 
         //region date/time bar
@@ -117,11 +117,9 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         //region Filter Folders
-        JPanel mainSection = defaultPanelAccessories.createJPanel(0, 350, 80);
-        mainSection.setLayout(new GridBagLayout());
-
-        JPanel filterBox = defaultPanelAccessories.createJPanel(0, 350, 80);
-        filterBox.setLayout(new GridBagLayout());
+        JPanel filterSection = defaultPanelAccessories.createJPanel(0, 350, 80);
+        filterSection.setLayout(new GridBagLayout());
+        filterSection.setBackground(null);
 
         addNewCategory = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100.png");
         allGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-diversity-100.png", "All Goods");
@@ -142,6 +140,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
 
         addProductButton =  defaultPanelAccessories.iconButton(150,20,20,20,"src/main/resources/JWR-Icons/White/icons8-plus-math-100.png");
+
         addProductButton.setText("Add New Product");
         addProductButton.setUI(new StyledButtonUI());
         addProductButton.setForeground(Color.white);
@@ -231,9 +230,35 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         
         prodTable.setShowGrid(false);
         prodTable.setRowHeight(50);
+        prodTable.setFillsViewportHeight(true);
+        prodTable.setBorder(null);
 
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        defaults.putIfAbsent("Table.alternateRowColor", Color.LIGHT_GRAY);
+        //UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+        //defaults.put("TableHeader.font", heading1);
+        //defaults.putIfAbsent("Table.alternateRowColor", Color.green);
+        prodTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {// alternate background color for rows
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected)
+                    c.setBackground(row % 2 == 0 ? Color.decode("#E5EBF4") : Color.decode("#ECF3FA"));
+                return c;
+            };
+        });
+
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setBorder(null);
+        renderer.setBackground(Color.decode("#ECF3FA"));
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        //renderer.setFont(new Font("SansSerif",Font.BOLD,50));
+        renderer.setForeground(Color.decode("#707070"));
+        renderer.setPreferredSize(new Dimension(100,50));
+
+
+        JTableHeader jTableHeader = prodTable.getTableHeader();
+        jTableHeader.setFont(new Font("SansSerif",Font.BOLD,50));
+        jTableHeader.setDefaultRenderer(renderer);
+
 
         final TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(headerModel);
         prodTable.setRowSorter(sorter);
@@ -244,7 +269,9 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
                 return new Dimension(100, 100);
             }
         };
-        tableScroll.setBackground(Color.GREEN);
+
+
+        //tableScroll.setBackground(Color.GREEN);
         //endregion
 
         //region Frame.Add
@@ -266,7 +293,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 1;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0, 0, 0, 0);
-        add(mainSection,mpCons);
+        add(filterSection,mpCons);
 
         mpCons.gridheight = 1;
         mpCons.weightx = 1;
@@ -360,92 +387,100 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0, 0, 5, 0);
-        mainSection.add(allGoodsButton,mpCons);
+        filterSection.add(allGoodsButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
-        mainSection.add(addNewCategory,mpCons);
+        filterSection.add(addNewCategory,mpCons);
 
         mpCons.gridwidth = 2;
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(bakedGoodsButton,mpCons);
+        filterSection.add(bakedGoodsButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(beverageButton,mpCons);
+        filterSection.add(beverageButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(cannedGoodsButton,mpCons);
+        filterSection.add(cannedGoodsButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(dairyButton,mpCons);
+        filterSection.add(dairyButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(frozenGoodsButton,mpCons);
+        filterSection.add(frozenGoodsButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(householdSuppliesButton,mpCons);
+        filterSection.add(householdSuppliesButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(meatButton,mpCons);
+        filterSection.add(meatButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(produceButton,mpCons);
+        filterSection.add(produceButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(personalCareButton,mpCons);
+        filterSection.add(personalCareButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(petCareButton,mpCons);
+        filterSection.add(petCareButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(seafoodButton,mpCons);
+        filterSection.add(seafoodButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(snacksButton,mpCons);
+        filterSection.add(snacksButton,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        mainSection.add(otherButton,mpCons);
+        filterSection.add(otherButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 1;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        filterSection.add(Box.createGlue(),mpCons);
+
+
         //endregion
 
         //endregion
@@ -489,7 +524,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         addProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new addProductDialog(client,prodPage);
+                new AddProductDialog(client,prodPage);
                 SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
             }
         });

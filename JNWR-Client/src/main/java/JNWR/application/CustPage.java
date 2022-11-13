@@ -24,13 +24,14 @@ import java.awt.Insets;
 import java.util.ArrayList; 
 
 
-public class custPage extends JPanel implements defaultPanelAccessories{
+public class CustPage extends JPanel implements defaultPanelAccessories{
 
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "ID#", "First Name", "Last Name", "DOB", "Telephone Number", "Email", "Date of Membership", "Expiry Date", "Options"};
 
     Client client;
+    CustPage custPage = this;
 
     ArrayList<DBEntity> list; 
     Customer cust;
@@ -40,7 +41,9 @@ public class custPage extends JPanel implements defaultPanelAccessories{
     JComboBox<String> filter;
     String filterOptions[] = { "customerID", "fName", "lName","telephoneNum"};
 
-    custPage(Client client) {
+    JButton addNewCustomerButton;
+
+    CustPage(Client client) {
 
         this.client = client;
 
@@ -98,7 +101,7 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         //region Search Bar
         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
-        searchBar.setBackground(Color.GRAY);
+        searchBar.setBackground(Color.decode("#E5EBF4"));
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
 
@@ -114,30 +117,64 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         searchButton.setIcon(searchIcon);
         searchButton.setPreferredSize(new Dimension(25,200));
 
-        mpCons.weightx = 1;
+        JLabel tableHeading = new JLabel("Customers");
+        tableHeading.setFont(heading2);
+
+        Image image = new ImageIcon("src/main/resources/JWR-Icons/White/icons8-add-contact-100.png").getImage().getScaledInstance(33,33, Image.SCALE_SMOOTH);
+        ImageIcon btnIcon = new ImageIcon(image);
+        addNewCustomerButton = defaultPanelAccessories.defaultButton();
+        addNewCustomerButton.setBackground(Color.white);
+        addNewCustomerButton.setPreferredSize(new Dimension(150,70));
+        addNewCustomerButton.setIcon(btnIcon);
+        addNewCustomerButton.setText("Add new customer");
+        addNewCustomerButton.setForeground(Color.white);
+        addNewCustomerButton.setBackground(Color.decode("#101E2D"));
+        addNewCustomerButton.setFont(new Font("Outfit", Font.BOLD, 14));
+        addNewCustomerButton.setIconTextGap(8);
+        addNewCustomerButton.setHorizontalAlignment(SwingConstants.LEFT);
+
+        mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(20,20,20,0);
+        searchBar.add(tableHeading,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        searchBar.add(addNewCustomerButton,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 2;
         searchBar.add(Box.createGlue(),mpCons);
-        mpCons.insets = new Insets(25,25,25,25);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 3;
+        searchBar.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 4;
+        searchBar.add(filter,mpCons);
 
         mpCons.weightx = .5;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 2;
+        mpCons.gridx = 5;
         mpCons.insets = new Insets(25,10,25,10);
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 1;
-        searchBar.add(filter,mpCons);
-
-        mpCons.weightx = 0;
-        mpCons.weighty = 0;
-        mpCons.gridy = 0;
-        mpCons.gridx = 3;
+        mpCons.gridx = 6;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -156,6 +193,7 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         
         customerTable.setShowGrid(false);
         customerTable.setRowHeight(50);
+
 
         JScrollPane tableScroll = new JScrollPane(customerTable){
             @Override
@@ -219,7 +257,7 @@ public class custPage extends JPanel implements defaultPanelAccessories{
          mpCons.gridy = 0;
          mpCons.gridx++;
          topBar.add(logOut,mpCons);        
- 
+
          //region DateTime.Add
         mpCons.weightx = 0;
         mpCons.weighty = 0;
@@ -241,7 +279,6 @@ public class custPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridx++;
         JLabel separator = new JLabel();
         separator.setFont(new Font("Roboto", Font.BOLD, 40));
-        //Color c = new Color(r,g,b,a);
         separator.setForeground(Color.decode("#dedee0"));
         separator.setText("  |  ");
         dateTimePanel.add(separator);
@@ -307,6 +344,13 @@ public class custPage extends JPanel implements defaultPanelAccessories{
     
                 }
             });
+
+        addNewCustomerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CreateNewCustomerDialog(client, custPage);
+            }
+        });
 
         //endregion
 

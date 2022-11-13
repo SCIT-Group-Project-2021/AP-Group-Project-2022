@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
-public class addCustomerDialog extends JFrame implements defaultPanelAccessories {
+public class AddCustomerDialog extends JFrame implements defaultPanelAccessories {
     int qty = 1;
     final int frameWidth = 550;
     final int frameHeight = 585;
@@ -28,7 +28,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
     JButton clearCustomerButton;
 
     JComboBox<String> filter;
-    public static searchDialog Instance;
+    public static SearchDialog Instance;
 
     ArrayList<DBEntity> list;
     DefaultTableModel headerModel = new DefaultTableModel();
@@ -38,7 +38,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
 
     Client client;
 
-    public addCustomerDialog(posPage posPage,Client client) {
+    public AddCustomerDialog(PosPage posPage, Client client) {
 
         this.client = client;
 

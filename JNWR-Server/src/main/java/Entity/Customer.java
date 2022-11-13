@@ -40,19 +40,14 @@ public class Customer extends DBEntity implements Serializable {
         
     }
 
-    public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership) {
+    public Customer(String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership,String dateOfMembershipExpiry) {
         this.fName = fName;
         this.lName = lName;
         this.dob = dob;
         this.telephoneNum = telephoneNum;
         this.email = email;
         this.dateOfMembership = dateOfMembership;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
-        LocalDate date = LocalDate.parse(dateOfMembership, dtf);
-        LocalDate dateEnd = date.withYear(date.getYear()+ 1);
-        String DOME = dtf.format(dateEnd);
-        //TODO: Data of expiry should be auto generated based on date of membership
-        this.dateOfMembershipExpiry = DOME;
+        this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
     //region Getters and setters
     public int getCustomerId() {
