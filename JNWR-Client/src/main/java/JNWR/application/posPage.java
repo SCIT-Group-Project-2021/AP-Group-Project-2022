@@ -671,6 +671,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new searchDialog(posPage,client).setVisible(true);
+                SwingUtilities.getWindowAncestor(posPage).setEnabled(false);
             }
         });
 
@@ -678,6 +679,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new addCustomerDialog(posPage,client);
+                SwingUtilities.getWindowAncestor(posPage).setEnabled(false);
             }
         });
 
@@ -988,7 +990,24 @@ public class posPage extends JPanel implements defaultPanelAccessories{
             doc.add(linebreak);
             doc.add(invoiceThankYou);
             doc.add(linebreak);
+            doc.close();
+
+            Object[] options = {"Yes","No"};
+
+
+            if (JOptionPane.showOptionDialog(posPage,"Would you like to open the invoice?","Purchase Complete",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options, options[0])
+            == JOptionPane.YES_OPTION) {
+                try {
+                    Desktop.getDesktop().open(new File("Invoice/invoice#"+getInvoiceNum()+".pdf"));
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                };    
+            }
+            
 		} 
+
+        
             
         catch (IOException e) {
             logger.error("An error occurred.");

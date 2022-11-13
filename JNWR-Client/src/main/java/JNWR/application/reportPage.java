@@ -38,6 +38,8 @@ public class reportPage extends JPanel implements defaultPanelAccessories{
     ArrayList<DBEntity> list; 
     Invoice invoice;
 
+    reportPage prodPage = this;
+
     JTextField searchBox;
     JButton searchButton;
     JComboBox<String> filter;
@@ -326,7 +328,8 @@ public class reportPage extends JPanel implements defaultPanelAccessories{
 
                     int selectedRowIndex = invoiceTable.getSelectedRow();
                     int invoiceNum = (int)invoiceTable.getValueAt(selectedRowIndex, 0);
-                    new invoiceDialog(client,invoiceNum);
+                    new invoiceDialog(client,invoiceNum,prodPage);
+                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);;
                 }
             });
         //endregion

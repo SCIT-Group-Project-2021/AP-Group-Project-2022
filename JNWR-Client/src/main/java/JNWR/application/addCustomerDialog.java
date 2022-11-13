@@ -253,6 +253,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SwingUtilities.getWindowAncestor(posPage).setEnabled(true);
                 dispose();
             }
         });
@@ -265,10 +266,12 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
 
                     posPage.updateCustomer((Customer) list.get(selectedRowIndex));
                 }
-                catch(ArrayIndexOutOfBoundsException ex){
+                catch(IndexOutOfBoundsException ex){
                     logger.error("The invoice item was not selected.");
+                    JOptionPane.showMessageDialog(new JFrame(),"No Customer Selected","ERROR", JOptionPane.ERROR_MESSAGE);
                 }
                 finally{
+                    SwingUtilities.getWindowAncestor(posPage).setEnabled(true);
                     dispose();
                 }
 
@@ -280,6 +283,7 @@ public class addCustomerDialog extends JFrame implements defaultPanelAccessories
             @Override
             public void actionPerformed(ActionEvent e) {
                 posPage.updateCustomer(null);
+                SwingUtilities.getWindowAncestor(posPage).setEnabled(true);
                 dispose();
             }
         });

@@ -488,6 +488,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new addProductDialog(client,prodPage);
+                SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
             }
         });
         //endregion

@@ -352,6 +352,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
                 dispose();
             }
         });
@@ -436,6 +437,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
                     //TODO: Check if entity already exists
                     client.addEntity(product);
                     prodPage.updateTable();
+                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
                     dispose();
                 }
                 else{

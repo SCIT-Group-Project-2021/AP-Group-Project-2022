@@ -302,6 +302,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SwingUtilities.getWindowAncestor(posPage).setEnabled(true);
                 dispose();
             }
         });
@@ -347,6 +348,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                     logger.error("The invoice item was not selected.");
                 }
                 finally{
+                    SwingUtilities.getWindowAncestor(posPage).setEnabled(true);
                     dispose();
                 }
 

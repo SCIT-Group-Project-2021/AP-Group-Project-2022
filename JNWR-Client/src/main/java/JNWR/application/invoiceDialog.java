@@ -30,7 +30,7 @@ public class invoiceDialog extends JFrame implements defaultPanelAccessories {
     String headers[] = { "Product Code", "Name", "Quantity","Total Price"};
     String filterOptions[] = { "productCode", "Name"};
 
-    public invoiceDialog(Client client, int invoiceNum) {
+    public invoiceDialog(Client client, int invoiceNum,JPanel reportPage) {
 
         this.invoiceNum = invoiceNum;
 
@@ -119,6 +119,7 @@ public class invoiceDialog extends JFrame implements defaultPanelAccessories {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SwingUtilities.getWindowAncestor(reportPage).setEnabled(true);
                 dispose();
             }
         });
