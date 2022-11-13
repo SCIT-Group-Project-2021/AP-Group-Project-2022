@@ -32,21 +32,38 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
     ArrayList<DBEntity> list; 
     Inventory inven;
 
-    JTextField searchBox;
+    CustomRoundTextField searchBox;
     JButton searchButton;
     JComboBox<String> filter;
     JButton addProductButton;
+    JFilterButton allGoodsButton;
+    JFilterButton bakedGoodsButton;
+    JFilterButton beverageButton;
+    JFilterButton cannedGoodsButton;
+    JFilterButton dairyButton;
+    JFilterButton dryGoodsButton;
+    JFilterButton frozenGoodsButton;
+    JFilterButton householdSuppliesButton;
+    JButton addNewCategory;
+    JFilterButton meatButton;
+    JFilterButton otherButton;
+    JFilterButton produceButton;
+    JFilterButton personalCareButton;
+    JFilterButton petCareButton;
+    JFilterButton seafoodButton;
+    JFilterButton snacksButton;
     String filterOptions[] = { "productCode", "name", "categoryID"};
 
 
     DefaultTableModel headerModel = new DefaultTableModel();
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
-    String Category[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
 
     prodPage(Client client) {
 
         this.client = client;
+        prodPage prodPage = this;
+
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -69,7 +86,6 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         dateTimePanel.setBackground(Color.WHITE);
         dateTimePanel.setLayout(new GridBagLayout());
 
-
         Image calendarImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-desk-calendar-100.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
         ImageIcon calendarIcon = new ImageIcon(calendarImage);
         JLabel calendar = new JLabel(calendarIcon);
@@ -89,17 +105,6 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
             }
         });
         timeTimer.start();
-
-        Image iconImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-add-contact-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        ImageIcon btnIcon = new ImageIcon(iconImage);
-        addProductButton = defaultPanelAccessories.defaultButton();
-        addProductButton.setBackground(Color.white);
-        addProductButton.setPreferredSize(new Dimension(150,70));
-        addProductButton.setIcon(btnIcon);
-        addProductButton.setText("Add New Product");
-        addProductButton.setFont(new Font("Outfit", Font.BOLD, 14));
-        addProductButton.setIconTextGap(8);
-        addProductButton.setHorizontalAlignment(SwingConstants.LEFT);
         //endregion
 
         //region Log Out Label & Button
@@ -111,14 +116,50 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
+        //region Filter Folders
+        JPanel mainSection = defaultPanelAccessories.createJPanel(0, 350, 80);
+        mainSection.setLayout(new GridBagLayout());
+
+        JPanel filterBox = defaultPanelAccessories.createJPanel(0, 350, 80);
+        filterBox.setLayout(new GridBagLayout());
+
+        addNewCategory = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100.png");
+        allGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-diversity-100.png", "All Goods");
+        bakedGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Baked Goods");
+        beverageButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Beverages");
+        cannedGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Canned Goods");
+        dairyButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Dairy");
+        dryGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Baking/Dry Goods");
+        frozenGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Frozen Goods");
+        householdSuppliesButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png","<html>Household & Cleaning<br> Supplies<html>");
+        meatButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Meat");
+        otherButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png","Other");
+        produceButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png","Produce");
+        personalCareButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png","Personal Care");
+        petCareButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Pet Care");
+        seafoodButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Seafood");
+        snacksButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Snacks");
+
+
+        addProductButton =  defaultPanelAccessories.iconButton(150,20,20,20,"src/main/resources/JWR-Icons/White/icons8-plus-math-100.png");
+        addProductButton.setText("Add New Product");
+        addProductButton.setForeground(Color.white);
+        addProductButton.setFont(new Font("Outfit", Font.BOLD, 14));
+        addProductButton.setIconTextGap(8);
+        addProductButton.setBackground(Color.decode("#101E2D"));
+        addProductButton.setOpaque(true);
+        addProductButton.setHorizontalAlignment(SwingConstants.LEFT);
+
+
         //region Search Bar
         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
         searchBar.setLayout(new GridBagLayout());
-        searchBar.setBackground(Color.GRAY);
+        searchBar.setBackground(Color.decode("#E5EBF4"));
         searchBar.setRoundTopLeft(25);
         searchBar.setRoundTopRight(25);
 
-        searchBox = new JTextField("Search...");
+        searchBox = new CustomRoundTextField();
+        searchBox.setText("Search...");
 
         filter = new JComboBox<>(filterOptions);
 
@@ -131,13 +172,14 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         searchButton.setIcon(searchIcon);
         searchButton.setPreferredSize(new Dimension(25,200));
 
-        mpCons.weightx = 1;
+        mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(20,20,20,0);
         searchBar.add(tableHeading,mpCons);
 
-        mpCons.weightx = 1;
+        mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 1;
@@ -169,6 +211,9 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
+        //endregion
+
+
 
         //region Customer Table Bar
         
@@ -205,55 +250,65 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         mpCons.ipadx = 0;
         mpCons.ipady = 0;
 
-
+        mpCons.gridwidth = 2;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         add(topBar,mpCons);
 
-        mpCons.weightx = 1;
+        mpCons.gridwidth = 1;
+        mpCons.gridheight = 2;
+        mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 1;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(0, 60, 0, 60);
+        mpCons.insets = new Insets(0, 0, 0, 0);
+        add(mainSection,mpCons);
+
+        mpCons.gridheight = 1;
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 1;
+        mpCons.gridx = 1;
+        mpCons.insets = new Insets(0, 0, 0, 60);
         add(searchBar,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy = 2;
-        mpCons.gridx = 0;
-        mpCons.insets = new Insets(0, 60, 60, 60);
+        mpCons.gridx = 1;
+        mpCons.insets = new Insets(0, 0, 60, 60);
         add(tableScroll,mpCons);
 
-         //region TopBar.Add
+        //region TopBar.Add
 
-         mpCons.weightx = 0;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx = 0;
-         mpCons.insets = new Insets(10, 30, 10, 10);
-         topBar.add(dateTimePanel,mpCons);
- 
-         mpCons.weightx = 1;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx++;
-         topBar.add(Box.createGlue(),mpCons);
- 
-         mpCons.weightx = 0;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx++;
-         topBar.add(empName,mpCons);
- 
-         mpCons.weightx = 0;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx++;
-         topBar.add(logOut,mpCons);        
- 
-         //region DateTime.Add
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(10, 30, 10, 10);
+        topBar.add(dateTimePanel,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(empName,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        topBar.add(logOut,mpCons);
+
+        //region DateTime.Add
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
@@ -293,9 +348,104 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         dateTimePanel.add(time, mpCons);
 
         //endregion
- 
-         //endregion
- 
+
+        //endregion
+
+
+        //region Filter Buttons
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(0, 0, 5, 0);
+        mainSection.add(allGoodsButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
+        mainSection.add(addNewCategory,mpCons);
+
+        mpCons.gridwidth = 2;
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(bakedGoodsButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(beverageButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(cannedGoodsButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(dairyButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(frozenGoodsButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(householdSuppliesButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(meatButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(produceButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(personalCareButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(petCareButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(seafoodButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(snacksButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        mainSection.add(otherButton,mpCons);
+        //endregion
+
         //endregion
 
         //region Buttons
@@ -304,7 +454,6 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
                 if(searchBox.getText().equals("Search...")){
                     searchBox.setText("");
                 }
-              
             }
       
             public void focusLost(FocusEvent e) {
@@ -328,24 +477,27 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
                     else{
                         list = client.getSpecificList("Inventory",searchFilter,searchId);
                         for (DBEntity entity : list) {
-                            //Inventory inven = (Inventory) list.get(i);
                             inven = (Inventory) entity;
-
                             headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
-
-                            }
+                        }
                     }
-    
-    
+
                 }
             });
         addProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new addProductDialog(client);
+                new addProductDialog(client,prodPage);
             }
         });
         //endregion
+
+        bakedGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(bakedGoodsButton.getText(),prodPage,client,headerModel);
+            }
+        });
 
 
         updateTable();
@@ -368,5 +520,7 @@ public class prodPage extends JPanel implements defaultPanelAccessories{
         }
 
     }
+
+
 
 }

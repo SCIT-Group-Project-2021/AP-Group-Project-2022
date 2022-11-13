@@ -1,5 +1,6 @@
 package JNWR.application;
 
+import Entity.Inventory;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -12,12 +13,9 @@ import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
 
 public class addProductDialog extends JFrame implements defaultPanelAccessories {
-    private CustomTextField textField1;
-    private CustomRoundTextFieldUI roundTextField;
-
     Client client;
-    int frameWidth = 720;
-    int frameHeight = 1000;
+    int frameWidth = 1100;
+    int frameHeight = 720;
 
     JLabel headingLabel;
     JLabel descriptionHeading;
@@ -41,10 +39,10 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
     JButton cancelButton;
     JButton addProductButton;
 
-    String category[] = { "Baked Goods", "Beverages","Canned Goods","Dairy","Baking Goods","Frozen Goods","Household & Cleaning Suppies","Meat","Produce","Personal Care","Pet Care","Seafood","Snacks","Other"};
+    String category[] = { "Select a Category","Baked Goods", "Beverages","Canned Goods","Dairy","Baking/Dry Goods","Frozen Goods","Household & Cleaning Supplies","Meat","Produce","Personal Care","Pet Care","Seafood","Snacks","Other"};
 
 
-    public addProductDialog(Client client) {
+    public addProductDialog(Client client, prodPage prodPage) {
 
         this.client = client;
         //region Base Frame Setup
@@ -61,11 +59,11 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         setVisible(true);
         //endregion
 
-        // #region Enables Undecorated Frame drag movement
+        // region Enables Undecorated Frame drag movement
         FrameDragListener frameDragListener = new FrameDragListener(this);
         this.addMouseListener(frameDragListener);
         this.addMouseMotionListener(frameDragListener);
-        // #endregion
+        // endregion
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -74,7 +72,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         mpCons.anchor = GridBagConstraints.NORTH;
         //endregion
 
-
+        // region GUI Sections
         JPanel mainSection = defaultPanelAccessories.createJPanel(0, 350, 80);
         mainSection.setLayout(new GridBagLayout());
         mainSection.setBackground(Color.white);
@@ -93,6 +91,9 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         buttonBox.setLayout(new GridBagLayout());
         buttonBox.setBackground(Color.white);
 
+        //endregion
+
+        //region GUI Elements' Initialization
         headingLabel = new JLabel("Add New Product");
         headingLabel.setFont(heading2);
 
@@ -151,7 +152,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         quantityField = new CustomRoundTextField();
         quantityField.setFont(miniText);
 
-        priceLabel = new JLabel("Price");
+        priceLabel = new JLabel("Unit Price");
         priceLabel.setFont(smText);
 
         priceField = new CustomRoundTextField(); //TODO: Add dollar sign icon in textfield
@@ -169,6 +170,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         addProductButton.setForeground(Color.white);
         addProductButton.setBackground(Color.decode("#005DFB"));
         addProductButton.setPreferredSize(new Dimension(20,50));
+        //endregion
 
 
         //region Frame.Add
@@ -200,13 +202,14 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         mpCons.weighty = 0.7;
         mpCons.gridy = 2;
         mpCons.gridx = 0;
-        mpCons.insets = new Insets(0,0,5,0);
+        mpCons.insets = new Insets(0,0,5,20);
         mainSection.add(descripSection,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0,0,5,0);
         descripSection.add(productIdLabel,mpCons);
 
         mpCons.weightx = 1;
@@ -234,7 +237,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         descripSection.add(shortDescripLabel,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 0;
+        mpCons.weighty = 0.2;
         mpCons.gridy++;
         mpCons.gridx = 0;
         descripSection.add(shortDescripPane,mpCons);
@@ -253,66 +256,80 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
-        mpCons.gridy = 3;
-        mpCons.gridx = 0;
-        mpCons.insets = new Insets(30,0,0,0);
+        mpCons.gridy = 1;//3
+        mpCons.gridx = 1;
+        mpCons.insets = new Insets(10,0,10,0); //to30
         mainSection.add(inventoryHeading,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0.2;
-        mpCons.gridy = 4;
-        mpCons.gridx = 0;
-        mpCons.insets = new Insets(10,0,10,0);
+        mpCons.gridy = 2; //4
+        mpCons.gridx = 1;
+        mpCons.insets = new Insets(0,0,5,0);
         mainSection.add(inventorySection,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0,0,5,0);
         inventorySection.add(categoryLabel,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0.05;
         mpCons.gridy++;
         mpCons.gridx = 0;
         inventorySection.add(categoryCombo,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
         inventorySection.add(quantityLabel,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
         inventorySection.add(quantityField,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
         inventorySection.add(priceLabel,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 1;
+        mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
         inventorySection.add(priceField,mpCons);
 
         mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
+        inventorySection.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 1;
         mpCons.weighty = 0;
-        mpCons.gridy = 5;
+        mpCons.gridwidth = 2;
+        mpCons.gridy = 3;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0,0,0,0);
         mainSection.add(buttonBox,mpCons);
 
         mpCons.weightx = 1;
+        mpCons.gridwidth = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        buttonBox.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 1;
         buttonBox.add(cancelButton,mpCons);
 
         mpCons.weightx = 1;
@@ -321,6 +338,13 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
         mpCons.gridx++;
         mpCons.insets = new Insets(0, 50, 0, 0);
         buttonBox.add(addProductButton,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.gridwidth = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        buttonBox.add(Box.createGlue(),mpCons);
         //endregion
 
         refresh();
@@ -338,7 +362,7 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
             }
 
             public void focusLost(FocusEvent e) {
-                shortDescripPane.setBorder(new RoundedBorder(Color.black,10));
+                shortDescripPane.setBorder(new RoundedBorder(Color.decode("#CED4DA"),10));
             }}
         );
 
@@ -351,6 +375,74 @@ public class addProductDialog extends JFrame implements defaultPanelAccessories 
                 longDescripPane.setBorder(new RoundedBorder(Color.decode("#CED4DA"),10));
             }}
         );
+
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(productIdField.getText() != "" && productNameField.getText() != "" && shortDescripField.getText() != "" && categoryCombo.getSelectedItem().toString() != "Select a Category" && priceField.getText() != "" && quantityField.getText() != ""){
+                    Inventory product = null;
+                    String categoryName = categoryCombo.getSelectedItem().toString();
+                    String categoryId = "";
+                    switch(categoryName){
+                        case "Baked Goods":
+                            categoryId="BKY";
+                            break;
+                        case "Beverages":
+                            categoryId="BVG";
+                            break;
+                        case "Canned Goods":
+                            categoryId="CNG";
+                            break;
+                        case "Dairy":
+                            categoryId="DAI";
+                            break;
+                        case "Baking/Dry Goods":
+                            categoryId="DRY";
+                            break;
+                        case "Frozen Goods":
+                            categoryId="FZG";
+                            break;
+                        case "Household & Cleaning Supplies":
+                            categoryId="HSS";
+                            break;
+                        case "Meat":
+                            categoryId="MT";
+                            break;
+                        case "Other":
+                            categoryId="OTR";
+                            break;
+                        case "Produce":
+                            categoryId="PRD";
+                            break;
+                        case "Personal Care":
+                            categoryId="PSC";
+                            break;
+                        case "Pet Care":
+                            categoryId="PTC";
+                        case "Seafood":
+                            categoryId="SFD";
+                            break;
+                        case "Snacks":
+                            categoryId="SNK";
+                            break;
+                    }
+
+                    if(longDescripField.getText() != ""){
+                        product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(),Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
+                    }
+                    else{
+                        product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(), longDescripField.getText(), Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
+                    }
+                    //TODO: Check if entity already exists
+                    client.addEntity(product);
+                    prodPage.updateTable();
+                    dispose();
+                }
+                else{
+                    JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
 
     }

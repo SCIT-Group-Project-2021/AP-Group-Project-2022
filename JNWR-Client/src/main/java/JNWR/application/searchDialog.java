@@ -316,7 +316,7 @@ public class searchDialog extends JFrame implements defaultPanelAccessories {
                     ArrayList<InvoiceItem> invoiceItemArrayList = posPage.getInvoiceItemArrayList();
                     qty = Integer.parseInt(qtyTextField.getText());
 
-                    if(qty < Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
+                    if(qty <= Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
                         InvoiceItem newItem = new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty);
                         for(int i = 0; i < invoiceItemArrayList.size();i++){
                             if(invoiceItemArrayList.get(i).getProductCode().equals(newItem.getProductCode())){

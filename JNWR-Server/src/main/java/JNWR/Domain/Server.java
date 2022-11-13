@@ -307,6 +307,7 @@ public class Server {
                             return;
                         default:
                             logger.info("No Task Completed");
+                            sendAction("Task Failed");
                             break;
                     }
 

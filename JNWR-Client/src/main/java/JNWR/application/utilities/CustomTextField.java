@@ -1,5 +1,9 @@
 package JNWR.application.utilities;
 
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -13,9 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTarget;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
+
 
 public class CustomTextField extends JTextField {
 

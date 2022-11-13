@@ -44,6 +44,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         setLayout(new GridBagLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+
         Client client = new Client();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
@@ -62,11 +63,13 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         //region Side Bar
         JPanel sideBar = defaultPanelAccessories.createJPanel(0,50,720);
         sideBar.setVisible(false);
-        JPanel sideBartrigger = defaultPanelAccessories.createJPanel(0,25,720);
-
+        JPanel sideBartrigger = defaultPanelAccessories.createJPanel(0,40,720);
+        sideBartrigger.setBackground(Color.red);
         sideBartrigger.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (sideBar.isVisible()) {
+                    //sideBar.setVisible(false);
+                    //sideBartrigger.setVisible(true);
                 }else {
                     sideBar.setVisible(true);
                     sideBartrigger.setVisible(false);
@@ -74,13 +77,15 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
             }   
         });
 
+
+
         sideBar.addMouseListener(new java.awt.event.MouseAdapter() {               
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+           /* public void mouseExited(java.awt.event.MouseEvent evt) {
                 if (sideBar.isVisible()) {
                     sideBar.setVisible(false);
                     sideBartrigger.setVisible(true);
                 }
-            }
+            }*/
         });
         
         sideBar.setBackground(Color.decode("#212020"));
@@ -93,6 +98,7 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         mainPanel.setBackground(Color.decode("#f2f3f5"));
         card = new CardLayout();
         mainPanel.setLayout(card);
+        mainPanel.setBackground(Color.RED);
         //endregion
 
         //region Frame.Add
@@ -299,6 +305,15 @@ public class landingPage extends JFrame implements defaultPanelAccessories{
         mainPanel.add(staff,"staff");
         mainPanel.add(inventory,"inventory");
         mainPanel.add(pos,"pos");
+
+        mainPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (sideBar.isVisible()) {
+                    sideBar.setVisible(false);
+                    sideBartrigger.setVisible(true);
+                }
+            }
+        });
         refresh();
         pack();
 

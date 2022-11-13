@@ -1,6 +1,11 @@
 package JNWR.application.utilities;
 
+import Entity.DBEntity;
+import Entity.InvenCategory;
+import Entity.Inventory;
 import JNWR.ClientApplication;
+import JNWR.Domain.Client;
+import JNWR.application.prodPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,6 +15,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 
 import java.awt.event.MouseAdapter;
@@ -21,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.swing.JPanel;
@@ -365,7 +372,7 @@ public interface defaultPanelAccessories {
         Image img = new ImageIcon(src).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(img);
         JButton newJButton = new JButton(icon);
-        newJButton.setSize(w, h);
+        newJButton.setPreferredSize(new Dimension(w,h));
         newJButton.setVisible(true);
         //newJButton.setUI(new StyledButtonUI());
         newJButton.setContentAreaFilled(false);
@@ -469,6 +476,35 @@ public interface defaultPanelAccessories {
         // https://stackoverflow.com/questions/16046824/making-a-java-swing-frame-movable-and-setundecorated
     }
 
+    public static class JFilterButton extends JButton{
+
+        public JFilterButton(int w,int h,int imgW, int imgH, String src, String btnText){
+            Image img = new ImageIcon(src).getImage().getScaledInstance(imgW,imgH, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(img);
+            setIcon(icon);
+            setText(btnText);
+            setPreferredSize(new Dimension(w,h));
+            setVisible(true);
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            //setOpaque(false);
+            setBorder(null);
+            //setBorderPainted(false);
+            setHorizontalAlignment(SwingConstants.LEFT);
+            setFont(miniText);
+        }
+        public void filterInventoryTable(String filterValue, prodPage prodPage, Client client, DefaultTableModel headerModel){
+            InvenCategory category = (InvenCategory) client.findEntity("InvenCategory","name",filterValue);
+            String categoryId = category.getCategoryID();
+            ArrayList<DBEntity> list = client.getSpecificList("Inventory","categoryID",categoryId);
+            headerModel.setRowCount(0);
+            for (DBEntity entity : list) {
+                Inventory inven = (Inventory) entity;
+                headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+
+            }
+        }
+    }
 
 
 }

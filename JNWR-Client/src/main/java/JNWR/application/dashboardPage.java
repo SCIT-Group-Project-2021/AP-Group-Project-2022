@@ -22,7 +22,6 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
     dashboardPage(Client client) {
 
         this.client = client;
-
         RoundedBorder round = new RoundedBorder(25);
 
         //region GridBagConstraints
@@ -33,7 +32,6 @@ public class dashboardPage extends JPanel implements defaultPanelAccessories {
         //endregion
 
         //region Main Panel
-        setBackground(Color.RED);
         setLayout(new GridBagLayout());
         //endregion
 

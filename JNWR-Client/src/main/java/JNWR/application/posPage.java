@@ -214,7 +214,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         unitPriceLabel = new JLabel("$0.00");
         unitPriceLabel.setFont(heading2);
 
-        shortDescrip = new JLabel("This is a short description");
+        shortDescrip = new JLabel("[Short Description Section]");
         shortDescrip.setFont(medText);
         /*
         Image deleteImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-delete-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
