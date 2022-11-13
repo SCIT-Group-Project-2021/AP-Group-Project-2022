@@ -260,6 +260,22 @@ public class Client {
         }
         
     }
+    public void checkOutEntity(DBEntity entity) {
+
+        sendAction("checkOutEntity");
+
+        sendEntity(entity);
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        
+    }
+    
 
     public DBEntity findEntity(String Table,String IDType, String ID) {
         

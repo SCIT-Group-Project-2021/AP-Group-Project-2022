@@ -20,9 +20,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+  
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.draw.DashedLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
 public class posPage extends JPanel implements defaultPanelAccessories{
 
@@ -36,6 +50,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
     JButton addCustomer;
     JLabel subtotalAmt;
     JLabel discountLabel;
+    JLabel empName;
 
     JLabel totalAmt;
     float discountPercent = 0;
@@ -97,7 +112,7 @@ public class posPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         //region Log Out Label & Button
-        JLabel empName = new JLabel();
+        empName = new JLabel();
         empName.setText(defaultPanelAccessories.getCurrentUser());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
@@ -777,24 +792,26 @@ public class posPage extends JPanel implements defaultPanelAccessories{
                     LocalDate dateTime = LocalDate.now();
                     String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
                     if (invoiceCustomer != null) {
-                    
                         Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
+                        printInvoice(getInvoiceNum(),invoice,invoiceItemArrayList,dateString);
                         client.addEntity(invoice);
                         for (InvoiceItem checkoutItems : invoiceItemArrayList) {
                             checkoutItems.setInvoiceNum(currentInvoiceNum);
-                            client.addEntity(checkoutItems);   
-                        }
-                        
+                            client.checkOutEntity(checkoutItems);
+
+                        }     
                     } 
                     else {
                     //TODO: Login must set StaffID
                     
                         Invoice invoice = new Invoice(dateString,319219);
+                        printInvoice(getInvoiceNum(),invoice,invoiceItemArrayList,dateString);
                         client.addEntity(invoice);
                         for (InvoiceItem checkoutItems : invoiceItemArrayList) {
                             checkoutItems.setInvoiceNum(currentInvoiceNum);
-                            client.addEntity(checkoutItems);   
+                            client.checkOutEntity(checkoutItems);   
                         }
+                        
                     }
 
                 invoiceItemArrayList.clear();
@@ -916,20 +933,67 @@ public class posPage extends JPanel implements defaultPanelAccessories{
 
     }
 
-    public void printInvoice(int invoiceNum) {
+    public void printInvoice(int invoiceNum, Invoice invoice, ArrayList<InvoiceItem> invoiceItems, String date) {         
 
-        try {
-            File myObj = new File("invoice#"+invoiceNum + ".pdf");
-            if (myObj.createNewFile()) {
-              System.out.println("File created: " + myObj.getName());
-            } else {
-              System.out.println("File already exists.");
-            }
-            //File.writeString
-          } catch (IOException e) {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter("invoice#"+getInvoiceNum()+".pdf"))) {
+			Document doc = new Document(pdfDoc);
+            LineSeparator linebreak = new LineSeparator(new DashedLine());
+
+			Paragraph invoiceTitleP = new Paragraph();
+            invoiceTitleP.setTextAlignment(TextAlignment.CENTER);
+
+            Paragraph invoiceTotal = new Paragraph();
+            Paragraph invoiceThankYou = new Paragraph();
+            invoiceThankYou.setTextAlignment(TextAlignment.CENTER);
+
+            invoiceTitleP.add(new Text("Jan's Wholesale and Retail \n").setFontSize(24).setBold());
+            invoiceTitleP.add(new Text("Invoice #"+getInvoiceNum()+"\n").setFontSize(18));
+            invoiceTitleP.add(new Text("Cashed on: "+ date+"\n").setFontSize(18));
+            invoiceTitleP.add(new Text("Cashier: "+ empName.getText()+"\n"));
+            
+            Table invoiceItemTable = new Table(UnitValue.createPercentArray(new float[]{5,2,1,(float) 1.5}));
+            invoiceItemTable.setBorder(Border.NO_BORDER);
+            invoiceItemTable.setWidth(UnitValue.createPercentValue(100));
+
+            invoiceItemTable.addHeaderCell(new Cell().add(new Paragraph("Item Name")).setBorder(Border.NO_BORDER));
+            invoiceItemTable.addHeaderCell(new Cell().add(new Paragraph("Unit Price").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            invoiceItemTable.addHeaderCell(new Cell().add(new Paragraph("Quantity").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            invoiceItemTable.addHeaderCell(new Cell().add(new Paragraph("Price").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            
+			for (InvoiceItem checkoutItems : invoiceItemArrayList) {
+                Inventory inven = (Inventory) client.findEntity(new Inventory(), Integer.parseInt(checkoutItems.getProductCode()));
+			    invoiceItemTable.addCell(new Cell().add(new Paragraph(""+inven.getName())).setBorder(Border.NO_BORDER));
+                invoiceItemTable.addCell(new Cell().add(new Paragraph("$"+inven.getUnitPrice()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                invoiceItemTable.addCell(new Cell().add(new Paragraph(""+checkoutItems.getItemQuantity() + "x").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                invoiceItemTable.addCell(new Cell().add(new Paragraph("$"+(inven.getUnitPrice()*checkoutItems.getItemQuantity())).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+
+			}
+
+            invoiceTotal.add(new Text("\n Subtotal: "));
+            invoiceTotal.add(new Text(subtotalAmt.getText()+"\n").setTextAlignment(TextAlignment.RIGHT));
+            invoiceTotal.add(new Text("Tax: "));
+            invoiceTotal.add(new Text(taxAmt.getText()+"\n").setTextAlignment(TextAlignment.RIGHT));
+            invoiceTotal.add(new Text("Discount: "));
+            invoiceTotal.add(new Text(discountAmtLabel.getText()+"\n").setTextAlignment(TextAlignment.RIGHT));
+            invoiceTotal.add(new Text("Total: ").setFontSize(20).setBold());
+            invoiceTotal.add(new Text(totalAmt.getText()).setFontSize(20).setBold().setTextAlignment(TextAlignment.RIGHT)); 
+            
+            invoiceThankYou.add(new Text("Thank You").setFontSize(20).setBold());
+            
+            doc.add(invoiceTitleP);
+            doc.add(linebreak);
+			doc.add(invoiceItemTable);
+            doc.add(linebreak);
+            doc.add(invoiceTotal);
+            doc.add(linebreak);
+            doc.add(invoiceThankYou);
+            doc.add(linebreak);
+		} 
+            
+        catch (IOException e) {
             logger.error("An error occurred.");
             logger.error(e.toString());
-          }
+        }
 
         String.format("%20s %20s \r\n", "column 1", "column 2");
         

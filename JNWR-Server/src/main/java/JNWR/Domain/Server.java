@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -123,6 +121,7 @@ public class Server {
                     logger.info("Waiting For Action");
                     
                     action = (String) objIs.readObject();
+                    logger.info(action);
 
                     DBEntity dbEntity = null;
 
@@ -142,6 +141,28 @@ public class Server {
                                 logger.error(e.toString());    
                             }
                             
+
+                            break;
+                        case "checkOutEntity":
+
+                            logger.info("Checking Entity");
+
+                            try {
+                                
+                                dbEntity = (DBEntity)objIs.readObject();
+
+                                addEntity(dbEntity);
+                                InvoiceItem checkoutItem = (InvoiceItem)dbEntity;
+                                Inventory itemStock = (Inventory)findEntity("Inventory","productCode",checkoutItem.getProductCode());
+                                itemStock.setStock(itemStock.getStock() - checkoutItem.getItemQuantity());
+                                dbEntity = itemStock;
+                                logger.info(itemStock.getProductCode());
+                                alterEntity(Integer.parseInt(itemStock.getProductCode()), dbEntity);
+                                sendAction("Task Completed");
+
+                            } catch (ConnectException e) {
+                                logger.error(e.toString());    
+                            }
                             
                             break;
                         case "findLastEntity":
@@ -430,13 +451,11 @@ public class Server {
     
                 transaction.begin();
     
-                DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
+                DBEntity dbEntity = em.find(Entitiy.getClass(), String.valueOf(ID));
     
                 em.merge(Entitiy);
             
                 transaction.commit();
-    
-                sendAction("Task Completed");
                 
             } catch (EntityNotFoundException e) {
                 // TODO: handle exception

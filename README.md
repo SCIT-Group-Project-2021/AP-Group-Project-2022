@@ -40,7 +40,7 @@ project, within seven (7) days of this document being distributed.
 
 - [ ]  Application Document
     - [x]  User Manuals
-    - [ ]  UML Classes
+    - [x]  UML Classes
     - [x]  Database ER Diagrams
     - [ ]  Comments, Programming Conventions and documentation
 - [ ]  Functioning Software Solution
@@ -50,7 +50,7 @@ project, within seven (7) days of this document being distributed.
     - [ ]  Exception Handling & Logging, User & data input validation
     - [x]  Classes
     - [x]  Interfaces
-    - [ ]  Inheritance and Polymorphism
+    - [x]  Inheritance and Polymorphism
     - [ ]  Customer Membership/Record Management (C.R.U.D.)
         - [x]  Member discount correctly applied
     - [ ]  Staff data/record management(C.R.U.D.)
@@ -58,8 +58,8 @@ project, within seven (7) days of this document being distributed.
         - [x]  Management dashboard
         - [ ]  CRUD
         - [x]  Real-time inventory update
-    - [ ]  Checkout
-        - [ ]  Invoice generation (printable)
+    - [x]  Checkout
+        - [x]  Invoice generation (printable)
         - [x]  Real-time inventory update
     - [ ]  Sales report
         - [ ]  Pull product data for specific period (Printable)
