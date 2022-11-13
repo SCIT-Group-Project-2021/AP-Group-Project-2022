@@ -54,9 +54,9 @@ project, within seven (7) days of this document being distributed.
     - [ ]  Customer Membership/Record Management (C.R.U.D.)
         - [x]  Member discount correctly applied
     - [ ]  Staff data/record management(C.R.U.D.)
-    - [ ]  Inventory management
+    - [x]  Inventory management
         - [x]  Management dashboard
-        - [ ]  CRUD
+        - [x]  CRUD
         - [x]  Real-time inventory update
     - [x]  Checkout
         - [x]  Invoice generation (printable)
