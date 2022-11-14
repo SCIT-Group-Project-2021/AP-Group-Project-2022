@@ -23,6 +23,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ProdPage extends JPanel implements defaultPanelAccessories{
@@ -38,6 +39,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
     JComboBox<String> filter;
     JButton addProductButton;
     JButton addNewCategory;
+    JTable prodTable;
     JFilterButton allGoodsButton;
     JFilterButton bakedGoodsButton;
     JFilterButton beverageButton;
@@ -57,8 +59,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
 
     DefaultTableModel headerModel = new DefaultTableModel();
+    Class[] types = {String.class, String.class, String.class,String.class,Integer.class, Double.class, ImageIcon.class};
         
-    String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
+    String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price", "Options"};
 
     ProdPage(Client client, Staff employee) {
 
@@ -170,6 +173,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         JLabel tableHeading = new JLabel("Products");
         tableHeading.setFont(heading2);
 
+        JButton editButton = defaultPanelAccessories.iconButton(23,23,"src/main/resources/JWR-Icons/icons8-pencil-100.png");
+        JButton deleteButton = defaultPanelAccessories.iconButton(33,33,"src/main/resources/JWR-Icons/icons8-remove-100.png");
+
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
         ImageIcon searchIcon = new ImageIcon(searchImage);
         searchButton = defaultPanelAccessories.defaultButton();
@@ -193,25 +199,37 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 2;
+        mpCons.gridx++;
         searchBar.add(Box.createGlue(),mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 3;
+        mpCons.gridx++;
+        searchBar.add(editButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        searchBar.add(deleteButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
         searchBar.add(filter,mpCons);
 
         mpCons.weightx = .5;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 4;
+        mpCons.gridx++;
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 5;
+        mpCons.gridx++;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -222,8 +240,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         //region Customer Table Bar
         
         headerModel.setColumnIdentifiers(headers);
-
-        JTable prodTable = new JTable(headerModel) {
+        prodTable = new JTable(headerModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
@@ -498,29 +515,34 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                     searchBox.setText("Search...");
                 }
             }});
+        Image image = new ImageIcon("src/main/resources/JWR-Icons/icons8-remove-100.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH);
+        ImageIcon removeIcon = new ImageIcon(image);
+
+
 
         searchButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String searchId;
-                    String searchFilter = String.valueOf(filter.getSelectedItem());
-                    searchId = searchBox.getText();
-    
-                    DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
-                    model.setRowCount(0);
-                    if(searchId.equals("Search...")){
-                        updateTable();
-                    }
-                    else{
-                        list = client.getSpecificList("Inventory",searchFilter,searchId);
-                        for (DBEntity entity : list) {
-                            inven = (Inventory) entity;
-                            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
-                        }
-                    }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchId;
+                String searchFilter = String.valueOf(filter.getSelectedItem());
+                searchId = searchBox.getText();
 
+                DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+                model.setRowCount(0);
+                if(searchId.equals("Search...")){
+                    updateTable();
                 }
-            });
+                else{
+                    list = client.getSpecificList("Inventory",searchFilter,searchId);
+                    for (DBEntity entity : list) {
+                        inven = (Inventory) entity;
+                        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+                    }
+                }
+
+            }
+        });
+
         addProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -528,8 +550,16 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
             }
         });
+
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
         //endregion
 
+        //region filter buttons
         allGoodsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -624,6 +654,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 bakedGoodsButton.filterInventoryTable(otherButton.getText(),prodPage,client,headerModel);
             }
         });
+<<<<<<< Updated upstream
 
         logOut.addActionListener(new ActionListener() {
             @Override
@@ -632,6 +663,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
+=======
+        //endregion
+>>>>>>> Stashed changes
         updateTable();
 
         repaint();
