@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import Entity.DBEntity;
+import Entity.InvenCategory;
 import Entity.Inventory;
 import Entity.Staff;
 import JNWR.Domain.Client;
@@ -713,7 +714,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
             inven = (Inventory) entity;
 
-            headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+            InvenCategory invenCat = (InvenCategory)client.findEntity("InvenCategory", "CategoryID", inven.getCategoryID());
+
+            headerModel.addRow(new Object[] {inven.getProductCode(),invenCat.getName(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
 
         }
 
