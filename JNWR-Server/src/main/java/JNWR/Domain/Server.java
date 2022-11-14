@@ -158,7 +158,7 @@ public class Server {
                                 itemStock.setStock(itemStock.getStock() - checkoutItem.getItemQuantity());
                                 dbEntity = itemStock;
                                 logger.info(itemStock.getProductCode());
-                                alterEntity(Integer.parseInt(itemStock.getProductCode()), dbEntity);
+                                alterEntity(itemStock.getProductCode(), dbEntity);
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
