@@ -143,7 +143,7 @@ public class InvoiceDialog extends JFrame implements defaultPanelAccessories {
         for (DBEntity entity : list) {
 
             InvoiceItem invoiceInven = (InvoiceItem) entity;
-            Inventory inven = (Inventory) client.findEntity(new Inventory(), Integer.parseInt(invoiceInven.getProductCode()));
+            Inventory inven = (Inventory) client.findEntity(new Inventory(), invoiceInven.getProductCode());
             
             headerModel.addRow(new Object[] {invoiceInven.getProductCode(),inven.getName(),invoiceInven.getItemQuantity(),inven.getUnitPrice()*invoiceInven.getItemQuantity()});
 

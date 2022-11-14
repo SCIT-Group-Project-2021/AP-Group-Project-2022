@@ -60,7 +60,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
 
     DefaultTableModel headerModel = new DefaultTableModel();
-    Class[] types = {String.class, String.class, String.class,String.class,Integer.class, Double.class, ImageIcon.class};
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price", "Long Description"};
 
@@ -535,9 +534,11 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 }
                 else{
                     list = client.getSpecificList("Inventory",searchFilter,searchId);
+
                     for (DBEntity entity : list) {
                         inven = (Inventory) entity;
-                        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice(),inven.getLongDescrip()});
+                        InvenCategory invenCat = (InvenCategory)client.findEntity("InvenCategory", "CategoryID", inven.getCategoryID());
+                        headerModel.addRow(new Object[] {inven.getProductCode(),invenCat.getName(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice(),inven.getLongDescrip()});
                     }
                 }
 
@@ -561,7 +562,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 else{
                     DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
                     int selectedRowIndex = prodTable.getSelectedRow();
-                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,1).toString());
+                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,6).toString());
 
                     new EditProductDialog(client, prodPage, item);
                     SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
@@ -716,7 +717,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
             InvenCategory invenCat = (InvenCategory)client.findEntity("InvenCategory", "CategoryID", inven.getCategoryID());
 
-            headerModel.addRow(new Object[] {inven.getProductCode(),invenCat.getName(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+            headerModel.addRow(new Object[] {inven.getProductCode(),invenCat.getName(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice(),inven.getLongDescrip()});
 
         }
 

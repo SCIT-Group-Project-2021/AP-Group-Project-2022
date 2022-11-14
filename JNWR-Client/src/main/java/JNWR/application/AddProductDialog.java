@@ -2,6 +2,7 @@ package JNWR.application;
 
 import Entity.Inventory;
 import JNWR.Domain.Client;
+import JNWR.application.customException.InvalidFieldInputException;
 import JNWR.application.utilities.*;
 
 import javax.swing.*;
@@ -381,71 +382,88 @@ public class AddProductDialog extends JFrame implements defaultPanelAccessories 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(productIdField.getText() != "" && productNameField.getText() != "" && shortDescripField.getText() != "" && categoryCombo.getSelectedItem().toString() != "Select a Category" && priceField.getText() != "" && quantityField.getText() != ""){
-                    Inventory product = null;
-                    String categoryName = categoryCombo.getSelectedItem().toString();
-                    String categoryId = "";
-                    switch(categoryName){
-                        case "Baked Goods":
-                            categoryId="BKY";
-                            break;
-                        case "Beverages":
-                            categoryId="BVG";
-                            break;
-                        case "Canned Goods":
-                            categoryId="CNG";
-                            break;
-                        case "Dairy":
-                            categoryId="DAI";
-                            break;
-                        case "Baking/Dry Goods":
-                            categoryId="DRY";
-                            break;
-                        case "Frozen Goods":
-                            categoryId="FZG";
-                            break;
-                        case "Household & Cleaning Supplies":
-                            categoryId="HSS";
-                            break;
-                        case "Meat":
-                            categoryId="MT";
-                            break;
-                        case "Other":
-                            categoryId="OTR";
-                            break;
-                        case "Produce":
-                            categoryId="PRD";
-                            break;
-                        case "Personal Care":
-                            categoryId="PSC";
-                            break;
-                        case "Pet Care":
-                            categoryId="PTC";
-                        case "Seafood":
-                            categoryId="SFD";
-                            break;
-                        case "Snacks":
-                            categoryId="SNK";
-                            break;
+                    try{
+                        Inventory product = null;
+                        String categoryName = categoryCombo.getSelectedItem().toString();
+                        String categoryId = "";
+                        switch(categoryName){
+                            case "Baked Goods":
+                                categoryId="BKY";
+                                break;
+                            case "Beverages":
+                                categoryId="BVG";
+                                break;
+                            case "Canned Goods":
+                                categoryId="CNG";
+                                break;
+                            case "Dairy":
+                                categoryId="DAI";
+                                break;
+                            case "Baking/Dry Goods":
+                                categoryId="DRY";
+                                break;
+                            case "Frozen Goods":
+                                categoryId="FZG";
+                                break;
+                            case "Household & Cleaning Supplies":
+                                categoryId="HSS";
+                                break;
+                            case "Meat":
+                                categoryId="MT";
+                                break;
+                            case "Other":
+                                categoryId="OTR";
+                                break;
+                            case "Produce":
+                                categoryId="PRD";
+                                break;
+                            case "Personal Care":
+                                categoryId="PSC";
+                                break;
+                            case "Pet Care":
+                                categoryId="PTC";
+                            case "Seafood":
+                                categoryId="SFD";
+                                break;
+                            case "Snacks":
+                                categoryId="SNK";
+                                break;
+                        }
+                        //Using regex to check if the text entered is valid
+                        if(!productIdField.getText().matches("^(\\d{10}|\\d{12})$")){
+                            throw new InvalidFieldInputException("Product Id must be the product barcode. Must only be a 12 digit number");
+                        }
+
+                        if(!quantityField.getText().matches("[0-9]+")){
+                            throw new NumberFormatException("Quantity field should only include numbers");
+                        }
+
+                        if(!priceField.getText().matches("(([1-9]\\d{0,2}(,\\d{3})*)|(([1-9]\\d*)?\\d))(\\.\\d\\d)?$")){
+                            throw new InvalidFieldInputException("Please enter a valid unit price");
+                        }
+
+                        product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(), longDescripField.getText(), Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
+
+
+                        Inventory check = (Inventory) client.findEntity(product,product.getProductCode());
+                        if(check == null){
+                            client.addEntity(product);
+                            prodPage.updateTable();
+                            JOptionPane.showMessageDialog(new JFrame(), "New product added successfully!");
+                            SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
+                            dispose();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(new JFrame(),"Product code already exits","Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    catch(NumberFormatException ex){
+
+                    } catch (InvalidFieldInputException ex) {
+                        JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                        logger.error(ex.toString());
                     }
 
-                    if(longDescripField.getText() != ""){
-                        product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(),Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
-                    }
-                    else{
-                        product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(), longDescripField.getText(), Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
-                    }
-                    //TODO: Check if entity already exists
-                    Inventory check = (Inventory) client.findEntity(product,product.getProductCode());
-                    if(check == null){
-                        client.addEntity(product);
-                        prodPage.updateTable();
-                        JOptionPane.showMessageDialog(new JFrame(), "New product added successfully!");
-                        SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
-                        dispose();
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(new JFrame(),"Product code already exits","Cannot create new product", JOptionPane.ERROR_MESSAGE);
-                    }
 
                 }
                 else{

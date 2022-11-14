@@ -241,8 +241,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         rightSection.setLayout(new GridBagLayout());
         rightSection.setBackground(Color.decode("#292c2d"));
 
-        //TODO:Get based on product selected (Get object with info and use this.get[attribute])
-        //TODO: Create an array with sources and link category id to array
+        // Array of category icons
         ImageIcon[] categoryIconArray = new ImageIcon[14];
         categoryIconArray[0] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-croissant-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
         categoryIconArray[1] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cola-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
@@ -265,6 +264,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         selectedItemName = new JLabel(getItemName());
         selectedItemName.setFont(heading1);
+        selectedItemName.setPreferredSize(new Dimension(450,40));
         JLabel priceLabel = new JLabel("Price ea.");
         priceLabel.setFont(heading3);
         unitPriceLabel = new JLabel("$0.00");
@@ -757,6 +757,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                     qty = selectedItem.getItemQuantity();
                     ImageIcon categoryIcon = null;
 
+                    //When item info panel is changed, the item category will be checked and the associated category icon will be shown
                     switch(inven.getCategoryID()){
                         case "BKY":
                             categoryIcon = categoryIconArray[0];
