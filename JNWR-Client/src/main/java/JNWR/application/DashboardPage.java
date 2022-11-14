@@ -347,6 +347,16 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
                 System.exit(0);
             }
         });
+       clockOutButton.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to clock out?", "Clock Out", JOptionPane.YES_NO_OPTION,
+                       JOptionPane.QUESTION_MESSAGE);
+               if(result == JOptionPane.YES_OPTION){
+                   System.exit(0);
+               }
+           }
+       });
     
     }
 
