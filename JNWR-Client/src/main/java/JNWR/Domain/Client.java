@@ -337,13 +337,8 @@ public class Client {
 
     }
 
-<<<<<<< Updated upstream
-    public void alterEntity(DBEntity entity,  Integer ID) {
-        //Sends the action to the Server
-=======
     public void alterEntity(DBEntity entity, Integer ID) {
         //Calls the get list function
->>>>>>> Stashed changes
         sendAction("alterEntity");
         sendInteger(ID);
         sendEntity(entity);
