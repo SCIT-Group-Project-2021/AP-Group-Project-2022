@@ -19,6 +19,7 @@ import javax.swing.table.TableRowSorter;
 import Entity.Inventory;
 import Entity.Staff;
 import Entity.DBEntity;
+import Entity.Department;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -441,7 +442,9 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
 
             staff = (Staff) list.get(i);
 
-            headerModel.addRow(new Object[] {staff.getIdNum(),staff.getfName(),staff.getlName(),staff.getPhoneNum(),staff.getEmployeeType(),staff.getDepartmentCode()});
+            Department department = (Department)client.findEntity("Department", "departmentCode", staff.getDepartmentCode());
+
+            headerModel.addRow(new Object[] {staff.getIdNum(),staff.getfName(),staff.getlName(),staff.getPhoneNum(),staff.getEmployeeType(),department.getName()});
         
         }
         

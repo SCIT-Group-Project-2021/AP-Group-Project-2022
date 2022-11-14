@@ -150,19 +150,7 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
         departmentCombo = new CustomRoundComboBox();
         departmentCombo.sendFont(miniText);
         departmentCombo.setModel(new javax.swing.DefaultComboBoxModel(department));
-        String departmentName;
-        switch(staff.getDepartmentCode()){
-            case "ACS":
-                departmentCombo.setSelectedItem("Accounting and Sales");
-            break;
-            case "INV":
-                departmentCombo.setSelectedItem("Inventory");
-                break;
-            case "MGT":
-                departmentCombo.setSelectedItem("Management");
-                break;
-        }
-
+        departmentCombo.setSelectedItem(staff.getDepartmentCode());
 
         //membershipDateField.setFont(miniText);
 
