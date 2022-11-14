@@ -37,6 +37,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
     Client client;
     Staff employee;
     CustPage custPage = this;
+    JTable customerTable;
 
     ArrayList<DBEntity> list; 
     Customer cust;
@@ -199,7 +200,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         
         headerModel.setColumnIdentifiers(headers);
 
-        JTable customerTable = new JTable(headerModel) {
+        customerTable = new JTable(headerModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
@@ -454,7 +455,8 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
 
 
     public void updateTable() {
-
+        DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+        model.setRowCount(0);
         list = client.getList("Customer");
 
         for (int i = 0; i < list.size(); i++) {
