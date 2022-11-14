@@ -654,7 +654,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 bakedGoodsButton.filterInventoryTable(otherButton.getText(),prodPage,client,headerModel);
             }
         });
-<<<<<<< Updated upstream
 
         logOut.addActionListener(new ActionListener() {
             @Override
@@ -663,9 +662,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
-=======
+
         //endregion
->>>>>>> Stashed changes
+
         updateTable();
 
         repaint();
