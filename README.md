@@ -47,13 +47,13 @@ project, within seven (7) days of this document being distributed.
     - [ ]  Graphical User Interface
     - [x]  Client/Server Networking Model
     - [x]  Database Connectivity
-    - [ ]  Exception Handling & Logging, User & data input validation
+    - [x]  Exception Handling & Logging, User & data input validation
     - [x]  Classes
     - [x]  Interfaces
     - [x]  Inheritance and Polymorphism
-    - [ ]  Customer Membership/Record Management (C.R.U.D.)
+    - [x]  Customer Membership/Record Management (C.R.U.D.)
         - [x]  Member discount correctly applied
-    - [ ]  Staff data/record management(C.R.U.D.)
+    - [x]  Staff data/record management(C.R.U.D.)
     - [x]  Inventory management
         - [x]  Management dashboard
         - [x]  CRUD
