@@ -67,6 +67,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
     Integer currentInvoiceNum;
 
     Client client;
+    Staff employee;
 
     public Customer getInvoiceCustomer() {
         return invoiceCustomer;
@@ -89,9 +90,10 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
     }
     JLabel invoiceNum;
 
-    public PosPage(Client client) {
+    public PosPage(Client client, Staff employee) {
 
         this.client = client;
+        this.employee = employee;
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -115,7 +117,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName()+employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -864,6 +866,13 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                 invoiceNum.setText("Invoice #" + Integer.toString(currentInvoiceNum));
                 updateCustomer(invoiceCustomer);
         
+            }
+        });
+
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 

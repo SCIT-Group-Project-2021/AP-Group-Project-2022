@@ -15,6 +15,7 @@ import javax.swing.table.*;
 
 import Entity.DBEntity;
 import Entity.Inventory;
+import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 public class ProdPage extends JPanel implements defaultPanelAccessories{
 
     Client client;
+    Staff employee;
 
     ArrayList<DBEntity> list; 
     Inventory inven;
@@ -58,9 +60,10 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         
     String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price"};
 
-    ProdPage(Client client) {
+    ProdPage(Client client, Staff employee) {
 
         this.client = client;
+        this.employee = employee;
         ProdPage prodPage = this;
 
 
@@ -109,7 +112,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName() + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -619,6 +622,13 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 bakedGoodsButton.filterInventoryTable(otherButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 

@@ -18,6 +18,7 @@ import javax.swing.table.TableRowSorter;
 
 import Entity.Customer;
 import Entity.DBEntity;
+import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -34,6 +35,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
     String headers[] = { "ID#", "First Name", "Last Name", "DOB", "Telephone Number", "Email", "Date of Membership", "Expiry Date", "Options"};
 
     Client client;
+    Staff employee;
     CustPage custPage = this;
 
     ArrayList<DBEntity> list; 
@@ -46,8 +48,8 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
 
     JButton addNewCustomerButton;
 
-    CustPage(Client client) {
-
+    CustPage(Client client,Staff employee) {
+        this.employee = employee;
         this.client = client;
 
         //region GridBagConstraints
@@ -94,7 +96,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName() + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -385,6 +387,13 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
         //endregion
 
         updateTable();
@@ -393,6 +402,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         setSize(getSize());
 
     }
+
 
     public void updateTable() {
 
@@ -407,5 +417,6 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         }
         
     }
+    
 
 }

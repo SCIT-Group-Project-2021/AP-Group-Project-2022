@@ -35,6 +35,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
     String headers[] = { "ID#", "First Name", "Last Name", "Telephone Number", "Employee Type", "Department Code"};
 
     Client client;
+    Staff employee;
 
     ArrayList<DBEntity> list; 
     Staff staff;
@@ -45,9 +46,10 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
     JComboBox<String> filter;
     String filterOptions[] = { "idNum", "fName", "lName","employeeType","departmentCode"};
 
-    StaffPage(Client client) {
+    StaffPage(Client client, Staff employee) {
 
         this.client = client;
+        this.employee = employee;
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -93,7 +95,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName() + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -378,6 +380,13 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
             public void actionPerformed(ActionEvent e) {
                 new AddStaffDialog(client, staffPage);
                 SwingUtilities.getWindowAncestor(staffPage).setEnabled(false);
+            }
+        });
+
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 

@@ -147,13 +147,7 @@ public class LoginPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-        });
-
-        /*
-        }*/
-        
-
-        
+        });   
 
     }
 

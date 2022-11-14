@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -17,11 +18,14 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         
     String headers[] = { "Time Management", "Clocked Users"};
 
+    Staff employee;
     Client client;
 
-    DashboardPage(Client client) {
+    DashboardPage(Client client,Staff employee) {
 
         this.client = client;
+        this.employee = employee;
+        
         RoundedBorder round = new RoundedBorder(25);
 
         //region GridBagConstraints
@@ -70,7 +74,7 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName() + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -195,7 +199,7 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
-        topBar.add(logOut,mpCons);        
+        topBar.add(logOut,mpCons);    
 
         //region DateTime.Add
         mpCons.weightx = 0;
@@ -338,6 +342,14 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
                     }
                 }
         );
+
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     
     }
+
 }

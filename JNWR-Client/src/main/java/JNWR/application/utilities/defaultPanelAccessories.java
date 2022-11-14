@@ -5,6 +5,7 @@ import Entity.InvenCategory;
 import Entity.Inventory;
 import JNWR.ClientApplication;
 import JNWR.Domain.Client;
+import JNWR.application.LandingPage;
 import JNWR.application.ProdPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -340,11 +341,6 @@ public interface defaultPanelAccessories {
         dateString = getDay().toString() + " " + getMonth().toString();
          */
         return dateString;
-    }
-
-    public static String getCurrentUser() {
-        String empName = "Cassie C.";
-        return empName;
     }
 
     public static JButton iconButton(int w,int h, String src) {

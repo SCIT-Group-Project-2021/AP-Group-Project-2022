@@ -20,6 +20,7 @@ import javax.swing.table.TableRowSorter;
 
 import Entity.DBEntity;
 import Entity.Invoice;
+import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -37,6 +38,7 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
     String invoiceItemHeaders[] = { "ID#", "First Name", "Last Name", "Telephone Number", "Employee Type", "Department Code"};
 
     Client client;
+    Staff employee;
 
     ArrayList<DBEntity> list; 
     Invoice invoice;
@@ -48,9 +50,10 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
     JComboBox<String> filter;
     String filterOptions[] = { "invoiceNum", "billingDate", "customerID","staffID"};
 
-    ReportPage(Client client) {
+    ReportPage(Client client, Staff employee) {
 
         this.client = client;
+        this.employee = employee;
 
         //region GridBagConstraints
         GridBagConstraints mpCons = new GridBagConstraints();
@@ -96,7 +99,7 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(defaultPanelAccessories.getCurrentUser());
+        empName.setText(employee.getfName() + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -361,6 +364,13 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
                     int invoiceNum = (int)invoiceTable.getValueAt(selectedRowIndex, 0);
                     new InvoiceDialog(client,invoiceNum,prodPage);
                     SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);;
+                }
+            });
+
+            logOut.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
                 }
             });
         //endregion

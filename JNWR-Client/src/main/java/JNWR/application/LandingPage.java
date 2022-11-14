@@ -22,6 +22,8 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
     public JPanel inventory;
     public JPanel pos;
 
+    Staff employee;
+
     public CardLayout card;
 
     Client client;
@@ -39,7 +41,10 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         return outfitBold;
     }
 
-    public LandingPage(Staff staffUser,Client client) {
+    public LandingPage(Staff currenStaff,Client client) {
+
+        setEmployee(currenStaff);
+        logger.info(employee);
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -85,17 +90,6 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
                     sideBartrigger.setVisible(false);
                 }
             }   
-        });
-
-
-
-        sideBar.addMouseListener(new java.awt.event.MouseAdapter() {               
-           /* public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (sideBar.isVisible()) {
-                    sideBar.setVisible(false);
-                    sideBartrigger.setVisible(true);
-                }
-            }*/
         });
         
         sideBar.setBackground(Color.decode("#212020"));
@@ -232,12 +226,12 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
 
         //endregion
 
-        dashBoard = new DashboardPage(client);
-        customer = new CustPage(client);
-        report = new ReportPage(client);
-        staff = new StaffPage(client);
-        inventory = new ProdPage(client);
-        pos = new PosPage(client);
+        dashBoard = new DashboardPage(client,employee);
+        customer = new CustPage(client,employee);
+        report = new ReportPage(client,employee);
+        staff = new StaffPage(client,employee);
+        inventory = new ProdPage(client,employee);
+        pos = new PosPage(client,employee);
 
 
         //region Buttons
@@ -340,6 +334,16 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
        
         card.show(mainPanel, replacPanel);
         //refresh();
+        
+    }
+
+    public void setEmployee(Staff employee) {
+        this.employee = employee;
+    }
+
+    public Staff getEmployee() {
+
+        return this.employee;
         
     }
 
