@@ -440,11 +440,12 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
 
                         client.addEntity(cust);
                         custPage.updateTable();
+                        JOptionPane.showMessageDialog(new JFrame(), "New customer added successfully!");
                         SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
                         dispose();
                     }
                     else{
-                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new customer", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 catch(FutureDateException ex){

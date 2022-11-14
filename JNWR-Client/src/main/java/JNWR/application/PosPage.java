@@ -54,6 +54,8 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
     JLabel discountLabel;
     JLabel empName;
 
+    JLabel empInvoiceName;
+
     JLabel totalAmt;
     float discountPercent = 0;
     Customer invoiceCustomer;
@@ -117,7 +119,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
-
+        empInvoiceName = new JLabel();
         //endregion
 
         JPanel mainSection = new JPanel();
@@ -487,9 +489,9 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 1;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0, 25, 0, 25);
-        empName.setFont(heading3);
-        empName.setForeground(Color.gray);
-        rightSection.add(empName, mpCons);
+        empInvoiceName.setFont(heading3);
+        empInvoiceName.setForeground(Color.gray);
+        rightSection.add(empInvoiceName, mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;

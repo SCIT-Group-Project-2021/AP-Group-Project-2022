@@ -1,18 +1,10 @@
 package JNWR.application;
 
-import Entity.Customer;
-<<<<<<< Updated upstream
-=======
-import Entity.Inventory;
-import Entity.Invoice;
 import Entity.Staff;
->>>>>>> Stashed changes
 import JNWR.Domain.Client;
-import JNWR.application.customException.FutureDateException;
+import JNWR.application.customException.InvalidFieldInputException;
+import JNWR.application.customException.InvalidIdNumberException;
 import JNWR.application.utilities.*;
-import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
-import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -20,18 +12,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 
 public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
     Client client;
     int frameWidth = 1100;
-    int frameHeight = 720;
+    int frameHeight = 600;
 
     JLabel headingLabel;
     JLabel descriptionHeading;
@@ -203,12 +189,15 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
         mpCons.insets = new Insets(0,0,0,0);
         add(mainSection,mpCons);
 
+        mpCons.gridwidth = 2;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0,0,10,0);
         mainSection.add(headingLabel,mpCons);
 
+        mpCons.gridwidth = 1;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 1;
@@ -371,53 +360,63 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
 
 
 
-/*
+
         addEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    if(firstNameField.getText() != "" && lastNameField.getText() != "" && telephoneNumberField.getText() != "" && membershipDateField.getDate() != null){
-                        Customer cust = null;
-
-                        Date enteredDate = null;
-                        enteredDate = membershipDateField.getDate();
-                        Date currentDate = new Date();
-                        if(enteredDate.after(currentDate)){
-                            throw new FutureDateException("Membership date cannot be after today.");
+                if(firstNameField.getText() != "" && lastNameField.getText() != "" && !telephoneNumberField.getText().equals("1-   -   -    ") && staffIdField.getText() !="" && departmentCombo.getSelectedIndex() != 0 && empTypeCombo.getSelectedIndex() != 0){
+                    try{
+                        int idNum = Integer.parseInt(staffIdField.getText());
+                        if(idNum < 999 || idNum > 9999){
+                            throw new InvalidIdNumberException("Staff Id number must be between 1000 and 9999");
                         }
+                        if(!firstNameField.getText().matches("^[a-zA-Z]+$") || !lastNameField.getText().matches("^[a-zA-Z]+$")){
+                            throw new InvalidFieldInputException("Staff member's name should only contain letters");
+                        }
+
+                        Staff employee = null;
                         String telephoneNumber;
-                        telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
-                        String email = "";
-                        String membershipStartDate = dateFormat.format(membershipDateField.getDate());
-                        String dob = null;
-
-                        if(dobDateField.getDate() != null){
-                            enteredDate = dobDateField.getDate();
-                            if(enteredDate.after(currentDate)){
-                                throw new FutureDateException("Date of birth cannot be after today.");
-                            }
-                            else{
-                                dob = dateFormat.format(dobDateField.getDate());
-                            }
+                        String departmentName = departmentCombo.getSelectedItem().toString();
+                        String departmentID = "";
+                        switch(departmentName) {
+                            case "Accounting and Sales":
+                                departmentID = "ACS";
+                                break;
+                            case "Inventory":
+                                departmentID = "INV";
+                                break;
+                            case "Management":
+                                departmentID = "MGT";
+                                break;
                         }
 
-                        cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
+                        telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
 
-                        client.addEntity(cust);
+                        employee = new Staff(Integer.parseInt(staffIdField.getText()), firstNameField.getText(),lastNameField.getText(),telephoneNumber,empTypeCombo.getSelectedItem().toString(), departmentID);
+
+                        client.addEntity(employee);
                         staffPage.updateTable();
+                        JOptionPane.showMessageDialog(new JFrame(), "New staff member added successfully!");
                         SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                         dispose();
                     }
-                    else{
-                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                    catch(NumberFormatException ex){
+                        JOptionPane.showMessageDialog(new JFrame(),"Id Number should only include numbers","Cannot create new staff member", JOptionPane.ERROR_MESSAGE);
+                        logger.error(ex.toString());
+                    } catch (InvalidIdNumberException ex) {
+                        JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Cannot create new staff member", JOptionPane.ERROR_MESSAGE);
+                        logger.error(ex.toString());
+                    } catch (InvalidFieldInputException ex) {
+                        JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Cannot create new staff member", JOptionPane.ERROR_MESSAGE);
+                        logger.warn(ex.toString());
                     }
                 }
-                catch(FutureDateException ex){
-                    JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Date in the Future Error", JOptionPane.ERROR_MESSAGE);
-                    logger.error(ex.toString());
+                else{
+                    JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new staff member", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
-        });*/
+        });
 
 
     }

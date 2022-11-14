@@ -11,7 +11,6 @@ import javax.swing.*;
 
 import Entity.Staff;
 import JNWR.Domain.Client;
-import JNWR.application.utilities.CustomRoundTextField;
 import JNWR.application.utilities.CustomTextField;
 import JNWR.application.utilities.defaultPanelAccessories;
 import JNWR.application.utilities.defaultPanelAccessories.FrameDragListener;
@@ -20,12 +19,12 @@ import JNWR.application.utilities.defaultPanelAccessories.PanelRound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class loginPage extends JFrame{
+public class LoginPage extends JFrame{
 
     private static final Logger logger = LogManager.getLogger(Client.class);
 
 
-    public loginPage () {
+    public LoginPage() {
 
         //region Base Frame Setup
         this.setUndecorated(true);

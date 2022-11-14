@@ -437,6 +437,7 @@ public class AddProductDialog extends JFrame implements defaultPanelAccessories 
                     //TODO: Check if entity already exists
                     client.addEntity(product);
                     prodPage.updateTable();
+                    JOptionPane.showMessageDialog(new JFrame(), "New product added successfully!");
                     SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
                     dispose();
                 }

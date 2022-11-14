@@ -21,7 +21,7 @@ import JNWR.application.utilities.*;
 import java.awt.GridBagConstraints;  
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 
 public class ProdPage extends JPanel implements defaultPanelAccessories{
@@ -35,6 +35,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
     JButton searchButton;
     JComboBox<String> filter;
     JButton addProductButton;
+    JButton addNewCategory;
     JFilterButton allGoodsButton;
     JFilterButton bakedGoodsButton;
     JFilterButton beverageButton;
@@ -43,7 +44,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
     JFilterButton dryGoodsButton;
     JFilterButton frozenGoodsButton;
     JFilterButton householdSuppliesButton;
-    JButton addNewCategory;
     JFilterButton meatButton;
     JFilterButton otherButton;
     JFilterButton produceButton;
@@ -121,7 +121,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         filterSection.setLayout(new GridBagLayout());
         filterSection.setBackground(null);
 
-        addNewCategory = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-add-100.png");
+        addNewCategory = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-trans-100.png");
         allGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-diversity-100.png", "All Goods");
         bakedGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Baked Goods");
         beverageButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-opened-folder-100.png", "Beverages");
@@ -377,7 +377,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
         //endregion
 
-
         //region Filter Buttons
         mpCons.weightx = 0;
         mpCons.weighty = 0;
@@ -391,6 +390,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridy = 0;
         mpCons.gridx = 1;
         filterSection.add(addNewCategory,mpCons);
+
 
         mpCons.gridwidth = 2;
         mpCons.weightx = 0;
@@ -527,6 +527,13 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         });
         //endregion
 
+        allGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTable();
+            }
+        });
+
         bakedGoodsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -534,6 +541,86 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
+        beverageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(beverageButton.getText(),prodPage,client,headerModel);
+            }
+        });
+        cannedGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(cannedGoodsButton.getText(),prodPage,client,headerModel);
+            }
+        });
+        dairyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(dairyButton.getText(),prodPage,client,headerModel);
+            }
+        });
+        frozenGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(frozenGoodsButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        householdSuppliesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable("Household & Cleaning Supplies",prodPage,client,headerModel);
+            }
+        });
+
+        meatButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(meatButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        produceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(produceButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        personalCareButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(personalCareButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        petCareButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(petCareButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        seafoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(seafoodButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        snacksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(snacksButton.getText(),prodPage,client,headerModel);
+            }
+        });
+
+        otherButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(otherButton.getText(),prodPage,client,headerModel);
+            }
+        });
 
         updateTable();
 

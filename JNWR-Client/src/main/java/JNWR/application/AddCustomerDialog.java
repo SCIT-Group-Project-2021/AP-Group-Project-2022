@@ -295,7 +295,6 @@ public class AddCustomerDialog extends JFrame implements defaultPanelAccessories
             public void actionPerformed(ActionEvent e) {
                 try{
                     int selectedRowIndex = customerTable.getSelectedRow();
-
                     posPage.updateCustomer((Customer) list.get(selectedRowIndex));
                 }
                 catch(IndexOutOfBoundsException ex){
