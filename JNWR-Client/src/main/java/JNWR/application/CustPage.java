@@ -415,7 +415,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
 
                     DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                     int selectedRowIndex = customerTable.getSelectedRow();
-                    Customer customer = new Customer(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString(),model.getValueAt(selectedRowIndex,6).toString());
+                    Customer customer = new Customer(Integer.parseInt(model.getValueAt(selectedRowIndex,0).toString()),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString(),model.getValueAt(selectedRowIndex,6).toString(),model.getValueAt(selectedRowIndex,6).toString());
                     new EditCustomerDialog(client, custPage, customer);
                     SwingUtilities.getWindowAncestor(custPage).setEnabled(false);
                 }

@@ -284,8 +284,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
                             staff = (Staff) entity;
 
                             headerModel.addRow(new Object[] {staff.getIdNum(),staff.getfName(),staff.getlName(),staff.getPhoneNum(),staff.getEmployeeType(),staff.getDepartmentCode()});
-        
-                            }
+                        }
                     }
     
     

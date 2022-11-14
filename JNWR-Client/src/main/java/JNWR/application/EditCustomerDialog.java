@@ -309,7 +309,7 @@ public class EditCustomerDialog extends JFrame implements defaultPanelAccessorie
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
-        mpCons.gridy = 1;//3
+        mpCons.gridy = 1;
         mpCons.gridx = 1;
         mpCons.insets = new Insets(10,0,10,0); //to30
         mainSection.add(inventoryHeading,mpCons);
