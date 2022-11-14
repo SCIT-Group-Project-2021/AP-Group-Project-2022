@@ -61,7 +61,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
     DefaultTableModel headerModel = new DefaultTableModel();
     Class[] types = {String.class, String.class, String.class,String.class,Integer.class, Double.class, ImageIcon.class};
         
-    String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price", "Options"};
+    String headers[] = { "Product Code","Product Category", "Name", "Short Description", "Stock", "Unit Price", "Long Description"};
 
     ProdPage(Client client, Staff employee) {
 
@@ -536,7 +536,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                     list = client.getSpecificList("Inventory",searchFilter,searchId);
                     for (DBEntity entity : list) {
                         inven = (Inventory) entity;
-                        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+                        headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice(),inven.getLongDescrip()});
                     }
                 }
 
@@ -554,9 +554,41 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                if(prodTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+                    int selectedRowIndex = prodTable.getSelectedRow();
+                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,1).toString());
+
+                    new EditProductDialog(client, prodPage, item);
+                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
+                }
             }
         });
+
+        /*deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(prodTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+                    int selectedRowIndex = prodTable.getSelectedRow();
+                    String productCode = model.getValueAt(selectedRowIndex,0).toString();
+                    String productName = model.getValueAt(selectedRowIndex,2).toString();
+                    int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+productName+ "\"?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        client.removeEntity(new Inventory(), productCode);
+                        JOptionPane.showMessageDialog(new JFrame(), "Product deleted successfully!");
+                        updateTable();
+                    }
+                }
+            }
+        });*/
         //endregion
 
         //region filter buttons
@@ -675,7 +707,8 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
     public void updateTable() {
 
         ArrayList<DBEntity> list = client.getList("Inventory");
-
+        DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+        model.setRowCount(0);
         for (DBEntity entity : list) {
 
             inven = (Inventory) entity;

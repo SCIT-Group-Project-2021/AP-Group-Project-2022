@@ -340,7 +340,7 @@ public class SearchDialog extends JFrame implements defaultPanelAccessories {
         addItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Check that qty isnt more than stock
+
                 try{
                     DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
                     int selectedRowIndex = searchTable.getSelectedRow();

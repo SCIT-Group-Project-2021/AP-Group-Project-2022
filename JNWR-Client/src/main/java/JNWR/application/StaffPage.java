@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
+import Entity.Inventory;
 import Entity.Staff;
 import Entity.DBEntity;
 import JNWR.Domain.Client;
@@ -37,6 +38,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
     Client client;
     Staff employee;
 
+    JTable staffTable;
     ArrayList<DBEntity> list; 
     Staff staff;
 
@@ -44,6 +46,8 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
     JButton searchButton;
     JButton addNewEmpButton;
     JComboBox<String> filter;
+    JButton editButton;
+    JButton deleteButton;
     String filterOptions[] = { "idNum", "fName", "lName","employeeType","departmentCode"};
 
     StaffPage(Client client, Staff employee) {
@@ -138,6 +142,9 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
         addNewEmpButton.setIconTextGap(8);
         addNewEmpButton.setHorizontalAlignment(SwingConstants.LEFT);
 
+        JButton editButton = defaultPanelAccessories.iconButton(23,23,"src/main/resources/JWR-Icons/icons8-pencil-100.png");
+        JButton deleteButton = defaultPanelAccessories.iconButton(33,33,"src/main/resources/JWR-Icons/icons8-remove-100.png");
+
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
@@ -160,19 +167,31 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 3;
+        mpCons.gridx++;
+        searchBar.add(editButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        searchBar.add(deleteButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
         searchBar.add(filter,mpCons);
 
         mpCons.weightx = .5;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 4;
+        mpCons.gridx++;
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 6;
+        mpCons.gridx++;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -181,7 +200,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
         
         headerModel.setColumnIdentifiers(headers);
 
-        JTable staffTable = new JTable(headerModel) {
+        staffTable = new JTable(headerModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
@@ -390,6 +409,22 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(staffTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) staffTable.getModel();
+                    int selectedRowIndex = staffTable.getSelectedRow();
+                    Staff staff = new Staff(Integer.parseInt(model.getValueAt(selectedRowIndex,0).toString()),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString());
+                    new EditStaffDialog(client, staffPage, staff);
+                    SwingUtilities.getWindowAncestor(staffPage).setEnabled(false);
+                }
+            }
+        });
+
         updateTable();
 
         repaint();
@@ -400,6 +435,8 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
     public void updateTable() {
 
         list = client.getList("Staff");
+        DefaultTableModel model = (DefaultTableModel) staffTable.getModel();
+        model.setRowCount(0);
 
         for (int i = 0; i < list.size(); i++) {
 

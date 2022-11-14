@@ -337,10 +337,30 @@ public class Client {
 
     }
 
+<<<<<<< Updated upstream
     public void alterEntity(DBEntity entity,  Integer ID) {
         //Sends the action to the Server
+=======
+    public void alterEntity(DBEntity entity, Integer ID) {
+        //Calls the get list function
+>>>>>>> Stashed changes
         sendAction("alterEntity");
         sendInteger(ID);
+        sendEntity(entity);
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+    }
+
+    public void alterEntity(DBEntity entity, String ID) {
+        //Calls the get list function
+        sendAction("alterEntityString");
+        sendAction(ID);
         sendEntity(entity);
 
         try {
@@ -357,6 +377,22 @@ public class Client {
         //Sends the action to the Server
         sendAction("removeEntity");
         sendInteger(ID);
+        sendEntity(entity);
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+
+    }
+
+    public void removeEntity(DBEntity entity, String ID) {
+        //Calls the get list function
+        sendAction("removeEntityString");
+        sendAction(ID);
         sendEntity(entity);
 
         try {

@@ -1,12 +1,10 @@
 package JNWR.application;
 
-import Entity.Customer;
+import Entity.Staff;
 import JNWR.Domain.Client;
-import JNWR.application.customException.FutureDateException;
+import JNWR.application.customException.InvalidFieldInputException;
+import JNWR.application.customException.InvalidIdNumberException;
 import JNWR.application.utilities.*;
-import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
-import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -14,24 +12,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 
-public class CreateNewCustomerDialog extends JFrame implements defaultPanelAccessories {
+public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
     Client client;
     int frameWidth = 1100;
-    int frameHeight = 720;
+    int frameHeight = 600;
 
     JLabel headingLabel;
     JLabel descriptionHeading;
     JLabel firstNameLabel;
     CustomRoundTextField firstNameField;
-    CustomRoundTextField customerIdField;
+    CustomRoundTextField staffIdField;
     JLabel lastNameLabel;
     CustomRoundTextField lastNameField;
     JLabel telephoneNumberLabel;
@@ -39,19 +31,22 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
     JLabel emailLabel;
     CustomRoundTextField emailField;
     JLabel inventoryHeading;
-    JLabel customerIdLabel;
-    JLabel membershipDate;
-    JXDatePicker membershipDateField;
+    JLabel staffIdLabel;
+    JLabel departmentLabel;
     JLabel dobLabel;
-    JXDatePicker dobDateField;
-    JLabel expiryDateLabel;
-    CustomRoundTextField expiryDateField; //TODO: Add dollar sign icon in textfield
+    JLabel empTypeLabel;
     JButton cancelButton;
-    JButton addCustomerButton;
-    DateFormat dateFormat;
+    JButton addEmployeeButton;
     MaskFormatter fmt;
 
-    public CreateNewCustomerDialog(Client client, CustPage custPage) {
+    CustomRoundComboBox<String> departmentCombo;
+    CustomRoundComboBox<String> empTypeCombo;
+
+    String department[] = {"Select a department","Accounting and Sales", "Inventory","Management"};
+
+    String empType[] = {"Select a employee type","Manager", "Supervisor", "Line worker"};
+
+    public EditStaffDialog(Client client, StaffPage staffPage, Staff staff) {
 
         this.client = client;
         //region Base Frame Setup
@@ -103,7 +98,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         //endregion
 
         //region GUI Elements' Initialization
-        headingLabel = new JLabel("Add New Customer");
+        headingLabel = new JLabel("Edit Staff");
         headingLabel.setFont(heading2);
 
         descriptionHeading = new JLabel("Personal Information");
@@ -113,67 +108,71 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         firstNameLabel.setFont(smText);
         firstNameField = new CustomRoundTextField();
         firstNameField.setFont(miniText);
+        firstNameField.setText(staff.getfName());
 
         lastNameLabel = new JLabel("Last Name");
         lastNameLabel.setFont(smText);
         lastNameField = new CustomRoundTextField();
         lastNameField.setFont(miniText);
+        lastNameField.setText(staff.getlName());
 
         dobLabel = new JLabel("Date of Birth");
         dobLabel.setFont(smText);
-        UIManager.put(CalendarHeaderHandler.uiControllerID, SpinningCalendarHeaderHandler.class.getName());
-        dobDateField = new JXDatePicker();
-        dobDateField.getMonthView().setZoomable(true);
 
         telephoneNumberLabel = new JLabel("Telephone Number");
         telephoneNumberLabel.setFont(smText);
+
 
 
         try {
             fmt = new MaskFormatter("1-###-###-####");
             telephoneNumberField = new JFormattedTextField(fmt);
             telephoneNumberField.setFont(miniText);
+            telephoneNumberField.setText(staff.getPhoneNum());
         } catch (ParseException e) {
-           logger.error(e.toString());
+            logger.error(e.toString());
+        }
+
+        inventoryHeading = new JLabel("Department Information");
+        inventoryHeading.setFont(heading3);
+
+        staffIdLabel = new JLabel("Staff ID");
+        staffIdLabel.setFont(smText);
+        staffIdField = new CustomRoundTextField();
+        staffIdField.setFont(miniText);
+        staffIdField.setText(Integer.toString(staff.getIdNum()));
+        staffIdField.setEditable(false);
+
+
+        departmentLabel = new JLabel("Department");
+        departmentLabel.setFont(smText);
+
+        departmentCombo = new CustomRoundComboBox();
+        departmentCombo.sendFont(miniText);
+        departmentCombo.setModel(new javax.swing.DefaultComboBoxModel(department));
+        String departmentName;
+        switch(staff.getDepartmentCode()){
+            case "ACS":
+                departmentCombo.setSelectedItem("Accounting and Sales");
+            break;
+            case "INV":
+                departmentCombo.setSelectedItem("Inventory");
+                break;
+            case "MGT":
+                departmentCombo.setSelectedItem("Management");
+                break;
         }
 
 
-        emailLabel = new JLabel("Email");
-        emailLabel.setFont(smText);
-
-        emailField = new CustomRoundTextField();
-        emailField.setFont(miniText);
-
-        inventoryHeading = new JLabel("Membership Information");
-        inventoryHeading.setFont(heading3);
-
-        customerIdLabel = new JLabel("Customer ID");
-        customerIdLabel.setFont(smText);
-        customerIdField = new CustomRoundTextField();
-        customerIdField.setFont(miniText);
-        customerIdField.setEditable(false);
-        customerIdField.setText(Integer.toString(getCustomerId()));
-
-
-        membershipDate = new JLabel("Date of Membership");
-        membershipDate.setFont(smText);
-
-        UIManager.put(CalendarHeaderHandler.uiControllerID, SpinningCalendarHeaderHandler.class.getName());
-        membershipDateField = new JXDatePicker();
-        membershipDateField.getMonthView().setZoomable(true);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        membershipDateField.setFormats(dateFormat);
-        membershipDateField.setDate(new Date());
-
         //membershipDateField.setFont(miniText);
 
-        expiryDateLabel = new JLabel("Date of Membership Expiry");
-        expiryDateLabel.setFont(smText);
+        empTypeLabel = new JLabel("Employee Type");
+        empTypeLabel.setFont(smText);
 
-        expiryDateField = new CustomRoundTextField();
-        expiryDateField.setEditable(false);
-        expiryDateField.setFont(miniText);
-        expiryDateField.setText(getExpiryDate());
+        empTypeCombo = new CustomRoundComboBox();
+        empTypeCombo.sendFont(miniText);
+        empTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(empType));
+        empTypeCombo.setSelectedItem(staff.getEmployeeType());
 
         cancelButton = defaultPanelAccessories.defaultButton();
         cancelButton.setText("Cancel");
@@ -181,12 +180,12 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         cancelButton.setPreferredSize(new Dimension(20,50));
         cancelButton.setBorder(round);
 
-        addCustomerButton = defaultPanelAccessories.defaultButton();
-        addCustomerButton.setText("Create Customer");
-        addCustomerButton.setFont(smText);
-        addCustomerButton.setForeground(Color.white);
-        addCustomerButton.setBackground(Color.decode("#005DFB"));
-        addCustomerButton.setPreferredSize(new Dimension(20,50));
+        addEmployeeButton = defaultPanelAccessories.defaultButton();
+        addEmployeeButton.setText("Add Employee");
+        addEmployeeButton.setFont(smText);
+        addEmployeeButton.setForeground(Color.white);
+        addEmployeeButton.setBackground(Color.decode("#005DFB"));
+        addEmployeeButton.setPreferredSize(new Dimension(20,50));
         //endregion
 
 
@@ -202,12 +201,15 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         mpCons.insets = new Insets(0,0,0,0);
         add(mainSection,mpCons);
 
+        mpCons.gridwidth = 2;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(0,0,10,0);
         mainSection.add(headingLabel,mpCons);
 
+        mpCons.gridwidth = 1;
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 1;
@@ -260,30 +262,6 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         personalInfoSection.add(telephoneNumberField,mpCons);
 
         mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(emailLabel,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(emailField,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(dobLabel,mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy++;
-        mpCons.gridx = 0;
-        personalInfoSection.add(dobDateField,mpCons);
-
-        mpCons.weightx = 1;
         mpCons.weighty = 1;
         mpCons.gridy++;
         mpCons.gridx = 0;
@@ -308,37 +286,37 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         mpCons.gridy = 0;
         mpCons.gridx = 0;
         mpCons.insets = new Insets(0,0,5,0);
-        membershipInfoSection.add(customerIdLabel,mpCons);
+        membershipInfoSection.add(staffIdLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(customerIdField,mpCons);
+        membershipInfoSection.add(staffIdField,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(membershipDate,mpCons);
+        membershipInfoSection.add(departmentLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(membershipDateField,mpCons);
+        membershipInfoSection.add(departmentCombo,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(expiryDateLabel,mpCons);
+        membershipInfoSection.add(empTypeLabel,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
-        membershipInfoSection.add(expiryDateField,mpCons);
+        membershipInfoSection.add(empTypeCombo,mpCons);
 
         mpCons.weightx = 1;
         mpCons.weighty = 1;
@@ -372,7 +350,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         mpCons.gridy = 0;
         mpCons.gridx++;
         mpCons.insets = new Insets(0, 50, 0, 0);
-        buttonBox.add(addCustomerButton,mpCons);
+        buttonBox.add(addEmployeeButton,mpCons);
 
         mpCons.weightx = 1;
         mpCons.gridwidth = 1;
@@ -387,71 +365,58 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
+                SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                 dispose();
             }
         });
 
-        membershipDateField.addActionListener(new ActionListener() {
+
+
+
+        addEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
-                LocalDate date = LocalDate.parse(dateFormat.format(membershipDateField.getDate()), dtf);
-                LocalDate dateEnd = date.withYear(date.getYear()+ 1);
-                String DOME = dtf.format(dateEnd);
-                expiryDateField.setText(DOME);
-            }
-        });
-
-
-
-
-
-        addCustomerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try{
-                    if(firstNameField.getText() != "" && lastNameField.getText() != "" && telephoneNumberField.getText() != "" && membershipDateField.getDate() != null){
-                        Customer cust = null;
-
-                        Date enteredDate = null;
-                        enteredDate = membershipDateField.getDate();
-                        Date currentDate = new Date();
-                        if(enteredDate.after(currentDate)){
-                           throw new FutureDateException("Membership date cannot be after today.");
+                if(firstNameField.getText() != "" && lastNameField.getText() != "" && !telephoneNumberField.getText().equals("1-   -   -    ") && staffIdField.getText() !="" && departmentCombo.getSelectedIndex() != 0 && empTypeCombo.getSelectedIndex() != 0){
+                    try{
+                        if(!firstNameField.getText().matches("^[a-zA-Z]+$") || !lastNameField.getText().matches("^[a-zA-Z]+$")){
+                            throw new InvalidFieldInputException("Staff member's name should only contain letters");
                         }
+
+                        Staff employee = null;
                         String telephoneNumber;
-                        telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
-                        String email = "";
-                        String membershipStartDate = dateFormat.format(membershipDateField.getDate());
-                        String dob = null;
-
-                        if(dobDateField.getDate() != null){
-                            enteredDate = dobDateField.getDate();
-                            if(enteredDate.after(currentDate)){
-                                throw new FutureDateException("Date of birth cannot be after today.");
-                            }
-                            else{
-                                dob = dateFormat.format(dobDateField.getDate());
-                            }
+                        String departmentName = departmentCombo.getSelectedItem().toString();
+                        String departmentID = "";
+                        switch(departmentName) {
+                            case "Accounting and Sales":
+                                departmentID = "ACS";
+                                break;
+                            case "Inventory":
+                                departmentID = "INV";
+                                break;
+                            case "Management":
+                                departmentID = "MGT";
+                                break;
                         }
 
-                        cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
-                        
-                        client.addEntity(cust);
-                        custPage.updateTable();
-                        JOptionPane.showMessageDialog(new JFrame(), "New customer added successfully!");
-                        SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
+                        telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
+
+                        employee = new Staff(Integer.parseInt(staffIdField.getText()), firstNameField.getText(),lastNameField.getText(),telephoneNumber,empTypeCombo.getSelectedItem().toString(), departmentID);
+
+                        client.alterEntity(employee, employee.getIdNum());
+                        staffPage.updateTable();
+                        JOptionPane.showMessageDialog(new JFrame(), "New staff member added successfully!");
+                        SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                         dispose();
                     }
-                    else{
-                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new customer", JOptionPane.ERROR_MESSAGE);
+                    catch (InvalidFieldInputException ex) {
+                        JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Cannot edit staff member", JOptionPane.ERROR_MESSAGE);
+                        logger.warn(ex.toString());
                     }
                 }
-                catch(FutureDateException ex){
-                    JOptionPane.showMessageDialog(new JFrame(),ex.getMessage(),"Date in the Future Error", JOptionPane.ERROR_MESSAGE);
-                    logger.error(ex.toString());
+                else{
+                    JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot edit staff member", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
         });
 
@@ -463,24 +428,4 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
 
-    public String getExpiryDate(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH);
-        LocalDate date = LocalDate.parse(dateFormat.format(membershipDateField.getDate()), dtf);
-        LocalDate dateEnd = date.withYear(date.getYear()+ 1);
-        String DOME = dtf.format(dateEnd);
-        return DOME;
-    }
-
-    private Integer getCustomerId() {
-
-        Integer customerId = 100000;
-        try {
-            Customer entity = (Customer) client.findLastEntity("Customer","customerId");
-            customerId = entity.getCustomerId()+ 1;
-        } catch (NullPointerException e) {
-            logger.warn("No customers in database throwing Up default start customer ID");
-        }
-
-        return customerId;
-    }
 }

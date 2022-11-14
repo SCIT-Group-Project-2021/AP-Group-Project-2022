@@ -41,6 +41,8 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
     ArrayList<DBEntity> list; 
     Customer cust;
 
+    JButton editButton;
+    JButton deleteButton;
     JTextField searchBox;
     JButton searchButton;
     JComboBox<String> filter;
@@ -125,6 +127,9 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         JLabel tableHeading = new JLabel("Customers");
         tableHeading.setFont(heading2);
 
+        JButton editButton = defaultPanelAccessories.iconButton(23,23,"src/main/resources/JWR-Icons/icons8-pencil-100.png");
+        JButton deleteButton = defaultPanelAccessories.iconButton(33,33,"src/main/resources/JWR-Icons/icons8-remove-100.png");
+
         Image image = new ImageIcon("src/main/resources/JWR-Icons/White/icons8-add-contact-100.png").getImage().getScaledInstance(33,33, Image.SCALE_SMOOTH);
         ImageIcon btnIcon = new ImageIcon(image);
         addNewCustomerButton = defaultPanelAccessories.defaultButton();
@@ -154,32 +159,38 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 2;
-        searchBar.add(Box.createGlue(),mpCons);
-
-        mpCons.weightx = 1;
-        mpCons.weighty = 0;
-        mpCons.gridy = 0;
-        mpCons.gridx = 3;
+        mpCons.gridx++;
         searchBar.add(Box.createGlue(),mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 4;
+        mpCons.gridx++;
+        searchBar.add(editButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        searchBar.add(deleteButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
         mpCons.insets = new Insets(25,10,25,10);
         searchBar.add(filter,mpCons);
 
         mpCons.weightx = .5;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 5;
+        mpCons.gridx++;
         searchBar.add(searchBox,mpCons);
 
         mpCons.weightx = 0;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
-        mpCons.gridx = 6;
+        mpCons.gridx++;
         mpCons.insets = new Insets(25,10,25,25);
         searchBar.add(searchButton,mpCons);
         //endregion
@@ -394,6 +405,22 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
             }
         });
 
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(customerTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+
+                    DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+                    int selectedRowIndex = customerTable.getSelectedRow();
+                    Customer customer = new Customer(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString(),model.getValueAt(selectedRowIndex,6).toString());
+                    new EditCustomerDialog(client, custPage, customer);
+                    SwingUtilities.getWindowAncestor(custPage).setEnabled(false);
+                }
+            }
+        });
         //endregion
 
         updateTable();
@@ -402,6 +429,8 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
         setSize(getSize());
 
     }
+
+
 
 
     public void updateTable() {

@@ -28,8 +28,6 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
     CustomRoundTextField lastNameField;
     JLabel telephoneNumberLabel;
     JFormattedTextField telephoneNumberField;
-    JLabel emailLabel;
-    CustomRoundTextField emailField;
     JLabel inventoryHeading;
     JLabel staffIdLabel;
     JLabel departmentLabel;
@@ -129,14 +127,7 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
             logger.error(e.toString());
         }
 
-
-        emailLabel = new JLabel("Email");
-        emailLabel.setFont(smText);
-
-        emailField = new CustomRoundTextField();
-        emailField.setFont(miniText);
-
-        inventoryHeading = new JLabel("Depertment Information");
+        inventoryHeading = new JLabel("Department Information");
         inventoryHeading.setFont(heading3);
 
         staffIdLabel = new JLabel("Staff ID");

@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateNewCustomerDialog extends JFrame implements defaultPanelAccessories {
+public class EditCustomerDialog extends JFrame implements defaultPanelAccessories {
     Client client;
     int frameWidth = 1100;
     int frameHeight = 720;
@@ -51,7 +51,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
     DateFormat dateFormat;
     MaskFormatter fmt;
 
-    public CreateNewCustomerDialog(Client client, CustPage custPage) {
+    public EditCustomerDialog(Client client, CustPage custPage, Customer cust) {
 
         this.client = client;
         //region Base Frame Setup
@@ -113,17 +113,25 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         firstNameLabel.setFont(smText);
         firstNameField = new CustomRoundTextField();
         firstNameField.setFont(miniText);
+        firstNameField.setText(cust.getfName());
 
         lastNameLabel = new JLabel("Last Name");
         lastNameLabel.setFont(smText);
         lastNameField = new CustomRoundTextField();
         lastNameField.setFont(miniText);
+        lastNameField.setText(cust.getlName());
 
         dobLabel = new JLabel("Date of Birth");
         dobLabel.setFont(smText);
         UIManager.put(CalendarHeaderHandler.uiControllerID, SpinningCalendarHeaderHandler.class.getName());
         dobDateField = new JXDatePicker();
         dobDateField.getMonthView().setZoomable(true);
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            dobDateField.setDate(formatter.parse(cust.getDob()));
+        } catch (ParseException e) {
+            logger.error("Invalid date passed");
+        }
 
         telephoneNumberLabel = new JLabel("Telephone Number");
         telephoneNumberLabel.setFont(smText);
@@ -133,8 +141,9 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
             fmt = new MaskFormatter("1-###-###-####");
             telephoneNumberField = new JFormattedTextField(fmt);
             telephoneNumberField.setFont(miniText);
+            telephoneNumberField.setText(cust.getTelephoneNum());
         } catch (ParseException e) {
-           logger.error(e.toString());
+            logger.error(e.toString());
         }
 
 
@@ -143,6 +152,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
 
         emailField = new CustomRoundTextField();
         emailField.setFont(miniText);
+        emailField.setText(cust.getEmail());
 
         inventoryHeading = new JLabel("Membership Information");
         inventoryHeading.setFont(heading3);
@@ -153,6 +163,8 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         customerIdField.setFont(miniText);
         customerIdField.setEditable(false);
         customerIdField.setText(Integer.toString(getCustomerId()));
+        customerIdField.setText(Integer.toString(cust.getCustomerId()));
+        customerIdField.setEditable(false);
 
 
         membershipDate = new JLabel("Date of Membership");
@@ -163,7 +175,12 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         membershipDateField.getMonthView().setZoomable(true);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         membershipDateField.setFormats(dateFormat);
-        membershipDateField.setDate(new Date());
+        try {
+            membershipDateField.setDate(dateFormat.parse(cust.getDateOfMembership()));
+        } catch (ParseException e) {
+            logger.error(e.toString());
+        }
+
 
         //membershipDateField.setFont(miniText);
 
@@ -174,6 +191,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         expiryDateField.setEditable(false);
         expiryDateField.setFont(miniText);
         expiryDateField.setText(getExpiryDate());
+        expiryDateField.setText(cust.getDateOfMembershipExpiry());
 
         cancelButton = defaultPanelAccessories.defaultButton();
         cancelButton.setText("Cancel");
@@ -182,7 +200,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
         cancelButton.setBorder(round);
 
         addCustomerButton = defaultPanelAccessories.defaultButton();
-        addCustomerButton.setText("Create Customer");
+        addCustomerButton.setText("Edit Customer");
         addCustomerButton.setFont(smText);
         addCustomerButton.setForeground(Color.white);
         addCustomerButton.setBackground(Color.decode("#005DFB"));
@@ -418,7 +436,7 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
                         enteredDate = membershipDateField.getDate();
                         Date currentDate = new Date();
                         if(enteredDate.after(currentDate)){
-                           throw new FutureDateException("Membership date cannot be after today.");
+                            throw new FutureDateException("Membership date cannot be after today.");
                         }
                         String telephoneNumber;
                         telephoneNumber = telephoneNumberField.getText().replaceAll("\\D", "");
@@ -437,15 +455,15 @@ public class CreateNewCustomerDialog extends JFrame implements defaultPanelAcces
                         }
 
                         cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
-                        
-                        client.addEntity(cust);
+
+                        client.alterEntity(cust,cust.getCustomerId());
                         custPage.updateTable();
-                        JOptionPane.showMessageDialog(new JFrame(), "New customer added successfully!");
+                        JOptionPane.showMessageDialog(new JFrame(), "Customer edited successfully!");
                         SwingUtilities.getWindowAncestor(custPage).setEnabled(true);
                         dispose();
                     }
                     else{
-                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new customer", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot edit customer record", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 catch(FutureDateException ex){

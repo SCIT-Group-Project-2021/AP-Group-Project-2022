@@ -228,21 +228,48 @@ public class Server {
                             }
                         
                             break;
+
+                        case "alterEntityString":
+
+                            logger.info("Altering Entity");
+
+                            try {
+
+                                alterEntity((String) objIs.readObject(), (DBEntity) objIs.readObject());
+                                sendAction("Task Completed");
+
+                            } catch (ConnectException e) {
+                                // TODO: handle exception
+                                logger.error(e.toString());
+                            }
+
+                            break;
                         case "removeEntity":
 
                            logger.info("Removing Entity");
 
                             try {
-
                                 removeEntity((Integer)objIs.readObject(),(DBEntity)objIs.readObject());
                                 sendAction("Task Completed");
                                 
                             } catch (ConnectException e) {
-                                // TODO: handle exception
                                 logger.error(e.toString());  
                             }
-                            
-                            
+                        break;
+
+                        case "removeEntityString":
+
+                            logger.info("Removing Entity by string");
+
+                            try {
+                                removeEntity((String)objIs.readObject(),(DBEntity)objIs.readObject());
+                                sendAction("Task Completed");
+
+                            } catch (ConnectException e) {
+                                logger.error(e.toString());
+                            }
+
+
                             break;
                         case "getList":
 
@@ -394,7 +421,7 @@ public class Server {
             }
         }
     
-        private void removeEntity(Integer ID, DBEntity Entitiy) {
+        private void removeEntity(Integer ID, DBEntity Entity) {
     
             EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
     
@@ -404,7 +431,7 @@ public class Server {
     
                 transaction.begin();
     
-                DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
+                DBEntity dbEntity = em.find(Entity.getClass(), ID);
     
                 em.remove(dbEntity);
             
@@ -417,7 +444,31 @@ public class Server {
                 // TODO: handle exception
                 e.printStackTrace();
             }
-            
+        }
+
+        private void removeEntity(String ID, DBEntity Entity) {
+
+            EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            EntityTransaction transaction = em.getTransaction();
+
+            try {
+
+                transaction.begin();
+
+                DBEntity dbEntity = em.find(Entity.getClass(), ID);
+
+                em.remove(dbEntity);
+
+                transaction.commit();
+
+            } catch (EntityNotFoundException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }catch (IllegalArgumentException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
         }
     
         private DBEntity findEntity(String Table,String IDType, String ID) throws EntityNotFoundException{
@@ -470,7 +521,7 @@ public class Server {
     
                 transaction.begin();
     
-                DBEntity dbEntity = em.find(Entitiy.getClass(), String.valueOf(ID));
+                DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
     
                 em.merge(Entitiy);
             
@@ -480,10 +531,30 @@ public class Server {
                 // TODO: handle exception
                 e.printStackTrace();
             }
-    
-            
-            
-    
+
+        }
+
+        private void alterEntity(String ID, DBEntity Entitiy) {
+
+            EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            EntityTransaction transaction = em.getTransaction();
+
+            try {
+
+                transaction.begin();
+
+                DBEntity dbEntity = em.find(Entitiy.getClass(), ID);
+
+                em.merge(Entitiy);
+
+                transaction.commit();
+
+            } catch (EntityNotFoundException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+
         }
     
         public List<DBEntity> listEntity(String Table) throws MappingNotFoundException{
