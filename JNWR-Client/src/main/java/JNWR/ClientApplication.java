@@ -14,7 +14,7 @@ public class ClientApplication {
 		SpringApplication.run(ClientApplication.class, args);
         System.setProperty("java.awt.headless", "false");
 
-        new LandingPage();
+        new loginPage();
 
         
 	}

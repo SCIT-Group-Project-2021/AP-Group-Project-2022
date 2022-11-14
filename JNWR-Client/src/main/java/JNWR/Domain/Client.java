@@ -21,16 +21,9 @@ public class Client {
     private static ObjectOutputStream objOs;
     private Socket connectionSocket;
 
-    public Client () {
-        try {
-            this.createConnection();
-            this.configureStreams();      
-
-        }catch (ConnectException e) {
-            logger.error(e.toString());
-        } catch (NullPointerException e) {
-            logger.error(e.toString());
-        }
+    public Client () throws ConnectException{
+        this.createConnection();
+        this.configureStreams();      
         
     }
 

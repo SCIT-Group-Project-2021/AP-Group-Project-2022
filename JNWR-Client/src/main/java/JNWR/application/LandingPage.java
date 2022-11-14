@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -23,6 +24,8 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
 
     public CardLayout card;
 
+    Client client;
+
     public JToggleButton dashBoardButton;
     public JToggleButton posButton;
     public JToggleButton customerButton;
@@ -36,7 +39,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         return outfitBold;
     }
 
-    public LandingPage() {
+    public LandingPage(Staff staffUser,Client client) {
 
         RoundedBorder round = new RoundedBorder(25);
 
@@ -54,8 +57,6 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         setLayout(new GridBagLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
-        Client client = new Client();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
                 client.sendAction("shutDown");
