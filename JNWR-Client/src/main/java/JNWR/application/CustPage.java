@@ -412,7 +412,6 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
                     JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
-
                     DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                     int selectedRowIndex = customerTable.getSelectedRow();
                     Customer customer = new Customer(Integer.parseInt(model.getValueAt(selectedRowIndex,0).toString()),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString(),model.getValueAt(selectedRowIndex,6).toString(),model.getValueAt(selectedRowIndex,6).toString());
@@ -421,6 +420,27 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
                 }
             }
         });
+        /*
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(customerTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit record", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
+                    int selectedRowIndex = customerTable.getSelectedRow();
+                    String customerId = model.getValueAt(selectedRowIndex,0).toString();
+                    String customerName = model.getValueAt(selectedRowIndex,1).toString()  + " " + model.getValueAt(selectedRowIndex,2).toString();
+                    int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+customerName+ "\"?\nId Number: "+ customerId, "Delete Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        client.removeEntity(new Customer(), Integer.parseInt(customerId));
+                        JOptionPane.showMessageDialog(new JFrame(), "Product deleted successfully!");
+                        updateTable();
+                    }
+                }
+            }
+        });*/
         //endregion
 
         updateTable();

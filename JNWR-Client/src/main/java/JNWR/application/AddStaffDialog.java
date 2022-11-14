@@ -1,5 +1,6 @@
 package JNWR.application;
 
+import Entity.Inventory;
 import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.customException.InvalidFieldInputException;
@@ -385,11 +386,18 @@ public class AddStaffDialog extends JFrame implements defaultPanelAccessories {
 
                         employee = new Staff(Integer.parseInt(staffIdField.getText()), firstNameField.getText(),lastNameField.getText(),telephoneNumber,empTypeCombo.getSelectedItem().toString(), departmentID);
 
-                        client.addEntity(employee);
-                        staffPage.updateTable();
-                        JOptionPane.showMessageDialog(new JFrame(), "New staff member added successfully!");
-                        SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
-                        dispose();
+                        Staff check = (Staff) client.findEntity(employee,employee.getIdNum());
+                        if(check == null){
+                            client.addEntity(employee);
+                            staffPage.updateTable();
+                            JOptionPane.showMessageDialog(new JFrame(), "New staff member added successfully!");
+                            SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
+                            dispose();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(new JFrame(),"Id number already in use","Cannot create new staff", JOptionPane.ERROR_MESSAGE);
+                        }
+
                     }
                     catch(NumberFormatException ex){
                         JOptionPane.showMessageDialog(new JFrame(),"Id Number should only include numbers","Cannot create new staff member", JOptionPane.ERROR_MESSAGE);

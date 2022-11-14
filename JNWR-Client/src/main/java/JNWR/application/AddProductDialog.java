@@ -435,11 +435,18 @@ public class AddProductDialog extends JFrame implements defaultPanelAccessories 
                         product = new Inventory(productIdField.getText(),productNameField.getText(),shortDescripField.getText(), longDescripField.getText(), Integer.parseInt(quantityField.getText()),Float.parseFloat(priceField.getText()), categoryId);
                     }
                     //TODO: Check if entity already exists
-                    client.addEntity(product);
-                    prodPage.updateTable();
-                    JOptionPane.showMessageDialog(new JFrame(), "New product added successfully!");
-                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
-                    dispose();
+                    Inventory check = (Inventory) client.findEntity(product,product.getProductCode());
+                    if(check == null){
+                        client.addEntity(product);
+                        prodPage.updateTable();
+                        JOptionPane.showMessageDialog(new JFrame(), "New product added successfully!");
+                        SwingUtilities.getWindowAncestor(prodPage).setEnabled(true);
+                        dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(new JFrame(),"Product code already exits","Cannot create new product", JOptionPane.ERROR_MESSAGE);
+                    }
+
                 }
                 else{
                     JOptionPane.showMessageDialog(new JFrame(),"Please fill the required text fields","Cannot create new product", JOptionPane.ERROR_MESSAGE);

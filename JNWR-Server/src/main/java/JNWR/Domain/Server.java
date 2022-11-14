@@ -210,6 +210,21 @@ public class Server {
                             }
                         
                             break;
+
+                            case "findEntitySimpleString":
+                            logger.info("Finding Entity by Class");
+                            try {
+
+                                sendEntity(findEntity((String) objIs.readObject(), (DBEntity) objIs.readObject()));
+                                sendAction("Task Completed");
+
+                            } catch (EntityNotFoundException e) {
+                                logger.error(e.toString());
+                            }catch (ConnectException e) {
+                                logger.error(e.toString());
+                            }
+
+                            break;
                         
                             
                         
@@ -500,7 +515,7 @@ public class Server {
     
             try {
     
-                dbEntity = em.find(Entitiy.getClass(), String.valueOf(ID));
+                dbEntity = em.find(Entitiy.getClass(), ID);
     
             } catch (EntityNotFoundException e) {
                 // TODO: handle exception
@@ -510,6 +525,27 @@ public class Server {
             return dbEntity;
     
         }
+
+        private DBEntity findEntity(String ID, DBEntity Entitiy) throws EntityNotFoundException{
+
+            EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            DBEntity dbEntity = null;
+
+            try {
+
+                dbEntity = em.find(Entitiy.getClass(), String.valueOf(ID));
+
+            } catch (EntityNotFoundException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+
+            return dbEntity;
+
+        }
+
+
     
         private void alterEntity(Integer ID, DBEntity Entitiy) {
     

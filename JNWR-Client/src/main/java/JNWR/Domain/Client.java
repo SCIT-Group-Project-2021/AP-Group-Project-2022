@@ -337,6 +337,37 @@ public class Client {
 
     }
 
+    public DBEntity findEntity(DBEntity entity, String ID) {
+        //Calls the get list function
+        sendAction("findEntitySimpleString");
+        sendAction(ID);
+        sendEntity(entity);
+
+        DBEntity entityOut = null;
+
+        try {
+            entityOut = (DBEntity)objIs.readObject();
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        } catch (NullPointerException e) {
+            logger.error(e.toString());
+        }
+
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+
+        return entityOut;
+
+    }
+
     public void alterEntity(DBEntity entity, Integer ID) {
         //Calls the get list function
         sendAction("alterEntity");
@@ -365,7 +396,6 @@ public class Client {
         } catch (IOException e) {
             logger.error(e.toString());
         }
-
     }
 
     public void removeEntity(DBEntity entity,  Integer ID) {
