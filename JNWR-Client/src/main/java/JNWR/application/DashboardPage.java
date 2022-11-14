@@ -39,48 +39,47 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         setLayout(new GridBagLayout());
         //endregion
 
-        //region Top Bar
-        JPanel topBar = defaultPanelAccessories.createJPanel(0,80,120);
-        //topBar.setBackground(Color.YELLOW);
-        topBar.setLayout(new GridBagLayout());
-
-        //region date/time bar
-        JPanel dateTimePanel = defaultPanelAccessories.createJPanel(50,450,80);
-        dateTimePanel.setBackground(Color.WHITE);
-        dateTimePanel.setLayout(new GridBagLayout());
-
-
-        Image calendarImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-desk-calendar-100.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
-        ImageIcon calendarIcon = new ImageIcon(calendarImage);
-        JLabel calendar = new JLabel(calendarIcon);
-        JLabel date = new JLabel(defaultPanelAccessories.getTodayDate());
-        date.setFont(heading3);
-
-        Image clockImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-clock-100-2.png").getImage().getScaledInstance(45,45, Image.SCALE_SMOOTH);
-        ImageIcon clockIcon = new ImageIcon(clockImage);
-        JLabel clock = new JLabel(clockIcon);
-        JLabel time = new JLabel(defaultPanelAccessories.getCurrentTime());
-        time.setFont(heading3);
-        Timer timeTimer = new Timer(60000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                time.setText(defaultPanelAccessories.getCurrentTime());
-               
-            }
-        });
-        timeTimer.start();
+                //region Top Bar
+                JPanel topBar = defaultPanelAccessories.createJPanel(0,80,120);
+                topBar.setBackground(null);
+                topBar.setLayout(new GridBagLayout());
         
-        //endregion
-
-        //region Log Out Label & Button
-        JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + employee.getlName());
-        empName.setFont(heading3);
-        JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
-        //endregion
-
-        //endregion
-
+                //region date/time bar
+                JPanel dateTimePanel = defaultPanelAccessories.createJPanel(50,450,80);
+                dateTimePanel.setBackground(Color.WHITE);
+                dateTimePanel.setLayout(new GridBagLayout());
+        
+                Image calendarImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-desk-calendar-100.png").getImage().getScaledInstance(55,55, Image.SCALE_SMOOTH);
+                ImageIcon calendarIcon = new ImageIcon(calendarImage);
+                JLabel calendar = new JLabel(calendarIcon);
+                JLabel date = new JLabel(defaultPanelAccessories.getTodayDate());
+                date.setFont(heading3);
+        
+                Image clockImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-clock-100-2.png").getImage().getScaledInstance(45,45, Image.SCALE_SMOOTH);
+                ImageIcon clockIcon = new ImageIcon(clockImage);
+                JLabel clock = new JLabel(clockIcon);
+                JLabel time = new JLabel(defaultPanelAccessories.getCurrentTime());
+                time.setFont(heading3);
+                Timer timeTimer = new Timer(60000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        time.setText(defaultPanelAccessories.getCurrentTime());
+                       
+                    }
+                });
+                timeTimer.start();
+                //endregion
+        
+                //region Log Out Label & Button
+                JLabel empName = new JLabel();
+                empName.setText(employee.getfName() + employee.getlName());
+                empName.setFont(heading3);
+                JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
+                //endregion
+        
+                //endregion
+        
+        
         //region main section
         JPanel mainSection = defaultPanelAccessories.createJPanel(0,350,80);
         mainSection.setLayout(new GridBagLayout());
@@ -89,20 +88,8 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         JPanel userBox = defaultPanelAccessories.createJPanel(0,350,350);
         userBox.setOpaque(false);
         userBox.setLayout(new GridBagLayout());
-
-        headerModel.setColumnIdentifiers(headers);
-
-        JTable userTable = new JTable(headerModel);
         
-        JScrollPane userTableScroll = new JScrollPane(userTable){
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(100, 100);
-            }
-        };
-
-        userTableScroll.setBorder(round);
-        //userTableScroll.setBackground(Color.GREEN);
+        JTabbedPane reportPanel = new JTabbedPane();
         //endregion
 
         //region buttonBox
@@ -161,6 +148,8 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
 
         mpCons.ipadx = 0;
         mpCons.ipady = 0;
+
+        mpCons.insets = new Insets(25,10,25,25);
 
         mpCons.weightx = 1;
         mpCons.weighty = 0;
@@ -259,7 +248,7 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
-        userBox.add(userTableScroll, mpCons);
+        userBox.add(reportPanel, mpCons);
 
         //endregion
 

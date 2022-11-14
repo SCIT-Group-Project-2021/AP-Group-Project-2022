@@ -43,7 +43,7 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
     ArrayList<DBEntity> list; 
     Invoice invoice;
 
-    ReportPage prodPage = this;
+    ReportPage invoicePage = this;
 
     JTextField searchBox;
     JButton searchButton;
@@ -107,11 +107,11 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
         //endregion
 
         //region Search Bar
-         PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
-         searchBar.setLayout(new GridBagLayout());
-         searchBar.setBackground(Color.GRAY);
-         searchBar.setRoundTopLeft(25);
-         searchBar.setRoundTopRight(25);
+        PanelRound searchBar = (PanelRound)defaultPanelAccessories.createJPanel(0,80,60);
+        searchBar.setLayout(new GridBagLayout());
+        searchBar.setBackground(Color.decode("#E5EBF4"));
+        searchBar.setRoundTopLeft(25);
+        searchBar.setRoundTopRight(25);
  
         searchBox = new CustomRoundTextField();
         searchBox.setText("Search...");
@@ -362,8 +362,8 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
 
                     int selectedRowIndex = invoiceTable.getSelectedRow();
                     int invoiceNum = (int)invoiceTable.getValueAt(selectedRowIndex, 0);
-                    new InvoiceDialog(client,invoiceNum,prodPage);
-                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);;
+                    new InvoiceDialog(client,invoiceNum,invoicePage);
+                    SwingUtilities.getWindowAncestor(invoicePage).setEnabled(false);;
                 }
             });
 

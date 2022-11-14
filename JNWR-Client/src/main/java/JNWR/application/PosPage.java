@@ -276,6 +276,8 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         mpCons.ipadx = 0;
         mpCons.ipady = 0;
 
+        mpCons.insets = new Insets(25,10,25,25);
+
         mpCons.weightx = 1;
         mpCons.weighty = 0;
         mpCons.gridy = 0;
