@@ -116,7 +116,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion

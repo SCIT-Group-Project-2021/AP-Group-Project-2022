@@ -68,6 +68,9 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
     Client client;
     Staff employee;
+    JLabel categoryIconLabel;
+    JIconToggleButton cashButton;
+    JIconToggleButton cardButton;
 
     public Customer getInvoiceCustomer() {
         return invoiceCustomer;
@@ -117,7 +120,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         empName = new JLabel();
-        empName.setText(employee.getfName()+employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -240,10 +243,25 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         //TODO:Get based on product selected (Get object with info and use this.get[attribute])
         //TODO: Create an array with sources and link category id to array
-        String[] categoryIconArray = new String[9];
+        ImageIcon[] categoryIconArray = new ImageIcon[14];
+        categoryIconArray[0] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-croissant-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[1] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cola-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[2] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-canned-sardines-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[3] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cheese-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[4] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-flour-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[5] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-ice-pop-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[6] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/detergent-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[7] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-meat-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[8] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-categorize-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[9] =  new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cauliflower-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[10] = new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-tooth-cleaning-kit-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[11] = new ImageIcon(new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-dog-paw-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[12] = new ImageIcon(new ImageIcon( "src/main/resources/JWR-Icons/Category Icons/icons8-octopus-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+        categoryIconArray[13] = new ImageIcon(new ImageIcon( "src/main/resources/JWR-Icons/Category Icons/snacks-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH));
+
         Image categoryImage = new ImageIcon("src/main/resources/JWR-Icons/Category Icons/icons8-cauliflower-100.png").getImage().getScaledInstance(80,80 , Image.SCALE_SMOOTH);
         ImageIcon categoryIcon = new ImageIcon(categoryImage);
-        JLabel categoryIconLabel = new JLabel(categoryIcon);
+        categoryIconLabel = new JLabel(categoryIcon);
 
         selectedItemName = new JLabel(getItemName());
         selectedItemName.setFont(heading1);
@@ -254,6 +272,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         shortDescrip = new JLabel("[Short Description Section]");
         shortDescrip.setFont(medText);
+        shortDescrip.setPreferredSize(new Dimension(400,30));
         /*
         Image deleteImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-delete-100.png").getImage().getScaledInstance(35,35, Image.SCALE_SMOOTH);
         ImageIcon deleteIcon = new ImageIcon(deleteImage);
@@ -620,7 +639,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridx = 0;
         mpCons.gridwidth = 1;
         mpCons.insets = new Insets(0, 25, 0, 25);
-        JIconToggleButton cashButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-us-dollar-circled-100.png","src/main/resources/JWR-Icons/Black/icons8-us-dollar-circled-100.png");
+        cashButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-us-dollar-circled-100.png","src/main/resources/JWR-Icons/Black/icons8-us-dollar-circled-100.png");
         paymentBtns.add(cashButton);
         cashButton.setHasBackground(false);
         cashButton.setBorder(paymentOptionBorder);
@@ -635,7 +654,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 10;
         mpCons.gridx = 1;
-        JIconToggleButton cardButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-credit-card-100.png","src/main/resources/JWR-Icons/Black/icons8-credit-card-100.png");
+        cardButton = defaultPanelAccessories.iconToggleButton(150,115,75,75,"src/main/resources/JWR-Icons/White/icons8-credit-card-100.png","src/main/resources/JWR-Icons/Black/icons8-credit-card-100.png");
         paymentBtns.add(cardButton);
         cardButton.setBorder(paymentOptionBorder);
         cardButton.setHasBackground(false);
@@ -733,8 +752,55 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                     selectedItemName.setText(inven.getName());
                     unitPriceLabel.setText("$" + inven.getUnitPrice());
                     shortDescrip.setText(inven.getShortDescrip());
+                    shortDescrip.setToolTipText(shortDescrip.getText());
                     qtyLabel.setText(Integer.toString(selectedItem.getItemQuantity()));
                     qty = selectedItem.getItemQuantity();
+                    ImageIcon categoryIcon = null;
+
+                    switch(inven.getCategoryID()){
+                        case "BKY":
+                            categoryIcon = categoryIconArray[0];
+                            break;
+                        case "BVG":
+                            categoryIcon = categoryIconArray[1];
+                            break;
+                        case "CNG":
+                            categoryIcon = categoryIconArray[2];
+                            break;
+                        case "DAI":
+                            categoryIcon = categoryIconArray[3];
+                            break;
+                        case "DRY":
+                            categoryIcon = categoryIconArray[4];
+                            break;
+                        case "FZG":
+                            categoryIcon = categoryIconArray[5];
+                            break;
+                        case "HSS":
+                            categoryIcon = categoryIconArray[6];
+                            break;
+                        case "MT":
+                            categoryIcon = categoryIconArray[7];
+                            break;
+                        case "OTR":
+                            categoryIcon = categoryIconArray[8];
+                            break;
+                        case "PRD":
+                            categoryIcon = categoryIconArray[9];
+                            break;
+                        case "PSC":
+                            categoryIcon = categoryIconArray[10];
+                            break;
+                        case "PTC":
+                            categoryIcon = categoryIconArray[11];
+                        case "SFD":
+                            categoryIcon = categoryIconArray[12];
+                            break;
+                        case "SNK":
+                            categoryIcon = categoryIconArray[13];
+                            break;
+                    }
+                    categoryIconLabel.setIcon(categoryIcon);
                 }
                 else{
                     selectedItemName.setText("Product Name");
@@ -986,6 +1052,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         File directory = new File("Invoice");
         directory.mkdir();
+        String paymentType = "Cash";
 
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter("Invoice/invoice#"+getInvoiceNum()+".pdf"))) {
 			Document doc = new Document(pdfDoc);
@@ -1013,14 +1080,18 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
             invoiceItemTable.addHeaderCell(new Cell().add(new Paragraph("Price").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
             
 			for (InvoiceItem checkoutItems : invoiceItemArrayList) {
-                Inventory inven = (Inventory) client.findEntity(new Inventory(), Integer.parseInt(checkoutItems.getProductCode()));
+                Inventory inven = (Inventory) client.findEntity(new Inventory(), checkoutItems.getProductCode());
 			    invoiceItemTable.addCell(new Cell().add(new Paragraph(""+inven.getName())).setBorder(Border.NO_BORDER));
                 invoiceItemTable.addCell(new Cell().add(new Paragraph("$"+inven.getUnitPrice()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
                 invoiceItemTable.addCell(new Cell().add(new Paragraph(""+checkoutItems.getItemQuantity() + "x").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
                 invoiceItemTable.addCell(new Cell().add(new Paragraph("$"+(inven.getUnitPrice()*checkoutItems.getItemQuantity())).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-
 			}
 
+            invoiceTotal.add(new Text("\n Payment Type: "));
+            if(cardButton.isSelected()){
+                paymentType = "Card";
+            }
+            invoiceTotal.add(new Text(paymentType+"\n").setTextAlignment(TextAlignment.RIGHT));
             invoiceTotal.add(new Text("\n Subtotal: "));
             invoiceTotal.add(new Text(subtotalAmt.getText()+"\n").setTextAlignment(TextAlignment.RIGHT));
             invoiceTotal.add(new Text("Tax: "));

@@ -99,7 +99,7 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName());
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -124,31 +124,40 @@ public class ReportPage extends JPanel implements defaultPanelAccessories{
          searchButton = defaultPanelAccessories.defaultButton();
          searchButton.setIcon(searchIcon);
          searchButton.setPreferredSize(new Dimension(25,200));
- 
-         mpCons.weightx = 1;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx = 0;
-         searchBar.add(Box.createGlue(),mpCons);
-         mpCons.insets = new Insets(25,25,25,25);
+
+        JLabel tableHeading = new JLabel("Invoices");
+        tableHeading.setFont(heading2);
+
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        mpCons.insets = new Insets(25,10,25,10);
+        searchBar.add(tableHeading,mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        searchBar.add(Box.createGlue(),mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
+        searchBar.add(filter,mpCons);
  
          mpCons.weightx = .5;
          mpCons.weighty = 0;
          mpCons.gridy = 0;
-         mpCons.gridx = 2;
-         mpCons.insets = new Insets(25,10,25,10);
+         mpCons.gridx++;
          searchBar.add(searchBox,mpCons);
  
          mpCons.weightx = 0;
          mpCons.weighty = 0;
          mpCons.gridy = 0;
-         mpCons.gridx = 1;
-         searchBar.add(filter,mpCons);
- 
-         mpCons.weightx = 0;
-         mpCons.weighty = 0;
-         mpCons.gridy = 0;
-         mpCons.gridx = 3;
+         mpCons.gridx++;
          mpCons.insets = new Insets(25,10,25,25);
          searchBar.add(searchButton,mpCons);
          //endregion
