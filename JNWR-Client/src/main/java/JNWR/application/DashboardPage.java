@@ -4,10 +4,13 @@ import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Entity.DBEntity;
+import Entity.Invoice;
 import Entity.Staff;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
@@ -20,6 +23,9 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
 
     Staff employee;
     Client client;
+    Invoice invoice;
+
+    ArrayList<DBEntity> list; 
 
     DashboardPage(Client client,Staff employee) {
 
@@ -89,7 +95,10 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         userBox.setOpaque(false);
         userBox.setLayout(new GridBagLayout());
         
-        JTabbedPane reportPanel = new JTabbedPane();
+        JPanel reportPanel = new JPanel();
+
+        client.getList("invoice");
+       
         //endregion
 
         //region buttonBox
@@ -340,5 +349,32 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         });
     
     }
+
+    public void updateTable() {
+
+        list = client.getList("Invoice");
+
+        for (int i = 0; i < list.size(); i++) {
+
+            invoice = (Invoice) list.get(i);
+
+            Integer customerID = null;
+
+            try {
+   
+                customerID = invoice.getCustomerID();
+
+            } catch (NullPointerException e) {
+                customerID = null;
+            }
+
+            
+            
+            headerModel.addRow(new Object[] {invoice.getInvoiceNum(),invoice.getBillingDate(),customerID,invoice.getStaffID()});
+        
+        }
+        
+    }
+
 
 }

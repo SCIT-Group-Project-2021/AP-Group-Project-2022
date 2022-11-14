@@ -66,6 +66,7 @@ public class Client {
 
     //region Utility Methods
 
+    //Sends the action to the Server
     public void sendAction(String action) {
         try {
             objOs.writeObject(action);
@@ -117,7 +118,7 @@ public class Client {
         ArrayList<DBEntity> list = new ArrayList<DBEntity>();
         //Calls the get list function
         sendAction("getList");
-        //Tells the functionwhat table to return
+        //Tells the function what table to return
         sendAction(Table);
 
         try {
@@ -145,11 +146,13 @@ public class Client {
     public ArrayList<DBEntity> getSpecificList(String Table,String IDType, String ID) {
 
         ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
-        //Calls the get list function
+        //Calls the a specific list function
         sendAction("getSpecificList");
-        //Tells the functionwhat table to return
+        //Tells the function what table to return
         sendAction(Table);
+        //Tells the function what Column to use to find the items
         sendAction(IDType);
+        //Tells the function ID's to return
         sendAction(ID);
 
         try {
@@ -177,7 +180,7 @@ public class Client {
     public ArrayList<DBEntity> getExactList(String Table,String IDType, String ID) {
 
         ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
-        //Calls the get list function
+        //Calls the get exact list function
         sendAction("getExactList");
         //Tells the functionwhat table to return
         sendAction(Table);
@@ -335,7 +338,7 @@ public class Client {
     }
 
     public void alterEntity(DBEntity entity,  Integer ID) {
-        //Calls the get list function
+        //Sends the action to the Server
         sendAction("alterEntity");
         sendInteger(ID);
         sendEntity(entity);
@@ -351,7 +354,7 @@ public class Client {
     }
 
     public void removeEntity(DBEntity entity,  Integer ID) {
-        //Calls the get list function
+        //Sends the action to the Server
         sendAction("removeEntity");
         sendInteger(ID);
         sendEntity(entity);

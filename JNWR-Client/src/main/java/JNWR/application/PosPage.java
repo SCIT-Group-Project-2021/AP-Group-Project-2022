@@ -982,7 +982,10 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
     }
 
-    public void printInvoice(int invoiceNum, Invoice invoice, ArrayList<InvoiceItem> invoiceItems, String date) {         
+    public void printInvoice(int invoiceNum, Invoice invoice, ArrayList<InvoiceItem> invoiceItems, String date) {   
+
+        File directory = new File("Invoice");
+        directory.mkdir();
 
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter("Invoice/invoice#"+getInvoiceNum()+".pdf"))) {
 			Document doc = new Document(pdfDoc);
