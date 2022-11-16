@@ -5,9 +5,24 @@ import JNWR.application.customException.FutureDateException;
 import JNWR.application.utilities.defaultPanelAccessories;
 import JNWR.Domain.Client;
 import org.jdesktop.swingx.JXDatePicker;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.draw.DashedLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -30,14 +45,13 @@ public class ReportRangeDialog extends JFrame implements defaultPanelAccessories
     int quantitySum;
     float totalSales;
 
-
     Client client;
     JXDatePicker startDateField;
     JXDatePicker endDateField;
     SimpleDateFormat dateFormat;
     JTable resultTable;
     DefaultTableModel headerModel = new DefaultTableModel();
-    String[] headers = { "Product Code", "Name", "Total Quantity Sold","Total Price"};
+    String[] headers = { "Product Code", "Name", "Total Quantity Sold","Total Sales"};
     String[] detailedHeaders = {"Invoice Item", "Product Code", "Name", "Quantity Sold","Total Price", "Invoice Date"};
 
     public ReportRangeDialog(Client client, ProdPage prodPage, Inventory item) {
@@ -118,7 +132,7 @@ public class ReportRangeDialog extends JFrame implements defaultPanelAccessories
         attributes = font.getAttributes();
         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
         printReportLabel.setFont(font.deriveFont(attributes));
-
+        printReportLabel.setEnabled(false);
 
         //region Customer Table Bar
 
@@ -234,7 +248,16 @@ public class ReportRangeDialog extends JFrame implements defaultPanelAccessories
         printReportLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: Print report
+                if(invoiceItems != null){
+                    if(invoiceItems.size() != 0){
+                        printReport(item,invoiceItems);
+                    }else {
+                        JOptionPane.showMessageDialog(new JFrame(),"No product records were found for the selected dates", "No product records",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(new JFrame(),"The report must be generated before a report can be printed.","Cannot print report", JOptionPane.ERROR_MESSAGE);
+                }
+                
             }
 
             @Override
@@ -385,6 +408,9 @@ public class ReportRangeDialog extends JFrame implements defaultPanelAccessories
                         model.setRowCount(0);
                         headerModel.addRow(new Object[] {item.getProductCode(),item.getName(),quantitySum,totalSales});
 
+                        printReportLabel.setEnabled(true);
+                        repaint();
+
                     }
                     else{
                         JOptionPane.showMessageDialog(new JFrame(),"To generate a report for one day, start date field requires a date. For a range, fill the start date and end date field","Cannot generate report", JOptionPane.ERROR_MESSAGE);
@@ -406,4 +432,111 @@ public class ReportRangeDialog extends JFrame implements defaultPanelAccessories
         setSize(new Dimension(getWidth()+1,getHeight()+1));
         setSize(new Dimension(getWidth()-1,getHeight()-1));
     }
+
+    public void printReport(Inventory item,ArrayList<DBEntity> invoice) {   
+
+        File directory = new File("Report");
+        directory.mkdir();
+        String reportTitle = "";
+
+        String startDate = dateFormat.format(startDateField.getDate());
+        String endDate = null;
+        
+        if (endDateField.getDate() != null) {
+            endDate = dateFormat.format(endDateField.getDate());
+            reportTitle = ("Report/Item_"+item.getName()+"_on_"+startDate+"_to_"+endDate+"_Report.pdf");
+        } else {
+            reportTitle = ("Report/Item_"+item.getName()+"_on_"+startDate+"_Report.pdf");
+        }
+
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(reportTitle))) {
+
+			Document doc = new Document(pdfDoc);
+            LineSeparator linebreak = new LineSeparator(new DashedLine());
+            float totalAmt = 0;
+            int totalQty = 0;
+
+			Paragraph reportTitleP = new Paragraph();
+            reportTitleP.setTextAlignment(TextAlignment.CENTER);
+
+            Paragraph reportTotal = new Paragraph();
+            Paragraph invoiceThankYou = new Paragraph();
+            invoiceThankYou.setTextAlignment(TextAlignment.CENTER);
+
+            reportTitleP.add(new Text("Jan's Wholesale and Retail \n").setFontSize(24).setBold());
+            reportTitleP.add(new Text("Report for Product#"+item.getProductCode()+"\n").setFontSize(18));
+            if (endDate != null) {
+                reportTitleP.add(new Text("From "+ startDate+ " to "+ endDate+"\n").setFontSize(18));
+            } else {
+                reportTitleP.add(new Text("From "+ startDate+"\n").setFontSize(18));
+            }
+            
+            Table reportItemTable = new Table(UnitValue.createPercentArray(new float[]{1,1,1,1,1,1}));
+            reportItemTable.setBorder(Border.NO_BORDER);
+            reportItemTable.setWidth(UnitValue.createPercentValue(100));
+
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Invoice#").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Product Code").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Name").setTextAlignment(TextAlignment.CENTER)).setBorder(Border.NO_BORDER));
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Quantity Sold").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Total Price").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            reportItemTable.addHeaderCell(new Cell().add(new Paragraph("Invoice Date").setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            
+            for (DBEntity entity : invoiceItems) {
+                InvoiceItem currentInvoiceItem = (InvoiceItem) entity;
+                Invoice currentInvoice = (Invoice) client.findEntity("Invoice","invoiceNum",Integer.toString(currentInvoiceItem.getInvoiceNum()));
+                reportItemTable.addCell(new Cell().add(new Paragraph(""+currentInvoice.getInvoiceNum()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                reportItemTable.addCell(new Cell().add(new Paragraph(""+item.getProductCode()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                reportItemTable.addCell(new Cell().add(new Paragraph(""+item.getName()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                reportItemTable.addCell(new Cell().add(new Paragraph(""+currentInvoiceItem.getItemQuantity()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                reportItemTable.addCell(new Cell().add(new Paragraph("$"+(item.getUnitPrice() * currentInvoiceItem.getItemQuantity())).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                reportItemTable.addCell(new Cell().add(new Paragraph(""+currentInvoice.getBillingDate()).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+                totalAmt += (item.getUnitPrice() * currentInvoiceItem.getItemQuantity());
+                totalQty += currentInvoiceItem.getItemQuantity();
+
+            }
+
+            reportTotal.add(new Text("Total Quanitiy Sold: ").setFontSize(16).setBold());
+            reportTotal.add(new Text(String.valueOf(totalQty)).setFontSize(16).setBold().setTextAlignment(TextAlignment.RIGHT));
+            reportTotal.add(new Text("\nTotal: $").setFontSize(20).setBold());
+            reportTotal.add(new Text(String.valueOf(totalAmt)).setFontSize(20).setBold().setTextAlignment(TextAlignment.RIGHT));
+            
+            invoiceThankYou.add(new Text("Thank You").setFontSize(20).setBold());
+            
+            doc.add(reportTitleP);
+            doc.add(linebreak);
+			doc.add(reportItemTable);
+            doc.add(linebreak);
+            doc.add(reportTotal);
+            doc.add(linebreak);
+            doc.add(invoiceThankYou);
+            doc.add(linebreak);
+            doc.close();
+
+            Object[] options = {"Yes","No"};
+
+
+            if (JOptionPane.showOptionDialog(this,"Would you like to open the Report?","Report Generated",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options, options[0])
+            == JOptionPane.YES_OPTION) {
+                try {
+                    Desktop.getDesktop().open(new File(reportTitle));
+                } catch (IOException e1) {
+                    logger.error(e1.toString());
+                };    
+            }
+            
+		} 
+
+        
+            
+        catch (IOException e) {
+            logger.error("An error occurred.");
+            logger.error(e.toString());
+        }
+
+        String.format("%20s %20s \r\n", "column 1", "column 2");
+        
+    }
+
+
 }

@@ -443,6 +443,12 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy++;
         mpCons.gridx = 0;
+        filterSection.add(dryGoodsButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy++;
+        mpCons.gridx = 0;
         filterSection.add(frozenGoodsButton,mpCons);
 
         mpCons.weightx = 0;
@@ -586,8 +592,9 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                     DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
                     int selectedRowIndex = prodTable.getSelectedRow();
 
-                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,4).toString()), model.getValueAt(selectedRowIndex,1).toString());
-                    if(model.getValueAt(selectedRowIndex,6) != null){
+                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,1).toString());
+
+                    if((model.getValueAt(selectedRowIndex,6) != null)){
                         item.setLongDescrip(model.getValueAt(selectedRowIndex,6).toString());
                     }
                     new ReportRangeDialog(client, prodPage, item);
@@ -688,6 +695,12 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
             @Override
             public void actionPerformed(ActionEvent e) {
                 bakedGoodsButton.filterInventoryTable(dairyButton.getText(),prodPage,client,headerModel);
+            }
+        });
+        dryGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bakedGoodsButton.filterInventoryTable(dryGoodsButton.getText(),prodPage,client,headerModel);
             }
         });
         frozenGoodsButton.addActionListener(new ActionListener() {

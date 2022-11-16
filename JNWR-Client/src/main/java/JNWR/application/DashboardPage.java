@@ -96,6 +96,12 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         userBox.setLayout(new GridBagLayout());
         
         JPanel reportPanel = new JPanel();
+        JLabel welcomeArea = new  JLabel();
+        welcomeArea.setText("<html>Welcome Back to Jan's Wholesale and Retail <br>You are appreciated<br> you are wonderful<br> you are a top tier worker<br> do your best<br> do a good job<br>Your corporate overloards appreciate you");
+        welcomeArea.setFont(new Font("Inter", Font.BOLD,36));
+        welcomeArea.setAlignmentX(SwingConstants.CENTER);
+        welcomeArea.setOpaque(false);
+       
 
         client.getList("invoice");
        
@@ -257,7 +263,16 @@ public class DashboardPage extends JPanel implements defaultPanelAccessories {
         mpCons.weighty = 1;
         mpCons.gridy = 0;
         mpCons.gridx = 0;
+        mpCons.insets = new Insets(30, 30, 60, 30);
+        mainSection.add(userBox, mpCons);
         userBox.add(reportPanel, mpCons);
+
+        mpCons.weightx = 1;
+        mpCons.weighty = 1;
+        mpCons.gridy = 0;
+        mpCons.gridx = 0;
+        //reportPanel.add(welcomeArea, mpCons);
+        mpCons.insets = new Insets(0, 30, 60, 30);
 
         //endregion
 

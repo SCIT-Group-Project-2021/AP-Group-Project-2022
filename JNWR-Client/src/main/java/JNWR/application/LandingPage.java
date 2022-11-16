@@ -165,7 +165,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         inventoryButton.setText("");
         sideBarButtons.add(inventoryButton);
 
-        invoiceButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-futures-100.png","src/main/resources/JWR-Icons/Black/icons8-futures-100.png");
+        invoiceButton = defaultPanelAccessories.iconToggleButton(sideBarX,sideBarY,sideBarImageX,sideBarImageY,"src/main/resources/JWR-Icons/White/icons8-bill-100.png","src/main/resources/JWR-Icons/Black/icons8-bill-100.png");
         invoiceButton.setBorder(round);
         invoiceButton.setText("");
         sideBarButtons.add(invoiceButton);

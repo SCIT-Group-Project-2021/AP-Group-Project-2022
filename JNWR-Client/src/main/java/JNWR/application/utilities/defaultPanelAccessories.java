@@ -494,14 +494,18 @@ public interface defaultPanelAccessories {
 
         public void filterInventoryTable(String filterValue, ProdPage prodPage, Client client, DefaultTableModel headerModel){
             //Fetches the id for the category we're searching for
-            InvenCategory category = (InvenCategory) client.findEntity("InvenCategory","name",filterValue);
-            String categoryId = category.getCategoryID();
-            //Searches the inventory table for any records with teh category list
-            ArrayList<DBEntity> list = client.getSpecificList("Inventory","categoryID",categoryId);
-            headerModel.setRowCount(0);
-            for (DBEntity entity : list) {
-                Inventory inven = (Inventory) entity;
-                headerModel.addRow(new Object[] {inven.getProductCode(),filterValue,inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+            try {
+                InvenCategory category = (InvenCategory) client.findEntity("InvenCategory","name",filterValue);
+                String categoryId = category.getCategoryID();
+                //Searches the inventory table for any records with teh category list
+                ArrayList<DBEntity> list = client.getSpecificList("Inventory","categoryID",categoryId);
+                headerModel.setRowCount(0);
+                for (DBEntity entity : list) {
+                    Inventory inven = (Inventory) entity;
+                    headerModel.addRow(new Object[] {inven.getProductCode(),filterValue,inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
+                }
+            } catch (NullPointerException e) {
+                logger.warn(e.toString());
             }
         }
     }
