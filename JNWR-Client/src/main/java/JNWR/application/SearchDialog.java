@@ -343,14 +343,21 @@ public class SearchDialog extends JFrame implements defaultPanelAccessories {
 
                 try{
                     DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
+                    //Gets the item selected from the table
                     int selectedRowIndex = searchTable.getSelectedRow();
+
+                    //Gets the list of products that are already on the invoice
                     ArrayList<InvoiceItem> invoiceItemArrayList = posPage.getInvoiceItemArrayList();
                     qty = Integer.parseInt(qtyTextField.getText());
 
+                    //Checks if the qty entered is less than or equal to the stock available
                     if(qty <= Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
                         InvoiceItem newItem = new InvoiceItem(model.getValueAt(selectedRowIndex,0).toString(), qty);
+
+                        //Checks if the item selected is already a part of the invoice
                         for(int i = 0; i < invoiceItemArrayList.size();i++){
                             if(invoiceItemArrayList.get(i).getProductCode().equals(newItem.getProductCode())){
+                                //Adds the requested quantity to what is already in the invoice and checks if that is less than or equal to the stock provided
                                 if(invoiceItemArrayList.get(i).getItemQuantity() + newItem.getItemQuantity() < Integer.parseInt((model.getValueAt(selectedRowIndex,2).toString()))){
                                     invoiceItemArrayList.get(i).setItemQuantity(invoiceItemArrayList.get(i).getItemQuantity() + newItem.getItemQuantity());
                                     posPage.changeQuantityInSearch(invoiceItemArrayList.get(i));

@@ -17,7 +17,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
     public JPanel mainPanel;
     public JPanel dashBoard;
     public JPanel customer;
-    public JPanel report;
+    public ReportPage report;
     public JPanel staff;
     public JPanel inventory;
     public JPanel pos;
@@ -55,10 +55,10 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
         defaults.putIfAbsent("Table.rowColor", Color.decode("#e5ebf4"));
 
         //region Base Frame Setup
-        setSize(1280, 720);
-        setVisible(true);
+        setSize(1600, 900);
+
         setLocationRelativeTo(null);
-        setMinimumSize(new Dimension(1380,820));
+        setMinimumSize(new Dimension(1600,900));
         setLayout(new GridBagLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -286,7 +286,7 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         replaceWindow(mainPanel, card, "invoice");
-
+                        report.updateTable();
                     }
                 }
         );
@@ -318,6 +318,8 @@ public class LandingPage extends JFrame implements defaultPanelAccessories{
                 }
             }
         });
+
+        setVisible(true);
         refresh();
         pack();
 

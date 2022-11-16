@@ -82,7 +82,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
     String headers[] = { "PRODUCT NAME", "UNIT PRICE", "QTY","TOTAL"};
     ArrayList<Inventory> checkOutItems= new ArrayList<>();
     float total = 0;
-    final float tax = (float)0.16;
+    final float tax = (float)0.15;
 
     public ArrayList<InvoiceItem> getInvoiceItemArrayList() {
         return invoiceItemArrayList;
@@ -120,7 +120,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         empName = new JLabel();
-        empName.setText(employee.getfName() + " " + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName().substring(0,1)+".");
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -565,7 +565,7 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 5;
         mpCons.gridx = 0;
-        JLabel taxLabel = new JLabel("Tax 16%");
+        JLabel taxLabel = new JLabel("Tax 15%");
         taxLabel.setFont(medText);
         taxLabel.setForeground(Color.WHITE);
         rightSection.add(taxLabel, mpCons);
@@ -895,13 +895,13 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
             public void actionPerformed(ActionEvent e) {
                 if (invoiceItemArrayList.isEmpty()) {
 
-                    JOptionPane.showMessageDialog(new JFrame(),"cant Process Empty Invoice","ERROR", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(new JFrame(),"Cant process empty invoice","ERROR", JOptionPane.ERROR_MESSAGE);
                     
                 }else{
                     LocalDate dateTime = LocalDate.now();
                     String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")).toString();
                     if (invoiceCustomer != null) {
-                        Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),319219);
+                        Invoice invoice = new Invoice(dateString,getInvoiceCustomer().getCustomerId(),employee.getIdNum());
                         printInvoice(getInvoiceNum(),invoice,invoiceItemArrayList,dateString);
                         client.addEntity(invoice);
                         for (InvoiceItem checkoutItems : invoiceItemArrayList) {
@@ -911,9 +911,8 @@ public class PosPage extends JPanel implements defaultPanelAccessories{
                         }     
                     } 
                     else {
-                    //TODO: Login must set StaffID
                     
-                        Invoice invoice = new Invoice(dateString,319219);
+                        Invoice invoice = new Invoice(dateString,employee.getIdNum());
                         printInvoice(getInvoiceNum(),invoice,invoiceItemArrayList,dateString);
                         client.addEntity(invoice);
                         for (InvoiceItem checkoutItems : invoiceItemArrayList) {

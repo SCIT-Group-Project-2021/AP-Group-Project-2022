@@ -21,7 +21,7 @@ public class Invoice extends DBEntity implements Serializable{
     int staffID;
 
     public Invoice(){}
-    
+
     public Invoice(String billingDate, int staffID) {
         this.billingDate = billingDate;
         this.customerID = null;
@@ -33,6 +33,7 @@ public class Invoice extends DBEntity implements Serializable{
         this.customerID = customerID;
         this.staffID = staffID;
     }
+
 
     //region Getters and Setters
 
@@ -70,40 +71,14 @@ public class Invoice extends DBEntity implements Serializable{
 
     //endregion
 
-    //TODO: Something isnt working in here so i temporarily commented it out
-    // Creating an invoice item
-    //Map<String, Object> params = new HashMap<>();
-    /* 
-    params.put("cus_ID");
-    params.put("price");
-
-    InvoiceItem invoiceItem =
-            InvoiceItem.create(params);
-
-    //Retrieve and inoice item
-    InvoiceItem invoiceItem =
-            InvoiceItem.retrieve("");
-
-    //Update an invoice item
-    InvoiceItem updatedInvoiceItem =
-            invoiceItem.update(params);
-
-    //Delete and invoice item
-    InvoiceItem deletedInvoiceItem =
-            invoiceItem.delete();
-
-    //List of all invoice items
-    InvoiceItemCollection invoiceItems =
-            InvoiceItem.list(params);*/
-
     @Override
     public String toString() {
-        return 
-            "\n invoiceNum= " + getInvoiceNum() +
-            ", billingDate= " + getBillingDate() +
-            ", customerID= " + getCustomerID() +
-            ", staffID= " + getStaffID();
+        return
+                "\n invoiceNum= " + getInvoiceNum() +
+                        ", billingDate= " + getBillingDate() +
+                        ", customerID= " + getCustomerID() +
+                        ", staffID= " + getStaffID();
     }
 
-    
+
 }

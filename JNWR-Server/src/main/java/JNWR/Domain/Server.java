@@ -8,20 +8,17 @@ import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 
 import org.hibernate.boot.MappingNotFoundException;
 
 import Entity.*;
+import org.hibernate.exception.ConstraintViolationException;
 
 public class Server {
 
@@ -264,7 +261,7 @@ public class Server {
                            logger.info("Removing Entity");
 
                             try {
-                                removeEntity((Integer)objIs.readObject(),(DBEntity)objIs.readObject());
+                                sendInteger(removeEntity((Integer)objIs.readObject(),(DBEntity)objIs.readObject()));
                                 sendAction("Task Completed");
                                 
                             } catch (ConnectException e) {
@@ -277,7 +274,7 @@ public class Server {
                             logger.info("Removing Entity by string");
 
                             try {
-                                removeEntity((String)objIs.readObject(),(DBEntity)objIs.readObject());
+                                sendInteger(removeEntity((String)objIs.readObject(),(DBEntity)objIs.readObject()));
                                 sendAction("Task Completed");
 
                             } catch (ConnectException e) {
@@ -331,6 +328,47 @@ public class Server {
                                 logger.error(e.toString());  
                             }
 
+                        break;
+
+                        case "reportInvoiceList":
+                            logger.info("Searching invoice table for dates selected");
+                            try{
+                                sendList(reportInvoiceList((String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            }
+                            catch(MappingNotFoundException e){
+                                logger.error(e.toString());
+                            }
+                            catch (ConnectException e) {
+                                logger.error(e.toString());
+                            }
+                        break;
+
+                        case "getSpecificInvoiceReport":
+                            logger.info("Searching related table for dates selected");
+                            try{
+                                sendEntity(getSpecificInvoiceReport((String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject(),(String) objIs.readObject()));
+                                sendAction("Task Completed");
+                            }
+                            catch(MappingNotFoundException e){
+                                logger.error(e.toString());
+                            }
+                            catch (ConnectException e) {
+                                logger.error(e.toString());
+                            }
+                        break;
+                        case "removeInvoiceItem":
+                            logger.info("Removing invoice item");
+                            try{
+                                removeInvoiceItem((DBEntity) objIs.readObject(),(Integer) objIs.readObject(),(String) objIs.readObject());
+                                sendAction("Task Completed");
+                            }
+                            catch(MappingNotFoundException e){
+                                logger.error(e.toString());
+                            }
+                            catch (ConnectException e) {
+                                logger.error(e.toString());
+                            }
                         break;
 
                         case "shutDown":
@@ -436,22 +474,23 @@ public class Server {
             }
         }
     
-        private void removeEntity(Integer ID, DBEntity Entity) {
-    
+
+        private void removeInvoiceItem(DBEntity Entity, Integer invoiceNum, String productCode) {
+
             EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
-    
+
             EntityTransaction transaction = em.getTransaction();
-    
+
             try {
-    
+                InvoiceItemID itemId = new InvoiceItemID(productCode, invoiceNum);
                 transaction.begin();
-    
-                DBEntity dbEntity = em.find(Entity.getClass(), ID);
-    
+
+                DBEntity dbEntity = em.find(Entity.getClass(), itemId);
+
                 em.remove(dbEntity);
-            
+
                 transaction.commit();
-                
+
             } catch (EntityNotFoundException e) {
                 // TODO: handle exception
                 e.printStackTrace();
@@ -461,11 +500,13 @@ public class Server {
             }
         }
 
-        private void removeEntity(String ID, DBEntity Entity) {
+        private Integer removeEntity(Integer ID, DBEntity Entity) {
 
             EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 
             EntityTransaction transaction = em.getTransaction();
+
+            Integer result = -1;
 
             try {
 
@@ -477,12 +518,70 @@ public class Server {
 
                 transaction.commit();
 
-            } catch (EntityNotFoundException e) {
+                result = 0;
+
+            }
+            catch(RollbackException e){
+                //e.printStackTrace();
+                logger.error(e.toString());
+                result = 1;
+            }
+            catch (EntityNotFoundException e) {
+                e.printStackTrace();
+            }
+            catch(PersistenceException e){
+                //e.printStackTrace();
+                logger.error(e.toString());
+                result = 1;
+            } catch (IllegalArgumentException e) {
                 // TODO: handle exception
                 e.printStackTrace();
-            }catch (IllegalArgumentException e) {
+            }
+            finally{
+                return result;
+            }
+        }
+
+
+        private Integer removeEntity(String ID, DBEntity Entity) {
+
+            EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            EntityTransaction transaction = em.getTransaction();
+
+            Integer result = -1;
+
+            try {
+
+                transaction.begin();
+
+                DBEntity dbEntity = em.find(Entity.getClass(), ID);
+
+                em.remove(dbEntity);
+
+                transaction.commit();
+
+                result = 0;
+
+            }
+            catch(RollbackException e){
+                //e.printStackTrace();
+                logger.error(e.toString());
+                result = 1;
+            }
+            catch (EntityNotFoundException e) {
+                e.printStackTrace();
+            }
+            catch(PersistenceException e){
+                //e.printStackTrace();
+                logger.error(e.toString());
+                result = 1;
+            } catch (IllegalArgumentException e) {
                 // TODO: handle exception
                 e.printStackTrace();
+            }
+            finally{
+                return result;
             }
         }
     
@@ -604,10 +703,7 @@ public class Server {
                 // TODO: handle exception
                 e.printStackTrace();
             }
-            
-    
             return entityList;
-            
         }
     
         public List<DBEntity> listSpecificEntity(String Table,String IDType, String ID) throws MappingNotFoundException{
@@ -621,8 +717,7 @@ public class Server {
                 // TODO: handle exception
                 e.printStackTrace();
             }
-    
-    
+
             return entityList;
     
         }
@@ -635,13 +730,66 @@ public class Server {
             try {
                 entityList = em2.createQuery("SELECT a FROM " + Table + " a WHERE " + IDType + " LIKE '" + ID + "'",DBEntity.class).getResultList();
             } catch (IllegalArgumentException e) {
-                // TODO: handle exception
                 e.printStackTrace();
             }
     
     
             return entityList;
     
+        }
+
+        public List<DBEntity> reportInvoiceList(String startDate, String endDate) throws MappingNotFoundException{
+            EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            List<DBEntity> entityList = null;
+            Invoice inv;
+
+            try {
+                if(endDate != null){
+                    entityList = em2.createQuery("SELECT a FROM Invoice a WHERE a.billingDate BETWEEN '" + startDate + "' AND '"+ endDate + "'",DBEntity.class).getResultList();
+                }
+                else{
+                    entityList = em2.createQuery("SELECT a FROM Invoice a WHERE a.billingDate LIKE '" + startDate + "'",DBEntity.class).getResultList();
+                }
+                for(DBEntity entity : entityList){
+                    inv = (Invoice) entity;
+                    System.out.println(inv);
+                }
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            catch (NoResultException e) {
+
+                e.printStackTrace();
+            }
+            finally {
+                return entityList;
+            }
+
+
+        }
+
+        public DBEntity getSpecificInvoiceReport(String table,String idType, String ID, String idType2,String id2) throws MappingNotFoundException{
+            EntityManager em2 = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+            DBEntity dbEntity = null;
+
+            try {
+                dbEntity = em2.createQuery("SELECT a FROM " + table + " a WHERE " + idType + " LIKE '" + ID + "'AND " + idType2 + " LIKE '" + id2 + "'",DBEntity.class).getSingleResult();
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            catch (NoResultException e) {
+
+                e.printStackTrace();
+            }
+            finally {
+                return dbEntity;
+            }
+
+
         }
     
         public void sendList(List<DBEntity> entityList) {
@@ -651,7 +799,7 @@ public class Server {
                 e.printStackTrace();
             }
         }
-    
+
         public static void addEntity(DBEntity entity) {
             EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
             EntityTransaction et = null;
@@ -679,6 +827,14 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
     
+            }
+        }
+        public void sendInteger(Integer i) {
+            try {
+                objOs.writeObject(i);
+            } catch (IOException e) {
+                e.printStackTrace();
+
             }
         }
     

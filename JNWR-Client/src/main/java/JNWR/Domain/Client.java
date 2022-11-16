@@ -143,10 +143,83 @@ public class Client {
   
     }
 
+    public ArrayList<DBEntity> reportInvoiceList(String startDate, String endDate) {
+
+        ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
+        //Calls the specific list function
+        sendAction("reportInvoiceList");
+        //Tells the function what the start date is
+        sendAction(startDate);
+        //Tells the function what the end date is
+        sendAction(endDate);
+
+        try {
+            list =(ArrayList<Entity.DBEntity>) objIs.readObject();
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        } catch (NullPointerException e) {
+            logger.error(e.toString());
+        }
+
+        try {
+            logger.info((String) objIs.readObject());
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+
+        return list;
+
+    }
+
+    public DBEntity getSpecificInvoiceReport(String Table,String IDType, String ID, String IDType2, String ID2) {
+        //Calls the specific list function
+        sendAction("getSpecificInvoiceReport");
+        //Tells the function what table to return
+        sendAction(Table);
+        //Tells the function what Column to use to find the items
+        sendAction(IDType);
+        //Tells the function IDs to return
+        sendAction(ID);
+        //Tells the function what Column to use to find the items
+        sendAction(IDType2);
+        //Tells the function IDs to return
+        sendAction(ID2);
+
+        DBEntity entity = null;
+
+        try {
+            entity = (DBEntity)objIs.readObject();
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        } catch (NullPointerException e) {
+            logger.error(e.toString());
+        }
+
+
+        try {
+            logger.info((String) objIs.readObject());
+
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return entity;
+
+    }
+
+
+
     public ArrayList<DBEntity> getSpecificList(String Table,String IDType, String ID) {
 
         ArrayList<Entity.DBEntity> list = new ArrayList<Entity.DBEntity>();
-        //Calls the a specific list function
+        //Calls the specific list function
         sendAction("getSpecificList");
         //Tells the function what table to return
         sendAction(Table);
@@ -398,27 +471,55 @@ public class Client {
         }
     }
 
-    public void removeEntity(DBEntity entity,  Integer ID) {
+    public Integer removeEntity(DBEntity entity,  Integer ID) {
         //Sends the action to the Server
         sendAction("removeEntity");
         sendInteger(ID);
         sendEntity(entity);
-
+        Integer result = -2;
         try {
+            result = (Integer) objIs.readObject();
             logger.info((String) objIs.readObject());
+
         } catch (ClassNotFoundException e) {
             logger.error(e.toString());
         } catch (IOException e) {
             logger.error(e.toString());
         }
+        finally{
+            return result;
+        }
 
     }
 
-    public void removeEntity(DBEntity entity, String ID) {
+    public Integer removeEntity(DBEntity entity, String ID) {
         //Calls the get list function
         sendAction("removeEntityString");
         sendAction(ID);
         sendEntity(entity);
+        Integer result = -2;
+        try {
+            result = (Integer) objIs.readObject();
+            logger.info((String) objIs.readObject());
+
+        } catch (ClassNotFoundException e) {
+            logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        finally{
+            return result;
+        }
+
+    }
+
+    public void removeInvoiceItem(DBEntity entity, Integer invoiceNum, String productCode) {
+        //Calls the get list function
+        sendAction("removeInvoiceItem");
+        sendEntity(entity);
+        sendInteger(invoiceNum);
+        sendAction(productCode);
+
 
         try {
             logger.info((String) objIs.readObject());
@@ -427,8 +528,9 @@ public class Client {
         } catch (IOException e) {
             logger.error(e.toString());
         }
-
     }
+
+
 
     //endregion
     

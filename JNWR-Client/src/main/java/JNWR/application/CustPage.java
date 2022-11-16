@@ -16,9 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
-import Entity.Customer;
-import Entity.DBEntity;
-import Entity.Staff;
+import Entity.*;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -99,7 +97,7 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + " " + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName().substring(0,1)+".");
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -415,33 +413,80 @@ public class CustPage extends JPanel implements defaultPanelAccessories{
                 else{
                     DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                     int selectedRowIndex = customerTable.getSelectedRow();
-                    Customer customer = new Customer(Integer.parseInt(model.getValueAt(selectedRowIndex,0).toString()),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,5).toString(),model.getValueAt(selectedRowIndex,6).toString(),model.getValueAt(selectedRowIndex,6).toString());
+                    Customer customer = new Customer(Integer.parseInt(model.getValueAt(selectedRowIndex,0).toString()),model.getValueAt(selectedRowIndex,1).toString(),model.getValueAt(selectedRowIndex,2).toString(), model.getValueAt(selectedRowIndex,4).toString(),model.getValueAt(selectedRowIndex,6).toString(),model.getValueAt(selectedRowIndex,6).toString());
+                    if(model.getValueAt(selectedRowIndex,3) != null){
+                        customer.setDob(model.getValueAt(selectedRowIndex,3).toString());
+                    }
+
+                    if(model.getValueAt(selectedRowIndex,5) != null){
+                        customer.setEmail(model.getValueAt(selectedRowIndex,5).toString());
+                    }
+
                     new EditCustomerDialog(client, custPage, customer);
                     SwingUtilities.getWindowAncestor(custPage).setEnabled(false);
                 }
             }
         });
-        /*
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(customerTable.getSelectionModel().isSelectionEmpty()){
-                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit record", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     DefaultTableModel model = (DefaultTableModel) customerTable.getModel();
                     int selectedRowIndex = customerTable.getSelectedRow();
+
+                    //Gets product code and name from selected entity row
                     String customerId = model.getValueAt(selectedRowIndex,0).toString();
-                    String customerName = model.getValueAt(selectedRowIndex,1).toString()  + " " + model.getValueAt(selectedRowIndex,2).toString();
-                    int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+customerName+ "\"?\nId Number: "+ customerId, "Delete Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    String customerName = model.getValueAt(selectedRowIndex,1).toString() + " " + model.getValueAt(selectedRowIndex,2).toString();
+
+                    int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+customerName+ "\"?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
                     if(result == JOptionPane.YES_OPTION){
-                        client.removeEntity(new Customer(), Integer.parseInt(customerId));
-                        JOptionPane.showMessageDialog(new JFrame(), "Product deleted successfully!");
+                        Integer queryResult = client.removeEntity(new Customer(), Integer.parseInt(customerId));
+                        switch(queryResult){
+                            case 0:
+                                JOptionPane.showMessageDialog(new JFrame(),"ID Number: " + customerId + "\n" + customerName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                            case 1:
+                                JOptionPane.showMessageDialog(new JFrame(),"This customer is associated with invoice records so they cannot be deleted.","Cannot delete staff", JOptionPane.ERROR_MESSAGE);
+                                /*
+                                //If customer is a part of a discount is applied if the customer is no longer there, the return value from the calculation will be incorrect
+                                int deleteConfirmation = JOptionPane.showConfirmDialog(new Frame(), "If you delete \""+ customerName + "\", all invoice records associate with this person must be deleted as well. Are you sure you want to delete them?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+                                    if(deleteConfirmation == JOptionPane.YES_OPTION){
+                                        //Gets the list of invoices that includes the customer that wants to be deleted
+                                        ArrayList<DBEntity> invoiceArrayList = client.getExactList("Invoice","customerId", customerId);
+                                        for(DBEntity entity : invoiceArrayList){
+                                            Invoice inv = (Invoice) entity;
+                                            inv.setCustomerID(null);
+                                            //After the customer is removed from the invoice, it can be removed from the customer table
+                                            client.alterEntity(inv, inv.getInvoiceNum());
+                                        }
+
+                                        //After the invoices are altered, the customer can be removed from the table
+                                        client.removeEntity(new Customer(), Integer.parseInt(customerId));
+                                        if(queryResult == 0){
+                                            JOptionPane.showMessageDialog(new JFrame(),"Product Code: " + customerName + "\n" + customerName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                                        }
+                                        else{
+                                            JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete product", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                */
+                                break;
+                            default:
+                                JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete product", JOptionPane.ERROR_MESSAGE);
+                                break;
+                        }
+
                         updateTable();
                     }
                 }
             }
-        });*/
+        });
         //endregion
 
         updateTable();

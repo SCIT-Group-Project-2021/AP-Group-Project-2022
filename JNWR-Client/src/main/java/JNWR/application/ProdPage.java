@@ -13,10 +13,7 @@ import java.awt.event.FocusListener;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import Entity.DBEntity;
-import Entity.InvenCategory;
-import Entity.Inventory;
-import Entity.Staff;
+import Entity.*;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -115,7 +112,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + " " + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName().substring(0,1)+".");
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -126,6 +123,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         JPanel filterSection = defaultPanelAccessories.createJPanel(0, 350, 80);
         filterSection.setLayout(new GridBagLayout());
         filterSection.setBackground(null);
+
 
         addNewCategory = defaultPanelAccessories.iconButton(35,35,"src/main/resources/JWR-Icons/Black/icons8-trans-100.png");
         allGoodsButton = new JFilterButton(150,35,35,35,"src/main/resources/JWR-Icons/Black/icons8-diversity-100.png", "All Goods");
@@ -174,6 +172,7 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         tableHeading.setFont(heading2);
 
         JButton editButton = defaultPanelAccessories.iconButton(23,23,"src/main/resources/JWR-Icons/icons8-pencil-100.png");
+        JButton reportButton = defaultPanelAccessories.iconButton(23,23,"src/main/resources/JWR-Icons/icons8-graph-report-100.png");
         JButton deleteButton = defaultPanelAccessories.iconButton(33,33,"src/main/resources/JWR-Icons/icons8-remove-100.png");
 
         Image searchImage = new ImageIcon("src/main/resources/JWR-Icons/Black/icons8-search-100.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
@@ -212,6 +211,12 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         mpCons.weighty = 0;
         mpCons.gridy = 0;
         mpCons.gridx++;
+        searchBar.add(reportButton,mpCons);
+
+        mpCons.weightx = 0;
+        mpCons.weighty = 0;
+        mpCons.gridy = 0;
+        mpCons.gridx++;
         searchBar.add(deleteButton,mpCons);
 
         mpCons.weightx = 0;
@@ -234,8 +239,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         searchBar.add(searchButton,mpCons);
         //endregion
         //endregion
-
-
 
         //region Customer Table Bar
         
@@ -375,7 +378,6 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
         mpCons.gridx++;
         JLabel separator = new JLabel();
         separator.setFont(new Font("Roboto", Font.BOLD, 40));
-        //Color c = new Color(r,g,b,a);
         separator.setForeground(Color.decode("#dedee0"));
         separator.setText("  |  ");
         dateTimePanel.add(separator);
@@ -562,15 +564,40 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 else{
                     DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
                     int selectedRowIndex = prodTable.getSelectedRow();
-                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),model.getValueAt(selectedRowIndex,4).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,6).toString());
 
+                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,5).toString()),model.getValueAt(selectedRowIndex,1).toString());
+
+                    if((model.getValueAt(selectedRowIndex,6) != null)){
+                        item.setLongDescrip(model.getValueAt(selectedRowIndex,6).toString());
+                    }
                     new EditProductDialog(client, prodPage, item);
                     SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
                 }
             }
         });
 
-        /*deleteButton.addActionListener(new ActionListener() {
+        reportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(prodTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot find report", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
+                    int selectedRowIndex = prodTable.getSelectedRow();
+
+                    Inventory item = new Inventory(model.getValueAt(selectedRowIndex,0).toString(),model.getValueAt(selectedRowIndex,2).toString(),model.getValueAt(selectedRowIndex,3).toString(),Integer.parseInt(model.getValueAt(selectedRowIndex,4).toString()),Float.parseFloat(model.getValueAt(selectedRowIndex,4).toString()), model.getValueAt(selectedRowIndex,1).toString());
+                    if(model.getValueAt(selectedRowIndex,6) != null){
+                        item.setLongDescrip(model.getValueAt(selectedRowIndex,6).toString());
+                    }
+                    new ReportRangeDialog(client, prodPage, item);
+                    SwingUtilities.getWindowAncestor(prodPage).setEnabled(false);
+                }
+
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(prodTable.getSelectionModel().isSelectionEmpty()){
@@ -579,21 +606,58 @@ public class ProdPage extends JPanel implements defaultPanelAccessories{
                 else{
                     DefaultTableModel model = (DefaultTableModel) prodTable.getModel();
                     int selectedRowIndex = prodTable.getSelectedRow();
+
+                    //Gets product code and name from selected entity row
                     String productCode = model.getValueAt(selectedRowIndex,0).toString();
                     String productName = model.getValueAt(selectedRowIndex,2).toString();
+
                     int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+productName+ "\"?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE);
                     if(result == JOptionPane.YES_OPTION){
-                        client.removeEntity(new Inventory(), productCode);
-                        JOptionPane.showMessageDialog(new JFrame(), "Product deleted successfully!");
+                        Integer queryResult = client.removeEntity(new Inventory(), productCode);
+                        switch(queryResult){
+                            case 0:
+                                JOptionPane.showMessageDialog(new JFrame(),"Product Code: " + productCode + "\n" + productName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                            case 1:
+                                JOptionPane.showMessageDialog(new JFrame(),"This product is involved in invoice records so it cannot be deleted.","Cannot delete product", JOptionPane.ERROR_MESSAGE);
+                                /*
+                                If invoice items are allowed to be deleted then this code should be uncommented
+                                int deleteConfirmation = JOptionPane.showConfirmDialog(new Frame(), "If you delete \""+productName+ "\", all invoice records with this item must be delete as well. Are you sure you want to delete it ?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+                                    if(deleteConfirmation == JOptionPane.YES_OPTION){
+                                        //Gets the list of invoice items that include the product code that wants to be deleted
+                                        ArrayList<DBEntity> entityArrayList = client.getExactList("InvoiceItem","productCode", productCode);
+
+                                        //Removes the invoice items from the invoice item table
+                                        for(DBEntity entity : entityArrayList){
+                                            InvoiceItem item = (InvoiceItem) entity;
+                                            client.removeInvoiceItem(item, item.getInvoiceNum(),item.getProductCode());
+                                        }
+
+                                        //After the invoice items are removed, the product can be removed from the product table
+                                        queryResult = client.removeEntity(new Inventory(), productCode);
+                                        if(queryResult == 0){
+                                            JOptionPane.showMessageDialog(new JFrame(),"Product Code: " + productCode + "\n" + productName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                                        }else{
+                                            JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete product", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                    */
+                            break;
+                            default:
+                                JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete product", JOptionPane.ERROR_MESSAGE);
+                                break;
+                        }
+
                         updateTable();
                     }
                 }
             }
-        });*/
+        });
         //endregion
 
-        //region filter buttons
+        //region Filter buttons
         allGoodsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -3,10 +3,6 @@ package Entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 @Entity
 @Table(name = "customer")
 public class Customer extends DBEntity implements Serializable {
@@ -37,7 +33,17 @@ public class Customer extends DBEntity implements Serializable {
     String dateOfMembershipExpiry;
 
     public Customer(){
-        
+    }
+
+    public Customer(int idNum, String fName, String lName, String telephoneNum, String dateOfMembership,String dateOfMembershipExpiry) {
+        this.customerId = idNum;
+        this.fName = fName;
+        this.lName = lName;
+        this.dob = dob;
+        this.telephoneNum = telephoneNum;
+        this.email = email;
+        this.dateOfMembership = dateOfMembership;
+        this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
 
     public Customer(int idNum, String fName, String lName, String dob, String telephoneNum, String email, String dateOfMembership,String dateOfMembershipExpiry) {
@@ -60,6 +66,7 @@ public class Customer extends DBEntity implements Serializable {
         this.dateOfMembership = dateOfMembership;
         this.dateOfMembershipExpiry = dateOfMembershipExpiry;
     }
+
     //region Getters and setters
     public int getCustomerId() {
         return customerId;
@@ -129,15 +136,15 @@ public class Customer extends DBEntity implements Serializable {
 
     @Override
     public String toString() {
-        return 
-            "\n customerId= " + getCustomerId() +
-            ", fName= " + getfName() +
-            ", lName= " + getlName() +
-            ", dob= " + getDob() +
-            ", telephoneNum= " + getTelephoneNum() +
-            ", email= " + getEmail() +
-            ", dateOfMembership= " + getDateOfMembership() +
-            ", dateOfMembershipExpiry= " + getDateOfMembershipExpiry();
+        return
+                "\n customerId= " + getCustomerId() +
+                        ", fName= " + getfName() +
+                        ", lName= " + getlName() +
+                        ", dob= " + getDob() +
+                        ", telephoneNum= " + getTelephoneNum() +
+                        ", email= " + getEmail() +
+                        ", dateOfMembership= " + getDateOfMembership() +
+                        ", dateOfMembershipExpiry= " + getDateOfMembershipExpiry();
     }
 
 

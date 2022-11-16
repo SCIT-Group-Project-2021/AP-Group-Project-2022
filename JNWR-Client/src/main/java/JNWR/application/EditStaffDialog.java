@@ -36,7 +36,7 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
     JLabel dobLabel;
     JLabel empTypeLabel;
     JButton cancelButton;
-    JButton addEmployeeButton;
+    JButton editEmployeeButton;
     MaskFormatter fmt;
 
     CustomRoundComboBox<String> departmentCombo;
@@ -168,12 +168,12 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
         cancelButton.setPreferredSize(new Dimension(20,50));
         cancelButton.setBorder(round);
 
-        addEmployeeButton = defaultPanelAccessories.defaultButton();
-        addEmployeeButton.setText("Add Employee");
-        addEmployeeButton.setFont(smText);
-        addEmployeeButton.setForeground(Color.white);
-        addEmployeeButton.setBackground(Color.decode("#005DFB"));
-        addEmployeeButton.setPreferredSize(new Dimension(20,50));
+        editEmployeeButton = defaultPanelAccessories.defaultButton();
+        editEmployeeButton.setText("Edit Employee");
+        editEmployeeButton.setFont(smText);
+        editEmployeeButton.setForeground(Color.white);
+        editEmployeeButton.setBackground(Color.decode("#005DFB"));
+        editEmployeeButton.setPreferredSize(new Dimension(20,50));
         //endregion
 
 
@@ -338,7 +338,7 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
         mpCons.gridy = 0;
         mpCons.gridx++;
         mpCons.insets = new Insets(0, 50, 0, 0);
-        buttonBox.add(addEmployeeButton,mpCons);
+        buttonBox.add(editEmployeeButton,mpCons);
 
         mpCons.weightx = 1;
         mpCons.gridwidth = 1;
@@ -361,7 +361,7 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
 
 
 
-        addEmployeeButton.addActionListener(new ActionListener() {
+        editEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(firstNameField.getText() != "" && lastNameField.getText() != "" && !telephoneNumberField.getText().equals("1-   -   -    ") && staffIdField.getText() !="" && departmentCombo.getSelectedIndex() != 0 && empTypeCombo.getSelectedIndex() != 0){
@@ -392,7 +392,7 @@ public class EditStaffDialog extends JFrame implements defaultPanelAccessories {
 
                         client.alterEntity(employee, employee.getIdNum());
                         staffPage.updateTable();
-                        JOptionPane.showMessageDialog(new JFrame(), "New staff member added successfully!");
+                        JOptionPane.showMessageDialog(new JFrame(), "Staff member edit completed successfully!");
                         SwingUtilities.getWindowAncestor(staffPage).setEnabled(true);
                         dispose();
                     }

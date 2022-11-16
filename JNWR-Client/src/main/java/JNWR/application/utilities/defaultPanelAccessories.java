@@ -462,8 +462,13 @@ public interface defaultPanelAccessories {
         }
 
         public void mouseDragged(MouseEvent e) {
-            Point currCoords = e.getLocationOnScreen();
-            frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+            try{
+                Point currCoords = e.getLocationOnScreen();
+                frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+            }
+           catch(NullPointerException ex){
+                logger.warn(ex.toString());
+           }
         }
         // got from
         // https://stackoverflow.com/questions/16046824/making-a-java-swing-frame-movable-and-setundecorated
@@ -486,15 +491,17 @@ public interface defaultPanelAccessories {
             setHorizontalAlignment(SwingConstants.LEFT);
             setFont(miniText);
         }
+
         public void filterInventoryTable(String filterValue, ProdPage prodPage, Client client, DefaultTableModel headerModel){
+            //Fetches the id for the category we're searching for
             InvenCategory category = (InvenCategory) client.findEntity("InvenCategory","name",filterValue);
             String categoryId = category.getCategoryID();
+            //Searches the inventory table for any records with teh category list
             ArrayList<DBEntity> list = client.getSpecificList("Inventory","categoryID",categoryId);
             headerModel.setRowCount(0);
             for (DBEntity entity : list) {
                 Inventory inven = (Inventory) entity;
-                headerModel.addRow(new Object[] {inven.getProductCode(),inven.getCategoryID(),inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
-
+                headerModel.addRow(new Object[] {inven.getProductCode(),filterValue,inven.getName(),inven.getShortDescrip(),inven.getStock(),inven.getUnitPrice()});
             }
         }
     }

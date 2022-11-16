@@ -30,7 +30,6 @@ public class LoginPage extends JFrame{
         this.setUndecorated(true);
         this.setShape(new RoundRectangle2D.Double(0,0,500,720,30,30));
         setSize(500, 720);
-        setVisible(true);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(new GridBagLayout());
@@ -112,8 +111,6 @@ public class LoginPage extends JFrame{
         mpCons.insets = new Insets(0,120, 25, 120);
         mainPanel.add(exitButton,mpCons);
 
-        refresh();
-
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,7 +144,10 @@ public class LoginPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-        });   
+        });
+
+        setVisible(true);
+        refresh();
 
     }
 

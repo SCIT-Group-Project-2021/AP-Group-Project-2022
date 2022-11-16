@@ -127,11 +127,14 @@ public class EditCustomerDialog extends JFrame implements defaultPanelAccessorie
         dobDateField = new JXDatePicker();
         dobDateField.getMonthView().setZoomable(true);
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            dobDateField.setDate(formatter.parse(cust.getDob()));
-        } catch (ParseException e) {
-            logger.error("Invalid date passed");
+        if(cust.getDob() != null){
+            try {
+                dobDateField.setDate(formatter.parse(cust.getDob()));
+            } catch (ParseException e) {
+                logger.error("Invalid date passed");
+            }
         }
+
 
         telephoneNumberLabel = new JLabel("Telephone Number");
         telephoneNumberLabel.setFont(smText);
@@ -152,7 +155,10 @@ public class EditCustomerDialog extends JFrame implements defaultPanelAccessorie
 
         emailField = new CustomRoundTextField();
         emailField.setFont(miniText);
-        emailField.setText(cust.getEmail());
+        if(cust.getEmail() != null){
+            emailField.setText(cust.getEmail());
+        }
+
 
         inventoryHeading = new JLabel("Membership Information");
         inventoryHeading.setFont(heading3);
@@ -454,7 +460,7 @@ public class EditCustomerDialog extends JFrame implements defaultPanelAccessorie
                             }
                         }
 
-                        cust = new Customer(firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
+                        cust = new Customer(Integer.parseInt(customerIdField.getText()), firstNameField.getText(),lastNameField.getText(),dob,telephoneNumber,emailField.getText(),membershipStartDate,expiryDateField.getText());
 
                         client.alterEntity(cust,cust.getCustomerId());
                         custPage.updateTable();

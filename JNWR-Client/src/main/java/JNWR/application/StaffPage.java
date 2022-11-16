@@ -16,10 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
-import Entity.Inventory;
-import Entity.Staff;
-import Entity.DBEntity;
-import Entity.Department;
+import Entity.*;
 import JNWR.Domain.Client;
 import JNWR.application.utilities.*;
 
@@ -100,7 +97,7 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
 
         //region Log Out Label & Button
         JLabel empName = new JLabel();
-        empName.setText(employee.getfName() + " " + employee.getlName());
+        empName.setText(employee.getfName() + " " + employee.getlName().substring(0,1)+".");
         empName.setFont(heading3);
         JButton logOut = defaultPanelAccessories.iconButton(30,30,"src/main/resources/JWR-Icons/Black/icons8-logout-rounded-down-100.png");
         //endregion
@@ -292,6 +289,71 @@ public class StaffPage extends JPanel implements defaultPanelAccessories{
                 }
             });
 
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(staffTable.getSelectionModel().isSelectionEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(),"Please select a record","Cannot edit product", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    DefaultTableModel model = (DefaultTableModel) staffTable.getModel();
+                    int selectedRowIndex = staffTable.getSelectedRow();
+
+                    //Gets product code and name from selected entity row
+                    String staffId = model.getValueAt(selectedRowIndex,0).toString();
+                    String staffName = model.getValueAt(selectedRowIndex,1).toString() + " " + model.getValueAt(selectedRowIndex,2).toString();
+
+                    int result = JOptionPane.showConfirmDialog(new Frame(), "Are you sure you want to delete \""+staffName+ "\"?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        Integer queryResult = client.removeEntity(new Staff(), Integer.parseInt(staffId));
+                        switch(queryResult){
+                            case 0:
+                                JOptionPane.showMessageDialog(new JFrame(),"ID Number: " + staffId + "\n" + staffName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                            case 1:
+                                JOptionPane.showMessageDialog(new JFrame(),"This employee is involved in invoice records so they cannot be deleted.","Cannot delete staff", JOptionPane.ERROR_MESSAGE);
+                                /*
+                                //If invoices are allowed to be deleted then this code should be uncommented
+                                int deleteConfirmation = JOptionPane.showConfirmDialog(new Frame(), "If you delete \""+ staffName+ "\", all invoice records associated with this person must be deleted as well. Are you sure you want to delete them?", "Delete Confirmation", JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+                                    if(deleteConfirmation == JOptionPane.YES_OPTION){
+
+                                        //Gets the list of invoices that include the employee that wants to be deleted
+                                        ArrayList<DBEntity> invoiceArrayList = client.getExactList("Invoice","staffID", staffId);
+                                        for(DBEntity entity : invoiceArrayList){
+                                            Invoice inv = (Invoice) entity;
+                                            //Gets the list of invoice items that include the invoice number code that wants to be deleted
+                                            ArrayList<DBEntity> entityArrayList = client.getExactList("InvoiceItem","invoiceNum", Integer.toString(inv.getInvoiceNum()));
+
+                                            //Removes the invoice items from the invoice item table
+                                            for(DBEntity dbEntity : entityArrayList){
+                                                InvoiceItem item = (InvoiceItem) dbEntity;
+                                                client.removeInvoiceItem(item, item.getInvoiceNum(),item.getProductCode());
+                                            }
+                                            //After the invoice items are removed, the invoice can be removed from the invoice table
+                                            queryResult = client.removeEntity(new Invoice(), inv.getInvoiceNum());
+                                        }
+                                        //After the invoices are removed, the employee can be removed from the staff table
+                                        queryResult = client.removeEntity(new Staff(), Integer.parseInt(staffId));
+                                        if(queryResult == 0){
+                                            JOptionPane.showMessageDialog(new JFrame(),"Staff Id: " + staffId + "\n" + staffName + " has been deleted.", "Record removed",JOptionPane.INFORMATION_MESSAGE);
+                                        }else{
+                                            JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete staff", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                */
+                                break;
+                            default:
+                                JOptionPane.showMessageDialog(new JFrame(),"Something has gone wrong. Record has not been deleted","Cannot delete employee", JOptionPane.ERROR_MESSAGE);
+                                break;
+                        }
+
+                        updateTable();
+                    }
+                }
+            }
+        });
         //endregion
 
 
