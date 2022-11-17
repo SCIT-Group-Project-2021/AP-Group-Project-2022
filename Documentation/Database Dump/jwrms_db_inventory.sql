@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `inventory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inventory` (
-  `productCode` char(11) NOT NULL,
+  `productCode` char(12) NOT NULL,
   `name` varchar(45) NOT NULL,
   `shortDescrip` tinytext NOT NULL,
   `longDescrip` mediumtext,
@@ -42,7 +42,7 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 /*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
-INSERT INTO `inventory` VALUES ('35893434','Serge\'s Cow Milk','Milk fresh from the farm',NULL,45,435.23,'DAI'),('35893435','OtherBrand Milk','Milk less fresh than the farm',NULL,22,353.23,'DAI'),('35893436','Lasco Vanilla Milk','Vanilla Milk Mix Powder',NULL,15,102.32,'DRY');
+INSERT INTO `inventory` VALUES ('182932128493','Tin Cornbeef','Makeral fresh for the seas straight into the tin','',11,32,'CNG'),('35893434','Serge\'s Cow Milk','Milk fresh from the farm','Milk fresh from the farm',42,435.23,'DAI'),('35893435','OtherBrand Milk','Milk less fresh than the farm','6',3,353.23,'PSC'),('35893436','Lasco Vanilla Milk','Vanilla Milk Mix Powder','',84,102.32,'DRY'),('38492345','Denny\'s Beef Burger Pack','5pk of frozen beef burgers',NULL,29,594.54,'FZG'),('438294321','Sara Lee Bread','Sara Lee® 100% Whole Wheat Bread, baked without high fructose corn syrup, artificial colors or flavors,',NULL,54,473.64,'BKY'),('84739212','Special Golden Cheese','Gold film cheese','Gold film cheese lob',16,1943.21,'DAI');
 /*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-11  4:18:25
+-- Dump completed on 2022-11-16 19:47:03

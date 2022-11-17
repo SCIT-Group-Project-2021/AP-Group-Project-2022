@@ -35,7 +35,7 @@ CREATE TABLE `invencategory` (
 
 LOCK TABLES `invencategory` WRITE;
 /*!40000 ALTER TABLE `invencategory` DISABLE KEYS */;
-INSERT INTO `invencategory` VALUES ('BKY','Baked Goods'),('BVG','Beverage'),('CNG','Canned Goods'),('DAI','Dairy'),('DRY','Baking Goods'),('FZG','Frozen Goods'),('HSS','Household & Cleaning Supplies'),('MT','Meat'),('PRD','Produce'),('PSC','Personal Care'),('PTC','Pet Care'),('SFD','Seafood'),('SNK','Snacks');
+INSERT INTO `invencategory` VALUES ('BKY','Baked Goods'),('BVG','Beverages'),('CNG','Canned Goods'),('DAI','Dairy'),('DRY','Baking/Dry Goods'),('FZG','Frozen Goods'),('HSS','Household & Cleaning Supplies'),('MT','Meat'),('OTR','Other'),('PRD','Produce'),('PSC','Personal Care'),('PTC','Pet Care'),('SFD','Seafood'),('SNK','Snacks');
 /*!40000 ALTER TABLE `invencategory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-11  4:18:25
+-- Dump completed on 2022-11-16 19:47:03

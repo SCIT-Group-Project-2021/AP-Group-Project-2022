@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `invoiceitem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `invoiceitem` (
-  `productCode` char(11) NOT NULL,
+  `productCode` char(12) NOT NULL,
   `invoiceNum` int NOT NULL,
   `itemQuantity` int NOT NULL,
   PRIMARY KEY (`productCode`,`invoiceNum`),
@@ -39,6 +39,7 @@ CREATE TABLE `invoiceitem` (
 
 LOCK TABLES `invoiceitem` WRITE;
 /*!40000 ALTER TABLE `invoiceitem` DISABLE KEYS */;
+INSERT INTO `invoiceitem` VALUES ('182932128493',106,7),('182932128493',113,3),('182932128493',114,5),('182932128493',115,10),('182932128493',116,2),('35893434',116,5),('35893434',117,3),('35893434',119,3),('438294321',116,5),('438294321',118,3),('438294321',119,3),('84739212',117,3),('84739212',118,4);
 /*!40000 ALTER TABLE `invoiceitem` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-11  4:18:25
+-- Dump completed on 2022-11-16 19:47:03
